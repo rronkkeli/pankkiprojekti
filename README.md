@@ -2,4 +2,4 @@
 
 RahanAhneRacing ryhmän oma github repositorio
 
-Tavoitteena luoda toimiva "pankkiautomaatti" ohjelma
+Tavoitteena luoda toimiva pankkiautomaatti ohjelma
