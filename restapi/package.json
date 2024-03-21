@@ -1,0 +1,16 @@
+{
+  "dependencies": {
+    "crypto": "^1.0.1",
+    "express": "^5.0.0-beta.2",
+    "mysql2": "^3.9.2"
+  },
+  "name": "restapi",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": ""
+}
