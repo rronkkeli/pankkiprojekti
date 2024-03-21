@@ -7,6 +7,10 @@ var logger = require('morgan');
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 
+// Declare developmend modules here
+var withrawalRouter = require('./routes/withdrawal');
+app.use('/withdrawal', withrawalRouter);
+
 var app = express();
 
 // view engine setup
