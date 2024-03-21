@@ -10,6 +10,8 @@ var usersRouter = require('./routes/users');
 // Declare developmend modules here
 var withrawalRouter = require('./routes/withdrawal');
 app.use('/withdrawal', withrawalRouter);
+const customerRouter = require('./routes/customer');
+app.use('/customer',customerRouter);
 
 var app = express();
 
