@@ -12,6 +12,8 @@ var withrawalRouter = require('./routes/withdrawal');
 app.use('/withdrawal', withrawalRouter);
 const customerRouter = require('./routes/customer');
 app.use('/customer',customerRouter);
+const credentialsRouter = require('./routes/credentials');
+app.use('/credentials', credentialsRouter);
 
 var app = express();
 
