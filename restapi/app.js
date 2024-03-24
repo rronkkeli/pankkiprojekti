@@ -7,14 +7,6 @@ var logger = require('morgan');
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 
-// Declare developmend modules here
-var withrawalRouter = require('./routes/withdrawal');
-app.use('/withdrawal', withrawalRouter);
-const customerRouter = require('./routes/customer');
-app.use('/customer',customerRouter);
-const credentialsRouter = require('./routes/credentials');
-app.use('/credentials', credentialsRouter);
-
 var app = express();
 
 // view engine setup
@@ -29,6 +21,14 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
+
+// Declare developmend modules here
+const withrawalRouter = require('./routes/withdrawal');
+app.use('/withdrawal', withrawalRouter);
+const customerRouter = require('./routes/customer');
+app.use('/customer',customerRouter);
+const credentialsRouter = require('./routes/credentials');
+app.use('/credentials', credentialsRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

@@ -17,6 +17,7 @@ router.get('/:account', (req, res) => {
 
 // Insert a new withdrawal for account
 router.post('/', (req, res) => {
+    console.log(req.body);
     withdrawal.add(req.body, (err, dbResult) => {
         if (err) {
             res.json(err);

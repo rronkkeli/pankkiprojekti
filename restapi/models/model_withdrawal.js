@@ -1,14 +1,14 @@
 const db = require('../mods/database');
 
-withdrawal = {
+const withdrawal = {
     getAll: (account, callback) => {
         let sql = 'SELECT * FROM withdrawal WHERE idaccount=? ORDER BY timestamp DESC';
         db.query(sql, [account], callback);
     },
 
-    add: (account, withdrawal, callback) => {
+    add: (withdrawal, callback) => {
         let sql = 'INSERT INTO withdrawal VALUES (NULL, ?, ?, NOW())';
-        db.query(sql, [account, withdrawal.amount], callback);
+        db.query(sql, [withdrawal.account, withdrawal.amount], callback);
     },
 
     update: (withdrawal, callback) => {
