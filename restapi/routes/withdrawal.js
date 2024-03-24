@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const withdrawal = require('../models/model_withdrawal');
+const withdrawal = require('../models/withdrawal_model');
 const auth = require('../mods/auth'); // Will implemet authentication later
 
 // Get withdrawal history for account

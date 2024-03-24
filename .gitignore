@@ -1,6 +1,1 @@
-*/www
-*/styles
-account/package.*
-account/node_modules/
-*/node_modules/
-*/models/
+.env
