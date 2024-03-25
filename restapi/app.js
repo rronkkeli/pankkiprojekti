@@ -31,6 +31,8 @@ const credentialsRouter = require('./routes/credentials');
 app.use('/credentials', credentialsRouter);
 const accountRouter = require('./routes/account');
 app.use('/account', accountRouter);
+var cardRouter = require('./routes/card');
+app.use('/card', cardRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
