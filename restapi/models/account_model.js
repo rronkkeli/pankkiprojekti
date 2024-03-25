@@ -1,4 +1,4 @@
-const db = require('../database');
+const db = require('../mods/database');
 
 const account = {
   getAll: function(callback) {
