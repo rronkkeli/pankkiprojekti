@@ -10,11 +10,11 @@ class RFID_EXPORT RFID : public QObject {
 
 private:
     QString cardData;
+    bool setReader();
 
 public:
     explicit RFID(QObject*);
     ~RFID();
-    bool setReader();
     QSerialPort *cardReader;
     QString getCardData();
 
