@@ -1,4 +1,3 @@
 bin/build*
 .env
 *.pro.user
-bin/testaaja_rfid
