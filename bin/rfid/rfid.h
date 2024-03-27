@@ -2,19 +2,27 @@
 #define RFID_H
 #include <QDebug>
 #include <QtSerialPort/QSerialPort>
+#include <QObject>
 #include "rfid_global.h"
 
-class RFID_EXPORT RFID
-{
-    unsigned int cardInfo;
-    QSerialPort cardReader;
+class RFID_EXPORT RFID : public QObject {
+    Q_OBJECT
+
+private:
+    QString cardData;
 
 public:
-    RFID();
+    explicit RFID(QObject*);
     ~RFID();
-    unsigned int getCardInfo();
+    bool setReader();
+    QSerialPort *cardReader;
+    QString getCardData();
+
+private slots:
     void readCard();
-    void setReader();
+
+signals:
+    void cardDataReady();
 };
 
 #endif // RFID_H
