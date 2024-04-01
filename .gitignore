@@ -1,5 +1,5 @@
-.env
-account/node_modules/
-account/package*
-account/bin/www
-style*
+pinuiDLL/build/
+pinuiDLL/*.user
+
+pinuiEXE/build/
+pinuiEXE/*.user
