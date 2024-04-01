@@ -22,7 +22,10 @@ private slots:
 
     void on_pb_login_clicked();
 
+    void on_pb_ins_card_clicked();
+
 private:
     Ui::mw1 *ui;
+    bool card_ins;
 };
 #endif // MW1_H

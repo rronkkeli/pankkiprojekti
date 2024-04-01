@@ -3,3 +3,4 @@
 account/package.*
 account/node_modules/
 */node_modules/
+*/build/*

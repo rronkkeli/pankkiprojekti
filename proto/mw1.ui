@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>500</width>
-    <height>272</height>
+    <width>1072</width>
+    <height>678</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -17,10 +17,10 @@
    <widget class="QGroupBox" name="groupBox">
     <property name="geometry">
      <rect>
-      <x>150</x>
-      <y>50</y>
-      <width>161</width>
-      <height>141</height>
+      <x>140</x>
+      <y>30</y>
+      <width>381</width>
+      <height>171</height>
      </rect>
     </property>
     <property name="title">
@@ -30,16 +30,9 @@
      <item>
       <layout class="QHBoxLayout" name="horizontalLayout">
        <item>
-        <widget class="QLabel" name="label_3">
+        <widget class="QPushButton" name="pb_ins_card">
          <property name="text">
-          <string>UserName</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QLineEdit" name="le_username">
-         <property name="text">
-          <string/>
+          <string>[Force] Card Inserted</string>
          </property>
         </widget>
        </item>
@@ -50,14 +43,14 @@
        <item>
         <widget class="QLabel" name="label_2">
          <property name="text">
-          <string>Insert Card</string>
+          <string>Insert PIN</string>
          </property>
         </widget>
        </item>
        <item>
         <widget class="QPushButton" name="pb_card">
          <property name="text">
-          <string>[Force] Correct Card</string>
+          <string>[Force] Correct PIN</string>
          </property>
         </widget>
        </item>
@@ -78,7 +71,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>500</width>
+     <width>1072</width>
      <height>17</height>
     </rect>
    </property>

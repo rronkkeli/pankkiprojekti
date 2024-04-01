@@ -10,13 +10,16 @@ CONFIG += c++17
 
 SOURCES += \
     main.cpp \
-    mw1.cpp
+    mw1.cpp \
+    mw2.cpp
 
 HEADERS += \
-    mw1.h
+    mw1.h \
+    mw2.h
 
 FORMS += \
-    mw1.ui
+    mw1.ui \
+    mw2.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
