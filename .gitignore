@@ -1,8 +1,13 @@
-pinuiDLL/build/
-pinuiDLL/*.user
+account/node_modules/
+account/package*
+account/bin/www
+style*
 
-pinuiEXE/build/
-pinuiEXE/*.user
 bin/build*
 .env
 *.pro.user
+
+pinuiDLL/build/
+pinuiDLL/*.user
+pinuiEXE/build/
+pinuiEXE/*.user
