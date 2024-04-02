@@ -3,3 +3,6 @@ pinuiDLL/*.user
 
 pinuiEXE/build/
 pinuiEXE/*.user
+bin/build*
+.env
+*.pro.user
