@@ -4,3 +4,9 @@ account/package.*
 account/node_modules/
 */node_modules/
 */build/
+.env
+*.pro.user
+pinuiDLL/build/
+pinuiDLL/*.user
+pinuiEXE/build/
+pinuiEXE/*.user
