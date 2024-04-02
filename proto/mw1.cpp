@@ -1,7 +1,6 @@
 #include "mw1.h"
-#include "mw2.h"
 #include "ui_mw1.h"
-#include "ui_mw2.h"
+#include "dialog.h"
 #include <QMessageBox>
 #include <QString>
 
@@ -40,11 +39,11 @@ void mw1::on_pb_login_clicked()
 
     if(card_ins && myString == "0000000001"){
         QMessageBox::information(this, "Login", "Welcome Administrator!");
-        this->hide();
 
-        //2nd UI
-        mw2 *UI2 = new mw2();
-        UI2->show();
+    //modal for 2nd window
+    Dialog secDialog;
+    secDialog.setModal(true);
+    secDialog.exec();
     }
     else {
         QMessageBox::warning(this,"Login", "Error reading card or PIN");
