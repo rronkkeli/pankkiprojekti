@@ -11,16 +11,16 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>mw1</string>
+   <string>RahanAhneBank</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <widget class="QGroupBox" name="groupBox">
     <property name="geometry">
      <rect>
-      <x>140</x>
-      <y>30</y>
-      <width>400</width>
-      <height>200</height>
+      <x>400</x>
+      <y>230</y>
+      <width>241</width>
+      <height>171</height>
      </rect>
     </property>
     <property name="title">
@@ -28,13 +28,16 @@
     </property>
     <layout class="QVBoxLayout" name="verticalLayout_2">
      <item>
-      <layout class="QHBoxLayout" name="horizontalLayout">
+      <layout class="QVBoxLayout" name="verticalLayout_3">
        <item>
-        <widget class="QPushButton" name="pb_ins_card">
+        <widget class="QLabel" name="label">
          <property name="text">
-          <string>[Force] Card Inserted</string>
+          <string>Card number</string>
          </property>
         </widget>
+       </item>
+       <item>
+        <widget class="QLineEdit" name="cardNumber"/>
        </item>
       </layout>
      </item>
@@ -43,16 +46,12 @@
        <item>
         <widget class="QLabel" name="label_2">
          <property name="text">
-          <string>Insert PIN</string>
+          <string>Card PIN</string>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QPushButton" name="pb_card">
-         <property name="text">
-          <string>[Force] Correct PIN</string>
-         </property>
-        </widget>
+        <widget class="QLineEdit" name="lineEdit"/>
        </item>
       </layout>
      </item>
@@ -66,23 +65,17 @@
     </layout>
    </widget>
   </widget>
+  <widget class="QStatusBar" name="statusbar"/>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
      <width>800</width>
-     <height>17</height>
+     <height>22</height>
     </rect>
    </property>
-   <widget class="QMenu" name="menuRahanAhneBank">
-    <property name="title">
-     <string>RahanAhneBank</string>
-    </property>
-   </widget>
-   <addaction name="menuRahanAhneBank"/>
   </widget>
-  <widget class="QStatusBar" name="statusbar"/>
  </widget>
  <resources/>
  <connections/>

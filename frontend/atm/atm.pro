@@ -25,3 +25,9 @@ FORMS += \
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
+
+win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../build-rfid-Desktop_Qt_6_6_3_MinGW_64_bit-Debug/release/ -lrfid
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../build-rfid-Desktop_Qt_6_6_3_MinGW_64_bit-Debug/debug/ -lrfid
+
+INCLUDEPATH += $$PWD/../rfid
+DEPENDPATH += $$PWD/../rfid

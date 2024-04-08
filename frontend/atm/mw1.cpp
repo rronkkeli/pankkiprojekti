@@ -13,16 +13,31 @@ mw1::mw1(QWidget *parent)
     , card_ins(false) //initialization of card_ins
 {
     ui->setupUi(this);
+    cardReader = new RFID(this);
+
+    connect(
+        cardReader,
+        SIGNAL(cardDataReady()),
+        this,
+        SLOT(fetch_card_data())
+    );
 }
 
 mw1::~mw1()
 {
     delete ui;
+    delete cardReader;
 }
 //cardDataReady() signaalin luku
 void mw1::on_pb_ins_card_clicked()
 {
     card_ins = true;
+}
+
+void mw1::fetch_card_data()
+{
+    cardNumber = cardReader->getCardData();
+    ui->cardNumber->setText(cardNumber);
 }
 
 
@@ -49,8 +64,3 @@ void mw1::on_pb_login_clicked()
         QMessageBox::warning(this,"Login", "Error reading card or PIN");
     }
 }
-
-
-
-
-
