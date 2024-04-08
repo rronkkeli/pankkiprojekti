@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include "rfid.h"
+#include "pinui.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -19,18 +20,16 @@ public:
     ~mw1();
 
 private slots:
-    void on_pb_card_clicked();
-
     void on_pb_login_clicked();
-
-    void on_pb_ins_card_clicked();
-
     void fetch_card_data();
+    void set_pin(QString);
 
 private:
     Ui::mw1 *ui;
     bool card_ins;
     RFID *cardReader;
     QString cardNumber;
+    PinUI *pinUI;
+    QString pin;
 };
 #endif // MW1_H

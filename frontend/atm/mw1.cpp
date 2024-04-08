@@ -4,9 +4,6 @@
 #include <QMessageBox>
 #include <QString>
 
-
-QString myString = "00000000"; //declaration of myString or "rfid", remove when merging with rfid module
-
 mw1::mw1(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::mw1)
@@ -14,6 +11,7 @@ mw1::mw1(QWidget *parent)
 {
     ui->setupUi(this);
     cardReader = new RFID(this);
+    pinUI = new PinUI(this);
 
     connect(
         cardReader,
@@ -21,44 +19,47 @@ mw1::mw1(QWidget *parent)
         this,
         SLOT(fetch_card_data())
     );
+
+    connect(
+        pinUI,
+        SIGNAL(sendPinNumber(QString)),
+        this,
+        SLOT(set_pin(QString))
+    );
 }
 
 mw1::~mw1()
 {
     delete ui;
     delete cardReader;
-}
-//cardDataReady() signaalin luku
-void mw1::on_pb_ins_card_clicked()
-{
-    card_ins = true;
+    delete pinUI;
 }
 
 void mw1::fetch_card_data()
 {
     cardNumber = cardReader->getCardData();
     ui->cardNumber->setText(cardNumber);
+    pinUI->show();
 }
 
-
-void mw1::on_pb_card_clicked()
+void mw1::set_pin(QString p)
 {
-    myString = "0000000001";
-    QMessageBox::information(this,"Card","Id is now: " + myString);
+    pin = p;
+    ui->pinNumber->setText(pin);
+    pinUI->hide();
 }
-
 
 void mw1::on_pb_login_clicked()
 {
 //    QString username = ui->le_username->text();
 
-    if(card_ins && myString == "0000000001"){
+    if(!cardNumber.isEmpty()){
         QMessageBox::information(this, "Login", "Welcome Administrator!");
-
-    //modal for 2nd window
-    Dialog secDialog;
-    secDialog.setModal(true);
-    secDialog.exec();
+        // Do some questionable shit here, like login.
+        //modal for 2nd window
+        Dialog secDialog;
+        secDialog.setModal(true);
+        secDialog.exec();
     }
     else {
         QMessageBox::warning(this,"Login", "Error reading card or PIN");

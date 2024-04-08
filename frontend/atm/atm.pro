@@ -31,3 +31,9 @@ else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../build-rfid-Desktop_Q
 
 INCLUDEPATH += $$PWD/../rfid
 DEPENDPATH += $$PWD/../rfid
+
+win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../build-pinuiDLL-Desktop_Qt_6_6_3_MinGW_64_bit-Debug/release/ -lpinuiDLL
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../build-pinuiDLL-Desktop_Qt_6_6_3_MinGW_64_bit-Debug/debug/ -lpinuiDLL
+
+INCLUDEPATH += $$PWD/../pinuiDLL
+DEPENDPATH += $$PWD/../pinuiDLL

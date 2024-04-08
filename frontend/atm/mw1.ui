@@ -37,7 +37,16 @@
         </widget>
        </item>
        <item>
-        <widget class="QLineEdit" name="cardNumber"/>
+        <widget class="QLabel" name="cardNumber">
+         <property name="font">
+          <font>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="text">
+          <string>No card inserted</string>
+         </property>
+        </widget>
        </item>
       </layout>
      </item>
@@ -51,7 +60,14 @@
         </widget>
        </item>
        <item>
-        <widget class="QLineEdit" name="lineEdit"/>
+        <widget class="QLineEdit" name="pinNumber">
+         <property name="echoMode">
+          <enum>QLineEdit::Password</enum>
+         </property>
+         <property name="readOnly">
+          <bool>true</bool>
+         </property>
+        </widget>
        </item>
       </layout>
      </item>
