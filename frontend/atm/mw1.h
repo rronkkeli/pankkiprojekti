@@ -31,5 +31,6 @@ private:
     QString cardNumber;
     PinUI *pinUI;
     QString pin;
+    void logout();
 };
 #endif // MW1_H

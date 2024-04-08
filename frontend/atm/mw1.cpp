@@ -49,19 +49,28 @@ void mw1::set_pin(QString p)
     pinUI->hide();
 }
 
+void mw1::logout()
+{
+    pin = "";
+    ui->pinNumber->setText(pin);
+    cardNumber = "";
+    ui->cardNumber->setText("No card inserted");
+    qDebug() << "Logged out or at least zeroed variables";
+}
+
 void mw1::on_pb_login_clicked()
 {
 //    QString username = ui->le_username->text();
 
-    if(!cardNumber.isEmpty()){
-        QMessageBox::information(this, "Login", "Welcome Administrator!");
+    if(!cardNumber.isEmpty() && !pin.isEmpty()){
         // Do some questionable shit here, like login.
         //modal for 2nd window
         Dialog secDialog;
         secDialog.setModal(true);
         secDialog.exec();
+        logout();
     }
     else {
-        QMessageBox::warning(this,"Login", "Error reading card or PIN");
+        QMessageBox::warning(this,"Login", "Incorrect card or pin!");
     }
 }

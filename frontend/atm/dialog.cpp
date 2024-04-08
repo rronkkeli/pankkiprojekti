@@ -18,4 +18,3 @@ void Dialog::on_LO_pb_clicked()
 {
     this->hide();
 }
-
