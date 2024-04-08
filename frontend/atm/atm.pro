@@ -37,3 +37,6 @@ else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../build-pinuiDLL-Deskt
 
 INCLUDEPATH += $$PWD/../pinuiDLL
 DEPENDPATH += $$PWD/../pinuiDLL
+
+DISTFILES += \
+    style.qss
