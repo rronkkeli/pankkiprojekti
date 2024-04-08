@@ -9,16 +9,31 @@ CONFIG += c++17
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    dialog.cpp \
     main.cpp \
-    mainwindow.cpp
+    mw1.cpp
 
 HEADERS += \
-    mainwindow.h
+    dialog.h \
+    mw1.h
 
 FORMS += \
-    mainwindow.ui
+    dialog.ui \
+    mw1.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
+
+win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../build-rfid-Desktop_Qt_6_6_3_MinGW_64_bit-Debug/release/ -lrfid
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../build-rfid-Desktop_Qt_6_6_3_MinGW_64_bit-Debug/debug/ -lrfid
+
+INCLUDEPATH += $$PWD/../rfid
+DEPENDPATH += $$PWD/../rfid
+
+win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../build-pinuiDLL-Desktop_Qt_6_6_3_MinGW_64_bit-Debug/release/ -lpinuiDLL
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../build-pinuiDLL-Desktop_Qt_6_6_3_MinGW_64_bit-Debug/debug/ -lpinuiDLL
+
+INCLUDEPATH += $$PWD/../pinuiDLL
+DEPENDPATH += $$PWD/../pinuiDLL

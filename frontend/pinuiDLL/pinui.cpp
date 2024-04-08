@@ -81,6 +81,9 @@ void PinUI::on_btnPinEnter_clicked()
 {
     qDebug() << "Clicked ENTER";
     emit sendPinNumber(pinNumber);
+    pinNumber = "";
+    text = "";
+    ui->pinLineEdit->clear();
 }
 
 void PinUI::pinNumberClickHandler()
