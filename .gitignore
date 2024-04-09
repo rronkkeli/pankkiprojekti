@@ -1,5 +1,3 @@
+build*
 .env
-account/node_modules/
-account/package*
-account/bin/www
-style*
+*.pro.user
