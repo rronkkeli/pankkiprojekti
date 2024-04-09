@@ -101,3 +101,15 @@ void PinUI::pinNumberClickHandler()
     ui->pinLineEdit->setText(text);
 }
 
+void PinUI::on_btnPinBackspace_clicked()
+{
+    qDebug() << "Clicked BACKSPACE";
+    pinNumber.chop(1);
+    text.chop(1);
+
+    qDebug() << "Pin number: " << pinNumber;
+    qDebug() << "Text in line edit: " << text << Qt::endl;
+
+    ui->pinLineEdit->setText(text);
+}
+
