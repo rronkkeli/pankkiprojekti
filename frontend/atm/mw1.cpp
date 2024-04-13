@@ -12,6 +12,7 @@ mw1::mw1(QWidget *parent)
     ui->setupUi(this);
     cardReader = new RFID(this);
     pinUI = new PinUI(this);
+    login = new LoginDLL(this);
 
     connect(
         cardReader,
@@ -26,6 +27,13 @@ mw1::mw1(QWidget *parent)
         this,
         SLOT(set_pin(QString))
     );
+
+    connect(
+        login,
+        SIGNAL(loginStatus(QString)),
+        this,
+        SLOT(setLoginStatus(QString))
+    );
 }
 
 mw1::~mw1()
@@ -33,6 +41,7 @@ mw1::~mw1()
     delete ui;
     delete cardReader;
     delete pinUI;
+    delete login;
 }
 
 void mw1::fetch_card_data()
@@ -47,6 +56,18 @@ void mw1::set_pin(QString p)
     pin = p;
     ui->pinNumber->setText(pin);
     pinUI->hide();
+
+    login->login(cardNumber, pin);
+}
+
+void mw1::setLoginStatus(QString s)
+{
+    loginStatus = s;
+    qDebug() << "Login status was set to: " << s;
+
+    if (loginStatus == "success") {
+        // TODO: fetch user data!
+    }
 }
 
 void mw1::logout()

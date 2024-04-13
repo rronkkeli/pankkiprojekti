@@ -1,4 +1,4 @@
-QT       += core gui
+QT       += core gui network
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -40,3 +40,9 @@ DEPENDPATH += $$PWD/../pinuiDLL
 
 DISTFILES += \
     style.qss
+
+win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../build-loginDLL-Desktop_Qt_6_6_3_MinGW_64_bit-Debug/release/ -lloginDLL
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../build-loginDLL-Desktop_Qt_6_6_3_MinGW_64_bit-Debug/debug/ -lloginDLL
+
+INCLUDEPATH += $$PWD/../loginDLL
+DEPENDPATH += $$PWD/../loginDLL

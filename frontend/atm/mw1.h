@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include "rfid.h"
 #include "pinui.h"
+#include "logindll.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -23,6 +24,7 @@ private slots:
     void on_pb_login_clicked();
     void fetch_card_data();
     void set_pin(QString);
+    void setLoginStatus(QString);
 
 private:
     Ui::mw1 *ui;
@@ -32,5 +34,7 @@ private:
     PinUI *pinUI;
     QString pin;
     void logout();
+    LoginDLL *login;
+    QString loginStatus;
 };
 #endif // MW1_H
