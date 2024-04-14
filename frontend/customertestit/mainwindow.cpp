@@ -1,6 +1,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
+
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
@@ -9,59 +10,54 @@ MainWindow::MainWindow(QWidget *parent)
 
     ptr_dll = new CustomerTests(this);
 
-    connect(ptr_dll,SIGNAL(customerInfo(QJsonArray)),
-            this,SLOT(handleGottenInformation(QJsonArray)));
+    connect(ptr_dll,SIGNAL(customerInfo(QString)),
+            this,SLOT(handleGottenInformation(QString)));
 
-    connect(ptr_dll,SIGNAL(withdrawalsInfo(QJsonArray)),
-            this,SLOT(handlewithdrawals(QJsonArray)));
+    connect(ptr_dll,SIGNAL(withdrawalsInfo(QString)),
+            this,SLOT(handlewithdrawals(QString)));
+
+    connect(ptr_dll,SIGNAL(tilitjakortitInfo(QString, QString)),
+            this,SLOT(handlekortit(QString, QString)));
+
+    connect(ptr_dll,SIGNAL(nostotapahtumaInfo(QString)),
+            this, SLOT(handlenostoInfo(QString)));
+
 }
 
 MainWindow::~MainWindow()
 {
     delete ui;
 }
-
-void MainWindow::handleGottenInformation(QJsonArray json_array)
+//Handle systeemit joissa laitetaan tiedot tekstiruutuun :)
+void MainWindow::handleGottenInformation(QString customer)
 {
-    QString customer;
-
-    customer="asiakas_numero | Etunimi | Sukunimi | puhelinnumero | syntymÃ¤aika | osoite \r\n";
-
-    foreach (const QJsonValue &value, json_array) {
-        QJsonObject json_obj = value.toObject();
-        customer+=QString::number(json_obj["idcustomer"].toInt())+"  |  ";
-
-        customer+=json_obj["fname"].toString()+"  |  ";
-        customer+=json_obj["lname"].toString()+"  |  ";
-        customer+=json_obj["phone_number"].toString()+"  |  ";
-        customer+=json_obj["birthdate"].toString()+"  |  ";
-        customer+=json_obj["address"].toString()+"  |  ";
-        customer+="\r\n";
-    }
-
     ui->textCustomer->setText(customer);
 }
 
-void MainWindow::handlewithdrawals(QJsonArray json_array)
+void MainWindow::handlewithdrawals(QString tilitiedot)
 {
-
-    QString withdrawal;
-    foreach (const QJsonValue &value, json_array) {
-        QJsonObject json_obj = value.toObject();
-        withdrawal+=QString::number(json_obj["idwithdrawal"].toInt())+", "+json_obj["amount"].toString()+", "+json_obj["timestamp"].toString()+"\r";
-        ui->textWithdrawals->setText(withdrawal);
-    }
-
-
+    ui->textWithdrawals->setText(tilitiedot);
 }
 
+void MainWindow::handlekortit(QString tilit,QString kortit)
+{
+    ui->textWithdrawals->setText(tilit);
+    ui->textkortit->setText(kortit);
+}
 
+void MainWindow::handlenostoInfo(QString nosto)
+{
+    ui->Virhetekstit->setText(nosto);
+}
+
+// Napinpainallus toiminnot
+void MainWindow::on_btnkortitInfo_clicked()
+{
+    ptr_dll->getTilitjaKortitInfo();
+}
 
 void MainWindow::on_btnCustomerInfo_clicked()
 {
-    //Kutsutaan DLL
-    //DLL lähettää tietokannasta saadut tiedot customerInfo-signaalissa
-
     ptr_dll->getCustomerInfo();
 }
 
@@ -72,6 +68,36 @@ void MainWindow::on_btnWithdrawalsInfo_clicked()
 
 void MainWindow::on_btnPost_clicked()
 {
-    ptr_dll->addCustomer();
+    QString asiakas;
+    asiakas=ui->asiakasruutu->text();
+    ptr_dll->setAsiakas(asiakas);
+}
+
+void MainWindow::on_btnNostotapahtuma_clicked()
+{
+    QString tilin_numero;
+    QString nosto;
+
+    tilin_numero=ui->tilinumero->text();
+    nosto=ui->summa->text();
+
+    int myint = tilin_numero.toInt();
+    float myfloat = nosto.toFloat();
+
+    if(!tilin_numero.isNull() && !tilin_numero.isEmpty()&& !nosto.isNull() && !nosto.isEmpty() ){
+        if(myint != NULL && myfloat != NULL){
+            ptr_dll->nostotapahtuma(tilin_numero,nosto);
+        }
+        else{
+            ui->textWithdrawals->setText("Syöttämäsi arvot eivät ole oikean tyyppisiä");
+        }
+
+    }
+    else{
+        ui->textWithdrawals->setText("Yritä syöttää arvot uudelleen");
+    }
+
+
+
 }
 

@@ -33,6 +33,7 @@ private slots:
     void on_btnPin9_clicked();
     void on_btnPinClear_clicked();
     void on_btnPinEnter_clicked();
+    void on_btnPinBackspace_clicked();
 
 private:
     Ui::PinUI *ui;
