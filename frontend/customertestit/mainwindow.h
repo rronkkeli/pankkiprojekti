@@ -22,6 +22,7 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
+
 private:
     Ui::MainWindow *ui;
     QNetworkAccessManager *getManager;
@@ -33,12 +34,16 @@ private:
 
 private slots:
 
-    void handleGottenInformation(QJsonArray json_array);
-    void handlewithdrawals (QJsonArray json_array);
+    void handleGottenInformation(QString customer);
+    void handlewithdrawals (QString tilitiedot);
+    void handlekortit(QString tilit, QString kortit);
+    void handlenostoInfo(QString);
 
     void on_btnCustomerInfo_clicked();
     void on_btnWithdrawalsInfo_clicked();
+    void on_btnkortitInfo_clicked();
 
     void on_btnPost_clicked();
+    void on_btnNostotapahtuma_clicked();
 };
 #endif // MAINWINDOW_H

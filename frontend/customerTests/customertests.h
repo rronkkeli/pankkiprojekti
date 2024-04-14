@@ -18,9 +18,12 @@ public:
 
     void getCustomerInfo();
     void getWithdrawalsInfo();
-    //void getTilitjaKortit();
+    void getTilitjaKortitInfo();
+    void nostotapahtuma(QString tilin_numero,QString nostot);
 
-    void addCustomer();
+
+    QString getAsiakas() const;
+    void setAsiakas(const QString &newAsiakas);
 
 private:
     QNetworkAccessManager *getManager;
@@ -28,17 +31,20 @@ private:
     QNetworkReply *reply;
     QByteArray response_data;
 
+    QString asiakas;
+
 private slots:
     void getCustomerSlot (QNetworkReply *reply);
     void getWithdrawalsSlot (QNetworkReply *reply);
-    //void getTilitjaKortitSlot (QNetworkReply *reply);
+    void getTilitjaKortitSlot (QNetworkReply *reply);
 
-    void addCustomerSlot (QNetworkReply *reply);
+    void getNostotapahtumaSlot (QNetworkReply *reply);
 
 signals:
-    void customerInfo(QJsonArray);
-    void withrawalsInfo(QJsonArray);
-    //void tilitjakortitInfo(QJsonArray);
+    void customerInfo(QString);
+    void withdrawalsInfo(QString withdrawal);
+    void tilitjakortitInfo(QString tilit, QString kortit);
+    void nostotapahtumaInfo(QString);
 
 };
 
