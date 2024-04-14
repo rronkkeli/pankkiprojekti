@@ -23,7 +23,7 @@ void LoginDLL::login(QString cardId, QString cardPin)
 
     //Signals etc.
     loginManager = new QNetworkAccessManager(this);
-    connect(loginManager, SIGNAL(finished (QNetworkReply*)),
+    connect(loginManager, SIGNAL(finished(QNetworkReply*)),
             this, SLOT(loginSlot(QNetworkReply*)));
     reply = loginManager->post(request,QJsonDocument(jsonObj).toJson());
 }

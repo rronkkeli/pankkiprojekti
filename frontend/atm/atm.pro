@@ -9,17 +9,23 @@ CONFIG += c++17
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    accountinfo.cpp \
     dialog.cpp \
     main.cpp \
-    mw1.cpp
+    mw1.cpp \
+    welcome.cpp
 
 HEADERS += \
+    accountinfo.h \
     dialog.h \
-    mw1.h
+    mw1.h \
+    welcome.h
 
 FORMS += \
+    accountinfo.ui \
     dialog.ui \
-    mw1.ui
+    mw1.ui \
+    welcome.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
