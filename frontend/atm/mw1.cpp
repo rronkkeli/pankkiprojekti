@@ -10,8 +10,13 @@ mw1::mw1(QWidget *parent)
     , card_ins(false) //initialization of card_ins
 {
     ui->setupUi(this);
+
+    // welcome = new Welcome(this);
+    widget = new Welcome(this);
+
     cardReader = new RFID(this);
     pinUI = new PinUI(this);
+    login = new LoginDLL(this);
 
     connect(
         cardReader,
@@ -26,6 +31,20 @@ mw1::mw1(QWidget *parent)
         this,
         SLOT(set_pin(QString))
     );
+
+    connect(
+        login,
+        SIGNAL(loginStatus(QString)),
+        this,
+        SLOT(setLoginStatus(QString))
+    );
+
+    connect(
+        widget,
+        SIGNAL(clicked()),
+        this,
+        SLOT(change())
+    );
 }
 
 mw1::~mw1()
@@ -33,44 +52,57 @@ mw1::~mw1()
     delete ui;
     delete cardReader;
     delete pinUI;
+    delete login;
+    // delete info;
+    // delete welcome;
+    delete widget;
 }
 
 void mw1::fetch_card_data()
 {
     cardNumber = cardReader->getCardData();
-    ui->cardNumber->setText(cardNumber);
+    // ui->cardNumber->setText(cardNumber);
     pinUI->show();
 }
 
 void mw1::set_pin(QString p)
 {
     pin = p;
-    ui->pinNumber->setText(pin);
     pinUI->hide();
+    login->login(cardNumber, pin);
+}
+
+void mw1::setLoginStatus(QString s)
+{
+    loginStatus = s;
+    qDebug() << "Login status was set to: " << s;
+
+    if (loginStatus == "success") {
+        setWidget(2);
+    }
 }
 
 void mw1::logout()
 {
     pin = "";
-    ui->pinNumber->setText(pin);
     cardNumber = "";
-    ui->cardNumber->setText("No card inserted");
     qDebug() << "Logged out or at least zeroed variables";
 }
 
-void mw1::on_pb_login_clicked()
+void mw1::setWidget(int type)
 {
-//    QString username = ui->le_username->text();
-
-    if(!cardNumber.isEmpty() && !pin.isEmpty()){
-        // Do some questionable shit here, like login.
-        //modal for 2nd window
-        Dialog secDialog;
-        secDialog.setModal(true);
-        secDialog.exec();
-        logout();
-    }
-    else {
-        QMessageBox::warning(this,"Login", "Incorrect card or pin!");
+    switch (type) {
+    case 1:
+        delete widget;
+        widget = new Welcome(this);
+        widget->show();
+        break;
+    case 2:
+        delete widget;
+        widget = new AccountInfo(this);
+        widget->show();
+        break;
+    default:
+        break;
     }
 }

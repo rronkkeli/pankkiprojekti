@@ -2,8 +2,12 @@
 #define MW1_H
 
 #include <QMainWindow>
+#include <QStackedWidget>
 #include "rfid.h"
 #include "pinui.h"
+#include "logindll.h"
+#include "welcome.h"
+#include "accountinfo.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -20,17 +24,24 @@ public:
     ~mw1();
 
 private slots:
-    void on_pb_login_clicked();
     void fetch_card_data();
     void set_pin(QString);
+    void setLoginStatus(QString);
 
 private:
     Ui::mw1 *ui;
+    QWidget *widget;
+    // QWidget *welcome;
+    // QWidget *info;
     bool card_ins;
     RFID *cardReader;
     QString cardNumber;
     PinUI *pinUI;
     QString pin;
     void logout();
+    LoginDLL *login;
+    QString loginStatus;
+
+    void setWidget(int);
 };
 #endif // MW1_H
