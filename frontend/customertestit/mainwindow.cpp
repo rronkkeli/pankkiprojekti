@@ -10,14 +10,14 @@ MainWindow::MainWindow(QWidget *parent)
 
     ptr_dll = new CustomerTests(this);
 
-    connect(ptr_dll,SIGNAL(customerInfo(QString)),
-            this,SLOT(handleGottenInformation(QString)));
+    connect(ptr_dll,SIGNAL(customerInfo(QJsonArray)),
+            this,SLOT(handleGottenInformation(QJsonArray)));
 
-    connect(ptr_dll,SIGNAL(withdrawalsInfo(QString)),
-            this,SLOT(handlewithdrawals(QString)));
+    connect(ptr_dll,SIGNAL(withdrawalsInfo(QJsonArray)),
+            this,SLOT(handlewithdrawals(QJsonArray)));
 
-    connect(ptr_dll,SIGNAL(tilitjakortitInfo(QString, QString)),
-            this,SLOT(handlekortit(QString, QString)));
+    connect(ptr_dll,SIGNAL(tilitjakortitInfo(QJsonArray)),
+            this,SLOT(handlekortit(QJsonArray)));
 
     connect(ptr_dll,SIGNAL(nostotapahtumaInfo(QString)),
             this, SLOT(handlenostoInfo(QString)));
@@ -29,17 +29,18 @@ MainWindow::~MainWindow()
     delete ui;
 }
 //Handle systeemit joissa laitetaan tiedot tekstiruutuun :)
-void MainWindow::handleGottenInformation(QString customer)
+void MainWindow::handleGottenInformation(QJsonArray customer)
 {
+    //Tässä kohdassa avataan tuo customer jsonarray :)
     ui->textCustomer->setText(customer);
 }
 
-void MainWindow::handlewithdrawals(QString tilitiedot)
+void MainWindow::handlewithdrawals(QJsonArray tilitiedot)
 {
     ui->textWithdrawals->setText(tilitiedot);
 }
 
-void MainWindow::handlekortit(QString tilit,QString kortit)
+void MainWindow::handlekortit(QJsonArray)
 {
     ui->textWithdrawals->setText(tilit);
     ui->textkortit->setText(kortit);
@@ -47,6 +48,7 @@ void MainWindow::handlekortit(QString tilit,QString kortit)
 
 void MainWindow::handlenostoInfo(QString nosto)
 {
+    // Älä muokkaa tätä paitsi jos vaihat tuota kenttää mihin se teksti tulee
     ui->Virhetekstit->setText(nosto);
 }
 
@@ -64,13 +66,6 @@ void MainWindow::on_btnCustomerInfo_clicked()
 void MainWindow::on_btnWithdrawalsInfo_clicked()
 {
     ptr_dll->getWithdrawalsInfo();
-}
-
-void MainWindow::on_btnPost_clicked()
-{
-    QString asiakas;
-    asiakas=ui->asiakasruutu->text();
-    ptr_dll->setAsiakas(asiakas);
 }
 
 void MainWindow::on_btnNostotapahtuma_clicked()
