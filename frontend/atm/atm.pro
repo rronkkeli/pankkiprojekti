@@ -52,3 +52,9 @@ else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../build-loginDLL-Deskt
 
 INCLUDEPATH += $$PWD/../loginDLL
 DEPENDPATH += $$PWD/../loginDLL
+
+win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../build-customerTests-Desktop_Qt_6_6_3_MinGW_64_bit-Debug/release/ -lcustomerTests
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../build-customerTests-Desktop_Qt_6_6_3_MinGW_64_bit-Debug/debug/ -lcustomerTests
+
+INCLUDEPATH += $$PWD/../customerTests
+DEPENDPATH += $$PWD/../customerTests

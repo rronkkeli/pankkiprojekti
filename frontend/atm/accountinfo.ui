@@ -82,12 +82,12 @@
        </font>
       </property>
       <property name="text">
-       <string>Tyyppi</string>
+       <string>Saldo</string>
       </property>
      </widget>
     </item>
     <item row="2" column="1">
-     <widget class="QLabel" name="accountType">
+     <widget class="QLabel" name="accountBalance">
       <property name="font">
        <font>
         <pointsize>12</pointsize>
