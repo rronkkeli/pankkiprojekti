@@ -1,11 +1,11 @@
 const express = require('express');
 const router = express.Router();
-const user = require('../models/card_model');
+const card = require('../models/card_model');
 
 router.get('/:id?',
  function(request, response) {
   if (request.params.id) {
-    user.getById(request.params.id, function(err, dbResult) {
+    card.getById(request.params.id, function(err, dbResult) {
       if (err) {
         response.json(err);
       } else {
@@ -13,7 +13,7 @@ router.get('/:id?',
       }
     });
   } else {
-    user.getAll(function(err, dbResult) {
+    card.getAll(function(err, dbResult) {
       if (err) {
         response.json(err);
       } else {
@@ -23,9 +23,20 @@ router.get('/:id?',
   }
 });
 
+router.get('/accountDetails/:id?',
+function(request, response) {
+  card.getAccountDetails(request.params.id, function(err, dbResult) {
+    if (err) {
+      response.json(err);
+    } else {
+      response.json(dbResult);
+    }
+  })
+});
+
 router.post('/', 
 function(request, response) {
-  user.add(request.body, function(err, dbResult) {
+  card.add(request.body, function(err, dbResult) {
     if (err) {
       response.json(err);
     } else {
@@ -36,7 +47,7 @@ function(request, response) {
 
 router.delete('/:id', 
 function(request, response) {
-  user.delete(request.params.id, function(err, dbResult) {
+  card.delete(request.params.id, function(err, dbResult) {
     if (err) {
       response.json(err);
     } else {
@@ -48,7 +59,7 @@ function(request, response) {
 
 router.put('/:id', 
 function(request, response) {
-  user.update(request.params.id, request.body, function(err, dbResult) {
+  card.update(request.params.id, request.body, function(err, dbResult) {
     if (err) {
       response.json(err);
     } else {
