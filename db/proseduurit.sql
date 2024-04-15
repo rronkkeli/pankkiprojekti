@@ -42,7 +42,8 @@ BEGIN
     WHERE asiakas = customer_has_account.idcustomer ORDER BY idwithdrawal desc;
 END//
 
-
+DROP PROCEDURE IF EXISTS tilit_ja_kortit;
+    
 CREATE PROCEDURE tilit_ja_kortit(IN asiakas INT)
 BEGIN
 
