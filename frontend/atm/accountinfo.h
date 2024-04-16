@@ -2,7 +2,7 @@
 #define ACCOUNTINFO_H
 
 #include <QWidget>
-#include "customertests.h"
+#include "logindll.h"
 
 namespace Ui {
 class AccountInfo;
@@ -13,19 +13,19 @@ class AccountInfo : public QWidget
     Q_OBJECT
 
 public:
-    explicit AccountInfo(QWidget *parent = nullptr);
+    explicit AccountInfo(QWidget *parent = nullptr, LoginDLL *login = nullptr);
     ~AccountInfo();
 
 private:
     Ui::AccountInfo *ui;
-    CustomerTests *libCustomer;
     QString account;
     QString type;
     QString balance;
     QStringList withdrawals;
+    LoginDLL *login;
 
 public slots:
-    void getAccountInfo(QString, QString);
+    void getAccountInfo(QJsonArray);
 };
 
 #endif // ACCOUNTINFO_H

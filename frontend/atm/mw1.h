@@ -2,7 +2,6 @@
 #define MW1_H
 
 #include <QMainWindow>
-#include <QStackedWidget>
 #include "rfid.h"
 #include "pinui.h"
 #include "logindll.h"
@@ -26,13 +25,11 @@ public:
 private slots:
     void fetch_card_data();
     void set_pin(QString);
-    void setLoginStatus(QString);
+    void setLoginStatus(LoginDLL::LoginStatus);
 
 private:
     Ui::mw1 *ui;
     QWidget *widget;
-    // QWidget *welcome;
-    // QWidget *info;
     bool card_ins;
     RFID *cardReader;
     QString cardNumber;
@@ -40,8 +37,13 @@ private:
     QString pin;
     void logout();
     LoginDLL *login;
-    QString loginStatus;
+    LoginDLL::LoginStatus loginStatus;
 
-    void setWidget(int);
+    enum SelectWidget {
+        WidgetWelcome,
+        WidgetInfo,
+    };
+
+    void setWidget(SelectWidget);
 };
 #endif // MW1_H

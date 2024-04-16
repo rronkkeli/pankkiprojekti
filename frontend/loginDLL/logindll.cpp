@@ -170,24 +170,8 @@ void LoginDLL::getCustomerSlot(QNetworkReply *reply)
     response_data=reply->readAll();
     qDebug()<<"DATA : "+response_data;
     QJsonDocument json_doc = QJsonDocument::fromJson(response_data);
-    QJsonArray json_array = json_doc.array();
+    QJsonArray customer = json_doc.array();
 
-    //Tässä kohtaa signaali käsittelevään hommaan mainissa
-
-    QString customer;
-
-    customer="asiakas_numero | Etunimi | Sukunimi | puhelinnumero | syntymÃ¤aika | osoite \r\n";
-
-    foreach (const QJsonValue &value, json_array) {
-        QJsonObject json_obj = value.toObject();
-        customer+=QString::number(json_obj["idcustomer"].toInt())+"  |  ";
-        customer+=json_obj["fname"].toString()+"  |  ";
-        customer+=json_obj["lname"].toString()+"  |  ";
-        customer+=json_obj["phone_number"].toString()+"  |  ";
-        customer+=json_obj["birthdate"].toString()+"  |  ";
-        customer+=json_obj["address"].toString()+"  |  ";
-        customer+="\r\n";
-    }
     emit customerInfo(customer);
     reply->deleteLater();
     getManager->deleteLater();
@@ -216,26 +200,9 @@ void LoginDLL::getWithdrawalsSlot(QNetworkReply *reply)
     response_data=reply->readAll();
     qDebug()<<"DATA : "+response_data;
     QJsonDocument json_doc = QJsonDocument::fromJson(response_data);
-    QJsonArray json_array = json_doc.array();
+    QJsonArray accountinfo = json_doc.array();
 
-
-    QString tilitiedot;
-
-
-    tilitiedot="Noston id  |  määrä  |  päiväys \r\n";
-
-    QJsonArray tilitiedotArray = json_array.at(0).toArray();
-    foreach (const QJsonValue &value, tilitiedotArray) {
-        QJsonObject json_obj = value.toObject();
-
-        tilitiedot+=QString::number(json_obj["idwithdrawal"].toInt())+"  |  ";
-        tilitiedot+=QString::number(json_obj["idaccount"].toInt())+"  |  ";
-        tilitiedot+=json_obj["amount"].toString()+"  |  ";
-        tilitiedot+=json_obj["timestamp"].toString()+" \r\n";
-    }
-
-    emit withdrawalsInfo(tilitiedot);
-
+    emit withdrawalsInfo(accountinfo);
     reply->deleteLater();
     getManager->deleteLater();
 }
@@ -266,33 +233,7 @@ void LoginDLL::getTilitjaKortitSlot(QNetworkReply *reply)
     QJsonDocument json_doc = QJsonDocument::fromJson(response_data);
     QJsonArray json_array = json_doc.array();
 
-    //Tässä kohtaa signaali käsittelevään hommaan mainissa
-    QString tilit;
-    QString kortit;
-
-    // Alustetaan tilit- ja kortit-merkkijonot otsikoilla
-    tilit = "Tilit_id | saldo | credit \n";
-    kortit = "Yhdistetyn tilin id | kortin numero | pin \n";
-
-    // Käsitellään tilit
-    QJsonArray tilitArray = json_array.at(0).toArray();
-    foreach (const QJsonValue &value, tilitArray) {
-        QJsonObject json_obj = value.toObject();
-        tilit += QString::number(json_obj["idaccount"].toInt()) + " | ";
-        tilit += json_obj["balance"].toString() + " | ";
-        tilit += json_obj["credit"].toString() + "\n";
-    }
-
-    // Käsitellään kortit
-    QJsonArray kortitArray = json_array.at(1).toArray();
-    foreach (const QJsonValue &value, kortitArray) {
-        QJsonObject json_obj = value.toObject();
-        kortit += QString::number(json_obj["idaccount"].toInt()) + " | ";
-        kortit += json_obj["idcard"].toString() + " | ";
-        kortit += json_obj["pin"].toString() + "\n";
-    }
-
-    emit tilitjakortitInfo(tilit,  kortit);
+    emit tilitjakortitInfo(json_array);
     qDebug()<<json_array;
 
     reply->deleteLater();

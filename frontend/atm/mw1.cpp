@@ -11,7 +11,6 @@ mw1::mw1(QWidget *parent)
 {
     ui->setupUi(this);
 
-    // welcome = new Welcome(this);
     widget = new Welcome(this);
 
     cardReader = new RFID(this);
@@ -34,17 +33,11 @@ mw1::mw1(QWidget *parent)
 
     connect(
         login,
-        SIGNAL(loginStatus(QString)),
+        SIGNAL(loginStatus(LoginDLL::LoginStatus)),
         this,
-        SLOT(setLoginStatus(QString))
+        SLOT(setLoginStatus(LoginDLL::LoginStatus))
     );
 
-    connect(
-        widget,
-        SIGNAL(clicked()),
-        this,
-        SLOT(change())
-    );
 }
 
 mw1::~mw1()
@@ -53,15 +46,12 @@ mw1::~mw1()
     delete cardReader;
     delete pinUI;
     delete login;
-    // delete info;
-    // delete welcome;
     delete widget;
 }
 
 void mw1::fetch_card_data()
 {
     cardNumber = cardReader->getCardData();
-    // ui->cardNumber->setText(cardNumber);
     pinUI->show();
 }
 
@@ -72,34 +62,50 @@ void mw1::set_pin(QString p)
     login->login(cardNumber, pin);
 }
 
-void mw1::setLoginStatus(QString s)
+void mw1::setLoginStatus(LoginDLL::LoginStatus s)
 {
     loginStatus = s;
     qDebug() << "Login status was set to: " << s;
 
-    if (loginStatus == "success") {
-        setWidget(2);
+    switch (loginStatus) {
+        case LoginDLL::LoginStatus::Ok:
+            setWidget(SelectWidget::WidgetInfo);
+            break;
+        case LoginDLL::LoginStatus::InvalidCredentials:
+            qDebug() << "Invalid credentials";
+            delete pinUI;
+            pinUI = new PinUI(this);
+            pinUI->show();
+            break;
+        case LoginDLL::LoginStatus::ConnectionError:
+            qDebug() << "Connection error while trying to log in";
+            delete pinUI;
+            pinUI = new PinUI(this);
+            break;
     }
+
 }
 
 void mw1::logout()
 {
     pin = "";
     cardNumber = "";
-    qDebug() << "Logged out or at least zeroed variables";
+    qDebug() << "Logged out";
+
+    setWidget(SelectWidget::WidgetWelcome);
 }
 
-void mw1::setWidget(int type)
+void mw1::setWidget(SelectWidget type)
 {
     switch (type) {
-    case 1:
+    case WidgetWelcome:
         delete widget;
         widget = new Welcome(this);
         widget->show();
         break;
-    case 2:
+    case WidgetInfo:
         delete widget;
-        widget = new AccountInfo(this);
+        widget = new AccountInfo(this, login);
         widget->show();
         break;
     default:

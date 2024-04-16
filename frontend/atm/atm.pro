@@ -32,29 +32,23 @@ qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
-win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../build-rfid-Desktop_Qt_6_6_3_MinGW_64_bit-Debug/release/ -lrfid
-else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../build-rfid-Desktop_Qt_6_6_3_MinGW_64_bit-Debug/debug/ -lrfid
-
-INCLUDEPATH += $$PWD/../rfid
-DEPENDPATH += $$PWD/../rfid
-
-win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../build-pinuiDLL-Desktop_Qt_6_6_3_MinGW_64_bit-Debug/release/ -lpinuiDLL
-else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../build-pinuiDLL-Desktop_Qt_6_6_3_MinGW_64_bit-Debug/debug/ -lpinuiDLL
-
-INCLUDEPATH += $$PWD/../pinuiDLL
-DEPENDPATH += $$PWD/../pinuiDLL
-
 DISTFILES += \
     style.qss
 
-win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../build-loginDLL-Desktop_Qt_6_6_3_MinGW_64_bit-Debug/release/ -lloginDLL
-else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../build-loginDLL-Desktop_Qt_6_6_3_MinGW_64_bit-Debug/debug/ -lloginDLL
+win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../loginDLL/build/Desktop_Qt_6_6_3_MinGW_64_bit-Debug/release/ -lloginDLL
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../loginDLL/build/Desktop_Qt_6_6_3_MinGW_64_bit-Debug/debug/ -lloginDLL
 
 INCLUDEPATH += $$PWD/../loginDLL
 DEPENDPATH += $$PWD/../loginDLL
 
-win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../build-customerTests-Desktop_Qt_6_6_3_MinGW_64_bit-Debug/release/ -lcustomerTests
-else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../build-customerTests-Desktop_Qt_6_6_3_MinGW_64_bit-Debug/debug/ -lcustomerTests
+win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../pinuiDLL/build/Desktop_Qt_6_6_3_MinGW_64_bit-Debug/release/ -lpinuiDLL
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../pinuiDLL/build/Desktop_Qt_6_6_3_MinGW_64_bit-Debug/debug/ -lpinuiDLL
 
-INCLUDEPATH += $$PWD/../customerTests
-DEPENDPATH += $$PWD/../customerTests
+INCLUDEPATH += $$PWD/../pinuiDLL
+DEPENDPATH += $$PWD/../pinuiDLL
+
+win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../rfid/build/Desktop_Qt_6_6_3_MinGW_64_bit-Debug/release/ -lrfid
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../rfid/build/Desktop_Qt_6_6_3_MinGW_64_bit-Debug/debug/ -lrfid
+
+INCLUDEPATH += $$PWD/../rfid
+DEPENDPATH += $$PWD/../rfid

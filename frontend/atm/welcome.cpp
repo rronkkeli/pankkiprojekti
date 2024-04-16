@@ -12,9 +12,3 @@ Welcome::~Welcome()
 {
     delete ui;
 }
-
-void Welcome::on_pushButton_clicked()
-{
-    emit clicked();
-}
-
