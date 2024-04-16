@@ -6,7 +6,6 @@ LoginDLL::LoginDLL(QObject * parent):QObject(parent) {
 
 LoginDLL::~LoginDLL()
 {
-
 }
 
 void LoginDLL::login(QString cardId, QString cardPin)

@@ -41,6 +41,13 @@ public:
 
     void nostotapahtuma(QString tilin_numero,QString nostot);
 
+    // Enums make it easy to handle different outcomes
+    enum LoginStatus {
+        InvalidCredentials,
+        ConnectionError,
+        Ok,
+    };
+
 private:
     QNetworkAccessManager *loginManager;
     QNetworkAccessManager *cardInfoManager;
@@ -59,16 +66,16 @@ private slots:
     void loginSlot(QNetworkReply *reply);
     void cardInfoSlot(QNetworkReply *reply);
     void accountInfoSlot(QNetworkReply *reply);
-    void getCustomerSlot (QNetworkReply *reply);
-    void getWithdrawalsSlot (QNetworkReply *reply);
-    void getTilitjaKortitSlot (QNetworkReply *reply);
-    void getNostotapahtumaSlot (QNetworkReply *reply);
+    void getCustomerSlot(QNetworkReply *reply);
+    void getWithdrawalsSlot(QNetworkReply *reply);
+    void getTilitjaKortitSlot(QNetworkReply *reply);
+    void getNostotapahtumaSlot(QNetworkReply *reply);
 
 signals:
-    void loginStatus(QString);
-    void customerInfo(QString);
-    void withdrawalsInfo(QString withdrawal);
-    void tilitjakortitInfo(QString tilit, QString kortit);
+    void loginStatus(LoginStatus);
+    void customerInfo(QJsonArray);
+    void withdrawalsInfo(QJsonArray);
+    void tilitjakortitInfo(QJsonArray);
     void nostotapahtumaInfo(QString);
 };
 

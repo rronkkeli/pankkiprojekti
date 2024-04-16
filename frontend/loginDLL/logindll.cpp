@@ -6,7 +6,12 @@ LoginDLL::LoginDLL(QObject * parent):QObject(parent) {
 
 LoginDLL::~LoginDLL()
 {
-
+    delete loginManager;
+    delete cardInfoManager;
+    delete accountInfoManager;
+    delete getManager;
+    delete postManager;
+    delete reply;
 }
 
 void LoginDLL::login(QString cardId, QString cardPin)
@@ -25,7 +30,7 @@ void LoginDLL::login(QString cardId, QString cardPin)
 
     //Signals etc.
     loginManager = new QNetworkAccessManager(this);
-    connect(loginManager, SIGNAL(finished (QNetworkReply*)),
+    connect(loginManager, SIGNAL(finished(QNetworkReply*)),
             this, SLOT(loginSlot(QNetworkReply*)));
     reply = loginManager->post(request,QJsonDocument(jsonObj).toJson());
 }
@@ -120,28 +125,26 @@ void LoginDLL::accountInfoSlot(QNetworkReply *reply)
 void LoginDLL::loginSlot(QNetworkReply *reply)
 {
     response_data = reply->readAll();
-    QString status;
+    LoginStatus status;
     qDebug()<<response_data;
     //Show user what the response is and send info to main program for message boxes
     if(response_data =="-4078" || response_data.length() == 0) {
         //No database connection
-        status = "Virhe tietokantayhteydessä";
+        status = LoginStatus::ConnectionError;
         setCardNum(NULL);
-        emit loginStatus(status);
     }
     else if(response_data != "false") {
         //Success
-        status = "success";
+        status = LoginStatus::Ok;
         setWebToken(response_data);
         getCardInformation();
         getAccountInformation();
-        emit loginStatus(status);
     } else {
         //Wrong card num or pin
-        status = "Kortin numero tai pin ei täsmää.";
+        status = LoginStatus::InvalidCredentials;
         setCardNum(NULL);
-        emit loginStatus(status);
     }
+    emit loginStatus(status);
 }
 
 //GET CUSTOMER
@@ -162,7 +165,7 @@ void LoginDLL::getCustomerInfo()
 }
 
 //GET CUSTOMER SLOT
-void LoginDLL::getCustomerSlot (QNetworkReply *reply)
+void LoginDLL::getCustomerSlot(QNetworkReply *reply)
 {
     response_data=reply->readAll();
     qDebug()<<"DATA : "+response_data;
@@ -208,7 +211,7 @@ void LoginDLL::getWithdrawalsInfo()
 }
 
 //GET WITHRAWAL SLOT
-void LoginDLL::getWithdrawalsSlot (QNetworkReply *reply)
+void LoginDLL::getWithdrawalsSlot(QNetworkReply *reply)
 {
     response_data=reply->readAll();
     qDebug()<<"DATA : "+response_data;
