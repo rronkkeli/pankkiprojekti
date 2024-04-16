@@ -3,6 +3,9 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+const jwt = require('jsonwebtoken');
+
+var loginRouter = require('./routes/cardLogin');
 
 var app = express();
 
@@ -16,6 +19,12 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+// Unprotected routes
+app.use('/login', loginRouter);
+
+app.use(authenticateToken);
+
+// Protected routes
 
 // Declare developmend modules here
 const withrawalRouter = require('./routes/withdrawal');
@@ -28,8 +37,6 @@ const accountRouter = require('./routes/account');
 app.use('/account', accountRouter);
 var cardRouter = require('./routes/card');
 app.use('/card', cardRouter);
-const loginRouter = require('./routes/login');
-app.use('/login', loginRouter);
 
 const tilitjakortitRouter = require('./routes/tilitjakortit');
 app.use('/tilitjakortit', tilitjakortitRouter);
@@ -55,5 +62,24 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
+
+//Token authentication
+function authenticateToken(req, res, next) {
+  const authHeader = req.headers['authorization']
+  const token = authHeader && authHeader.split(' ')[1]
+
+  console.log(process.env.MY_TOKEN);
+  console.log("token = "+token);
+  if (token == null) return res.sendStatus(401)
+
+  jwt.verify(token, process.env.MY_TOKEN, function(err, card) {
+    
+    if (err) return res.sendStatus(403)
+
+    req.card = card
+
+    next()
+  })
+}
 
 module.exports = app;
