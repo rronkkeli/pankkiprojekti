@@ -28,6 +28,8 @@ const accountRouter = require('./routes/account');
 app.use('/account', accountRouter);
 var cardRouter = require('./routes/card');
 app.use('/card', cardRouter);
+const loginRouter = require('./routes/login');
+app.use('/login', loginRouter);
 
 const tilitjakortitRouter = require('./routes/tilitjakortit');
 app.use('/tilitjakortit', tilitjakortitRouter);
