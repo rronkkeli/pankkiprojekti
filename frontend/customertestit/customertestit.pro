@@ -26,6 +26,7 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 QT +=network
 
 
+
 win32: LIBS += -L$$PWD/../customerTests/build/debug/ -lcustomerTests
 
 INCLUDEPATH += $$PWD/../customerTests
