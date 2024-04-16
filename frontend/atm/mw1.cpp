@@ -7,7 +7,6 @@
 mw1::mw1(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::mw1)
-    , card_ins(false) //initialization of card_ins
 {
     ui->setupUi(this);
 
@@ -28,7 +27,8 @@ mw1::mw1(QWidget *parent)
         pinUI,
         SIGNAL(sendPinNumber(QString)),
         this,
-        SLOT(set_pin(QString))
+        SLOT(set_pin(QString)),
+        Qt::UniqueConnection
     );
 
     connect(
@@ -75,12 +75,28 @@ void mw1::setLoginStatus(LoginDLL::LoginStatus s)
             qDebug() << "Invalid credentials";
             delete pinUI;
             pinUI = new PinUI(this);
+            connect(
+                pinUI,
+                SIGNAL(sendPinNumber(QString)),
+                this,
+                SLOT(set_pin(QString)),
+                Qt::UniqueConnection
+            );
             pinUI->show();
             break;
         case LoginDLL::LoginStatus::ConnectionError:
             qDebug() << "Connection error while trying to log in";
             delete pinUI;
             pinUI = new PinUI(this);
+            connect(
+                pinUI,
+                SIGNAL(sendPinNumber(QString)),
+                this,
+                SLOT(set_pin(QString)),
+                Qt::UniqueConnection
+            );
+            break;
+        default:
             break;
     }
 
@@ -105,7 +121,7 @@ void mw1::setWidget(SelectWidget type)
         break;
     case WidgetInfo:
         delete widget;
-        widget = new AccountInfo(this, login);
+        widget = new AccountInfo(this, login, cardNumber);
         widget->show();
         break;
     default:

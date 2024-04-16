@@ -43,9 +43,9 @@ void LoginDLL::getCardInformation()
     QByteArray myToken="Bearer "+webToken;
     request.setRawHeader(QByteArray("Authorization"),(myToken));
     //WEBTOKEN LOPPU
-    cardInfoManager = new QNetworkAccessManager(this);
 
-    connect(cardInfoManager, SIGNAL(finished (QNetworkReply*)), this, SLOT(cardInfoSlot(QNetworkReply*)));
+    cardInfoManager = new QNetworkAccessManager(this);
+    connect(cardInfoManager, SIGNAL(finished(QNetworkReply*)), this, SLOT(cardInfoSlot(QNetworkReply*)));
     reply = cardInfoManager->get(request);
 }
 
@@ -76,7 +76,7 @@ void LoginDLL::logout()
 void LoginDLL::setCardNum(const QString &newCardNum)
 {
     cardNum = newCardNum;
-    qDebug()<<cardNum;
+    qDebug() << "Card number in logindll was set to: " << cardNum;
 }
 
 void LoginDLL::setWebToken(const QByteArray &newWebToken)
@@ -87,7 +87,7 @@ void LoginDLL::setWebToken(const QByteArray &newWebToken)
 void LoginDLL::setUserId(const QString &newUserId)
 {
     userId = newUserId;
-    qDebug()<<"User id " + userId;
+    qDebug()<<"User id " + userId + " was set in logindll";
 }
 
 void LoginDLL::setAccountId(const QString &newAccountId)
@@ -99,6 +99,7 @@ void LoginDLL::setAccountId(const QString &newAccountId)
 void LoginDLL::cardInfoSlot(QNetworkReply *reply)
 {
     response_data=reply->readAll();
+    qDebug() << "Response data: " << QString(response_data);
 
     QJsonDocument json_doc = QJsonDocument::fromJson(response_data);
     QJsonArray json_array = json_doc.array();
@@ -107,12 +108,18 @@ void LoginDLL::cardInfoSlot(QNetworkReply *reply)
         QJsonObject json_obj = value.toObject();
         card+=json_obj["idcard"].toString()+","+QString::number(json_obj["idcustomer"].toInt());
         setUserId(QString::number(json_obj["idcustomer"].toInt()));
+        qDebug() << "UserId was set to " << userId << " by cardInfo";
     }
+
+    reply->deleteLater();
+    getAccountInformation();
 }
 
 void LoginDLL::accountInfoSlot(QNetworkReply *reply)
 {
     response_data=reply->readAll();
+
+    qDebug() << "Account info: " << response_data;
 
     QJsonDocument json_doc = QJsonDocument::fromJson(response_data);
     QJsonArray json_array = json_doc.array();
@@ -120,6 +127,10 @@ void LoginDLL::accountInfoSlot(QNetworkReply *reply)
         QJsonObject json_obj = value.toObject();
         setAccountId(QString::number(json_obj["idaccount"].toInt()));
     }
+
+    emit accountInfo(json_array);
+    reply->deleteLater();
+    getWithdrawalsInfo();
 }
 
 void LoginDLL::loginSlot(QNetworkReply *reply)
@@ -135,16 +146,19 @@ void LoginDLL::loginSlot(QNetworkReply *reply)
     }
     else if(response_data != "false") {
         //Success
+        qDebug() << "Apparently login succeeded";
         status = LoginStatus::Ok;
         setWebToken(response_data);
         getCardInformation();
-        getAccountInformation();
     } else {
         //Wrong card num or pin
         status = LoginStatus::InvalidCredentials;
         setCardNum(NULL);
     }
     emit loginStatus(status);
+    qDebug() << "Logged in by logindll";
+
+    reply->deleteLater();
 }
 
 //GET CUSTOMER
@@ -160,7 +174,7 @@ void LoginDLL::getCustomerInfo()
     request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
 
     getManager = new QNetworkAccessManager(this);
-    connect(getManager, SIGNAL(finished (QNetworkReply*)),this, SLOT(getCustomerSlot(QNetworkReply*)));
+    connect(getManager, SIGNAL(finished(QNetworkReply*)),this, SLOT(getCustomerSlot(QNetworkReply*)));
     reply = getManager->get(request);
 }
 
@@ -174,7 +188,7 @@ void LoginDLL::getCustomerSlot(QNetworkReply *reply)
 
     emit customerInfo(customer);
     reply->deleteLater();
-    getManager->deleteLater();
+    // getManager->deleteLater();
 }
 
 //GET WITHRAWAL
@@ -182,6 +196,8 @@ void LoginDLL::getWithdrawalsInfo()
 {
     QString site_url="http://localhost:3000/tilitiedot";
     site_url.append("/" + userId);
+    qDebug() << "userId in getWithdrawalsInfo() was " << userId;
+    qDebug() << "Trying to access url " << site_url;
     QNetworkRequest request((site_url));
     //WEBTOKEN ALKU
     QByteArray myToken="Bearer "+webToken;
@@ -190,7 +206,7 @@ void LoginDLL::getWithdrawalsInfo()
     request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
 
     getManager = new QNetworkAccessManager(this);
-    connect(getManager, SIGNAL(finished (QNetworkReply*)),this, SLOT(getWithdrawalsSlot(QNetworkReply*)));
+    connect(getManager, SIGNAL(finished(QNetworkReply*)),this, SLOT(getWithdrawalsSlot(QNetworkReply*)));
     reply = getManager->get(request);
 }
 
@@ -204,12 +220,13 @@ void LoginDLL::getWithdrawalsSlot(QNetworkReply *reply)
 
     emit withdrawalsInfo(accountinfo);
     reply->deleteLater();
-    getManager->deleteLater();
+    // getManager->deleteLater();
 }
 
 //GET TILIT JA KORTIT
 void LoginDLL::getTilitjaKortitInfo()
 {
+    qDebug() << "Current userId is: " << userId << "(On row 216, logindll.cpp)";
     QString site_url="http://localhost:3000/tilitjakortit";
     site_url.append("/" + userId);
 
@@ -221,7 +238,7 @@ void LoginDLL::getTilitjaKortitInfo()
     request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
 
     getManager = new QNetworkAccessManager(this);
-    connect(getManager, SIGNAL(finished (QNetworkReply*)),this, SLOT(getTilitjaKortitSlot(QNetworkReply*)));
+    connect(getManager, SIGNAL(finished(QNetworkReply*)),this, SLOT(getTilitjaKortitSlot(QNetworkReply*)));
     reply = getManager->get(request);
 }
 
@@ -237,7 +254,7 @@ void LoginDLL::getTilitjaKortitSlot(QNetworkReply *reply)
     qDebug()<<json_array;
 
     reply->deleteLater();
-    getManager->deleteLater();
+    // getManager->deleteLater();
 }
 
 
@@ -260,13 +277,13 @@ void LoginDLL::nostotapahtuma(QString tilin_numero,QString nostot)
     request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
 
     getManager = new QNetworkAccessManager(this);
-    connect(getManager, SIGNAL(finished (QNetworkReply*)),this, SLOT(getNostotapahtumaSlot(QNetworkReply*)));
+    connect(getManager, SIGNAL(finished(QNetworkReply*)),this, SLOT(getNostotapahtumaSlot(QNetworkReply*)));
     reply = getManager->get(request);
 }
 
 
 //NOSTOTAPAHTUMA SLOT
-void LoginDLL::getNostotapahtumaSlot (QNetworkReply *reply)
+void LoginDLL::getNostotapahtumaSlot(QNetworkReply *reply)
 {
 
     QByteArray responseData = reply->readAll();
@@ -287,8 +304,7 @@ void LoginDLL::getNostotapahtumaSlot (QNetworkReply *reply)
                 }
             }
         }
-
     }
     reply->deleteLater();
-    getManager->deleteLater();
+    // getManager->deleteLater();
 }

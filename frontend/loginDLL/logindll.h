@@ -76,6 +76,7 @@ signals:
     void customerInfo(QJsonArray);
     void withdrawalsInfo(QJsonArray);
     void tilitjakortitInfo(QJsonArray);
+    void accountInfo(QJsonArray);
     void nostotapahtumaInfo(QString);
 };
 

@@ -30,7 +30,6 @@ private slots:
 private:
     Ui::mw1 *ui;
     QWidget *widget;
-    bool card_ins;
     RFID *cardReader;
     QString cardNumber;
     PinUI *pinUI;
