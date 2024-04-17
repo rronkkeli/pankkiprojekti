@@ -34,7 +34,7 @@ AccountInfo::~AccountInfo()
 void AccountInfo::getWithdrawalsInfo(QJsonArray wi) {
     this->withdrawalsInfo = wi;
     qsizetype len = withdrawalsInfo.size();
-    QString data = "Tunniste\tSumma\tPäivämäärä\r\n";
+    QString data = "Tunniste\tSumma\tNostoajankohta\r\n";
 
     for (qsizetype i = 0; i < len; i++) {
         QJsonObject row = withdrawalsInfo.at(i).toObject();
@@ -55,20 +55,22 @@ void AccountInfo::getAccountInfo(QJsonArray accountData)
     qsizetype len = accountData.size();
 
     QString id, balance, type;
-    int credit;
+    QString credit;
 
     id = QString::number(data["idaccount"].toInt());
     balance = data["balance"].toString();
-    credit = data["credit"].toInt();
+    credit = data["credit"].toString();
 
     ui->accountBalance->setText(balance);
     ui->accountNumber->setText(id);
 
-    if (&credit == nullptr) {
+    qDebug() << "Credit: " << credit;
+
+    if (credit == "") {
         type = QString("Debit");
     } else {
-        if (credit > 0) {
-            type = QString("Credit");
+        if (credit != "0.00" || credit != "0") {
+            type = QString("Credit (" + credit + ")");
         } else {
             type = QString("Debit");
         }
