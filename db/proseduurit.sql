@@ -29,9 +29,21 @@ END IF;
 
 END//
 
+DROP procedure IF EXISTS tilitiedot;
 
+CREATE PROCEDURE tilitiedot(IN asiakas INT)
+BEGIN
 
+       SELECT idwithdrawal, withdrawal.idaccount, amount, timestamp
+    FROM withdrawal
 
+    JOIN account ON withdrawal.idaccount = account.idaccount
+    JOIN customer_has_account ON account.idaccount = customer_has_account.idaccount
+    WHERE asiakas = customer_has_account.idcustomer ORDER BY idwithdrawal desc;
+END//
+
+DROP PROCEDURE IF EXISTS tilit_ja_kortit;
+    
 CREATE PROCEDURE tilit_ja_kortit(IN asiakas INT)
 BEGIN
 
