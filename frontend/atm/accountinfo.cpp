@@ -42,7 +42,7 @@ void AccountInfo::getWithdrawalsInfo(QJsonArray wi) {
         QString id = QString::number(row["idwithdrawal"].toInt());
         QString amount = row["amount"].toString();
         QString time = row["timestamp"].toString();
-
+        time = editTimestamp(time);
         data.append(id + "\t" + amount + "\t" + time + "\r\n");
     }
 
@@ -75,4 +75,11 @@ void AccountInfo::getAccountInfo(QJsonArray accountData)
     }
 
     ui->accountType->setText(type);
+}
+
+QString AccountInfo::editTimestamp(QString timestamp)
+{
+    QDateTime time = QDateTime::fromString(timestamp, Qt::ISODateWithMs);
+    QString editedTime = time.toString("hh.mm dd.MM.yyyy");
+    return editedTime;
 }

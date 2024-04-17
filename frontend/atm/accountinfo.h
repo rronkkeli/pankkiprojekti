@@ -8,6 +8,8 @@
 #include <QJsonValue>
 #include "logindll.h"
 
+#include <QDateTime>
+
 namespace Ui {
 class AccountInfo;
 }
@@ -19,6 +21,8 @@ class AccountInfo : public QWidget
 public:
     explicit AccountInfo(QWidget *parent = nullptr, LoginDLL *login = nullptr, QString card = "-");
     ~AccountInfo();
+
+    QString editTimestamp(QString);
 
 private:
     Ui::AccountInfo *ui;
