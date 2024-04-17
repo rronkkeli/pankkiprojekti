@@ -194,9 +194,9 @@ void LoginDLL::getCustomerSlot(QNetworkReply *reply)
 //GET WITHRAWAL
 void LoginDLL::getWithdrawalsInfo()
 {
-    QString site_url="http://localhost:3000/tilitiedot";
-    site_url.append("/" + userId);
-    qDebug() << "userId in getWithdrawalsInfo() was " << userId;
+    QString site_url="http://localhost:3000/withdrawal";
+    site_url.append("/" + accountId);
+    qDebug() << "userId in getWithdrawalsInfo() was " << accountId;
     qDebug() << "Trying to access url " << site_url;
     QNetworkRequest request((site_url));
     //WEBTOKEN ALKU
