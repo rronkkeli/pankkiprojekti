@@ -32,7 +32,7 @@ AccountInfo::~AccountInfo()
 }
 
 void AccountInfo::getWithdrawalsInfo(QJsonArray wi) {
-    this->withdrawalsInfo = wi.at(0).toArray();
+    this->withdrawalsInfo = wi;
     qsizetype len = withdrawalsInfo.size();
     QString data = "Tunniste\tSumma\tPäivämäärä\r\n";
 
