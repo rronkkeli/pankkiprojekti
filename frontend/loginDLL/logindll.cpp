@@ -1,17 +1,12 @@
 #include "logindll.h"
 
 LoginDLL::LoginDLL(QObject * parent):QObject(parent) {
-
+    qDebug() << "LoginDLL created";
 }
 
 LoginDLL::~LoginDLL()
 {
-    delete loginManager;
-    delete cardInfoManager;
-    delete accountInfoManager;
-    delete getManager;
-    delete postManager;
-    delete reply;
+    qDebug() << "LoginDLL deleted";
 }
 
 void LoginDLL::login(QString cardId, QString cardPin)
@@ -51,6 +46,7 @@ void LoginDLL::getCardInformation()
 
 void LoginDLL::getAccountInformation()
 {
+    qDebug() << "Got request for account information..";
     QString site_url="http://localhost:3000/card/accountDetails/" + cardNum;
     QNetworkRequest request((site_url));
     //WEBTOKEN ALKU
@@ -99,7 +95,7 @@ void LoginDLL::setAccountId(const QString &newAccountId)
 void LoginDLL::cardInfoSlot(QNetworkReply *reply)
 {
     response_data=reply->readAll();
-    qDebug() << "Response data: " << QString(response_data);
+    qDebug() << "Card info: " << QString(response_data);
 
     QJsonDocument json_doc = QJsonDocument::fromJson(response_data);
     QJsonArray json_array = json_doc.array();
@@ -112,7 +108,7 @@ void LoginDLL::cardInfoSlot(QNetworkReply *reply)
     }
 
     reply->deleteLater();
-    getAccountInformation();
+    cardInfoManager->deleteLater();
 }
 
 void LoginDLL::accountInfoSlot(QNetworkReply *reply)
@@ -123,14 +119,17 @@ void LoginDLL::accountInfoSlot(QNetworkReply *reply)
 
     QJsonDocument json_doc = QJsonDocument::fromJson(response_data);
     QJsonArray json_array = json_doc.array();
+
+    qDebug() << "Account info length: " << json_array.size();
+
     foreach (const QJsonValue &value, json_array) {
         QJsonObject json_obj = value.toObject();
         setAccountId(QString::number(json_obj["idaccount"].toInt()));
     }
 
-    emit accountInfo(json_array);
+    emit cardInfo(json_array);
     reply->deleteLater();
-    getWithdrawalsInfo();
+    accountInfoManager->deleteLater();
 }
 
 void LoginDLL::loginSlot(QNetworkReply *reply)
@@ -149,7 +148,7 @@ void LoginDLL::loginSlot(QNetworkReply *reply)
         qDebug() << "Apparently login succeeded";
         status = LoginStatus::Ok;
         setWebToken(response_data);
-        getCardInformation();
+        // getCardInformation();
     } else {
         //Wrong card num or pin
         status = LoginStatus::InvalidCredentials;
@@ -159,6 +158,7 @@ void LoginDLL::loginSlot(QNetworkReply *reply)
     qDebug() << "Logged in by logindll";
 
     reply->deleteLater();
+    loginManager->deleteLater();
 }
 
 //GET CUSTOMER
@@ -188,7 +188,7 @@ void LoginDLL::getCustomerSlot(QNetworkReply *reply)
 
     emit customerInfo(customer);
     reply->deleteLater();
-    // getManager->deleteLater();
+    getManager->deleteLater();
 }
 
 //GET WITHRAWAL
@@ -220,7 +220,7 @@ void LoginDLL::getWithdrawalsSlot(QNetworkReply *reply)
 
     emit withdrawalsInfo(accountinfo);
     reply->deleteLater();
-    // getManager->deleteLater();
+    getManager->deleteLater();
 }
 
 //GET TILIT JA KORTIT
@@ -254,7 +254,7 @@ void LoginDLL::getTilitjaKortitSlot(QNetworkReply *reply)
     qDebug()<<json_array;
 
     reply->deleteLater();
-    // getManager->deleteLater();
+    getManager->deleteLater();
 }
 
 
@@ -306,5 +306,5 @@ void LoginDLL::getNostotapahtumaSlot(QNetworkReply *reply)
         }
     }
     reply->deleteLater();
-    // getManager->deleteLater();
+    getManager->deleteLater();
 }

@@ -7,6 +7,7 @@
 #include "logindll.h"
 #include "welcome.h"
 #include "accountinfo.h"
+#include "cardselect.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -26,6 +27,7 @@ private slots:
     void fetch_card_data();
     void set_pin(QString);
     void setLoginStatus(LoginDLL::LoginStatus);
+    void setAccount(QJsonObject);
     void logout();
 
 private:
@@ -37,10 +39,13 @@ private:
     QString pin;
     LoginDLL *login;
     LoginDLL::LoginStatus loginStatus;
+    QJsonObject account;
+    bool initialization = true;
 
     enum SelectWidget {
         WidgetWelcome,
         WidgetInfo,
+        WidgetCardSelect,
     };
 
     void setWidget(SelectWidget);

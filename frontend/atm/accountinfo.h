@@ -19,9 +19,8 @@ class AccountInfo : public QWidget
     Q_OBJECT
 
 public:
-    explicit AccountInfo(QWidget *parent = nullptr, LoginDLL *login = nullptr, QString card = "-");
+    explicit AccountInfo(QWidget *parent = nullptr, LoginDLL *login = nullptr, QString card = "-", QJsonObject account = QJsonObject());
     ~AccountInfo();
-
     QString editTimestamp(QString);
 
 private:

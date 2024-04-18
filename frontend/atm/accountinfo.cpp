@@ -1,7 +1,7 @@
 #include "accountinfo.h"
 #include "ui_accountinfo.h"
 
-AccountInfo::AccountInfo(QWidget *parent, LoginDLL *l, QString card)
+AccountInfo::AccountInfo(QWidget *parent, LoginDLL *l, QString card, QJsonObject account)
     : QWidget(parent)
     , ui(new Ui::AccountInfo)
 {
@@ -15,19 +15,31 @@ AccountInfo::AccountInfo(QWidget *parent, LoginDLL *l, QString card)
         SLOT(getWithdrawalsInfo(QJsonArray))
     );
 
-    connect(
-        login,
-        SIGNAL(accountInfo(QJsonArray)),
-        this,
-        SLOT(getAccountInfo(QJsonArray))
-    );
-
     ui->cardNumber->setText(card);
+
+    QString credit = account["credit"].toString();
+    QString accountNumber = QString::number(account["idaccount"].toInt());
+    QString balance = account["balance"].toString();
+
+    if (credit == "" || credit == "0" || credit == "0.00" || credit.isNull()) {
+        ui->accountType->setText("Debit");
+    } else {
+        ui->accountType->setText("Credit (" + credit + ")");
+    }
+
+    login->setAccountId(accountNumber);
+    login->getWithdrawalsInfo();
+
+    ui->accountBalance->setText(balance);
+    ui->accountNumber->setText(accountNumber);
+
+    qDebug() << "AccountInfo widget created";
 }
 
 AccountInfo::~AccountInfo()
 {
     delete ui;
+    qDebug() << "AccountInfo widget deleted";
 }
 
 void AccountInfo::getWithdrawalsInfo(QJsonArray wi) {

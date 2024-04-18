@@ -78,6 +78,7 @@ signals:
     void tilitjakortitInfo(QJsonArray);
     void accountInfo(QJsonArray);
     void nostotapahtumaInfo(QString);
+    void cardInfo(QJsonArray);
 };
 
 #endif // LOGINDLL_H
