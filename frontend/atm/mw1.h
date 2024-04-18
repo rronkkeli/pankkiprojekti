@@ -26,6 +26,7 @@ private slots:
     void fetch_card_data();
     void set_pin(QString);
     void setLoginStatus(LoginDLL::LoginStatus);
+    void logout();
 
 private:
     Ui::mw1 *ui;
@@ -34,7 +35,6 @@ private:
     QString cardNumber;
     PinUI *pinUI;
     QString pin;
-    void logout();
     LoginDLL *login;
     LoginDLL::LoginStatus loginStatus;
 

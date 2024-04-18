@@ -28,7 +28,6 @@ AccountInfo::AccountInfo(QWidget *parent, LoginDLL *l, QString card)
 AccountInfo::~AccountInfo()
 {
     delete ui;
-    delete login;
 }
 
 void AccountInfo::getWithdrawalsInfo(QJsonArray wi) {
@@ -85,3 +84,9 @@ QString AccountInfo::editTimestamp(QString timestamp)
     QString editedTime = time.toString("hh.mm dd.MM.yyyy");
     return editedTime;
 }
+
+void AccountInfo::on_logout_clicked()
+{
+    emit logout();
+}
+

@@ -36,6 +36,11 @@ private:
 public slots:
     void getWithdrawalsInfo(QJsonArray);
     void getAccountInfo(QJsonArray);
+private slots:
+    void on_logout_clicked();
+
+signals:
+    void logout();
 };
 
 #endif // ACCOUNTINFO_H

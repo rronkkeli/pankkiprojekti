@@ -107,24 +107,38 @@ void mw1::logout()
     pin = "";
     cardNumber = "";
     qDebug() << "Logged out";
-
+    disconnect(widget, SIGNAL(logout()), this, SLOT(logout()));
     setWidget(SelectWidget::WidgetWelcome);
 }
 
 void mw1::setWidget(SelectWidget type)
 {
+    qDebug() << "Selecting widget..";
     switch (type) {
     case WidgetWelcome:
+        qDebug() << "Welcome widget selected";
         delete widget;
+        delete login;
+        login = new LoginDLL(this);
+        qDebug() << "Login data cleared";
         widget = new Welcome(this);
         widget->show();
         break;
     case WidgetInfo:
+        qDebug() << "Info widget selected";
         delete widget;
         widget = new AccountInfo(this, login, cardNumber);
+        connect(
+            widget,
+            SIGNAL(logout()),
+            this,
+            SLOT(logout()),
+            Qt::UniqueConnection
+        );
         widget->show();
         break;
     default:
+        qDebug() << "No widget selected";
         break;
     }
 }
