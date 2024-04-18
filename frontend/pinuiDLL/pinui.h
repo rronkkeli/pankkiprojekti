@@ -9,7 +9,7 @@ namespace Ui {
 class PinUI;
 }
 
-class PINUIDLL_EXPORT PinUI : public QDialog
+class PINUIDLL_EXPORT PinUI : public QWidget
 {
     Q_OBJECT
 

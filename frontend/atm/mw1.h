@@ -35,7 +35,6 @@ private:
     QWidget *widget;
     RFID *cardReader;
     QString cardNumber;
-    PinUI *pinUI;
     QString pin;
     LoginDLL *login;
     LoginDLL::LoginStatus loginStatus;
@@ -46,6 +45,7 @@ private:
         WidgetWelcome,
         WidgetInfo,
         WidgetCardSelect,
+        WidgetPinUI,
     };
 
     void setWidget(SelectWidget);
