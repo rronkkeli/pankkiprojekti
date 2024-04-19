@@ -1,6 +1,17 @@
 #include "logindll.h"
 
 LoginDLL::LoginDLL(QObject * parent):QObject(parent) {
+
+    QString path = "socket";
+    QFile socketfile(path);
+
+    if (!socketfile.open(QFile::ReadOnly)) {
+        qDebug() << "Opening socket file failed";
+        socket = "http://localhost:3000";
+    } else {
+        socket = QLatin1String(socketfile.readAll());
+    }
+
     qDebug() << "LoginDLL created";
 }
 
@@ -19,7 +30,7 @@ void LoginDLL::login(QString cardId, QString cardPin)
     jsonObj.insert("idcard",cardId);
 
     //URL etc.
-    QString site_url = "http://localhost:3000/login";
+    QString site_url = socket + "/login";
     QNetworkRequest request((site_url));
     request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
 
@@ -32,10 +43,10 @@ void LoginDLL::login(QString cardId, QString cardPin)
 
 void LoginDLL::getCardInformation()
 {
-    QString site_url="http://localhost:3000/card/" + cardNum;
+    QString site_url = socket + "/card/" + cardNum;
     QNetworkRequest request((site_url));
     //WEBTOKEN ALKU
-    QByteArray myToken="Bearer "+webToken;
+    QByteArray myToken="Bearer " + webToken;
     request.setRawHeader(QByteArray("Authorization"),(myToken));
     //WEBTOKEN LOPPU
 
@@ -47,10 +58,10 @@ void LoginDLL::getCardInformation()
 void LoginDLL::getAccountInformation()
 {
     qDebug() << "Got request for account information..";
-    QString site_url="http://localhost:3000/card/accountDetails/" + cardNum;
+    QString site_url = socket + "/card/accountDetails/" + cardNum;
     QNetworkRequest request((site_url));
     //WEBTOKEN ALKU
-    QByteArray myToken="Bearer "+webToken;
+    QByteArray myToken = "Bearer " + webToken;
     request.setRawHeader(QByteArray("Authorization"),(myToken));
     //WEBTOKEN LOPPU
     accountInfoManager = new QNetworkAccessManager(this);
@@ -149,13 +160,13 @@ void LoginDLL::loginSlot(QNetworkReply *reply)
         status = LoginStatus::Ok;
         setWebToken(response_data);
         // getCardInformation();
+        qDebug() << "Logged in by logindll";
     } else {
         //Wrong card num or pin
         status = LoginStatus::InvalidCredentials;
         setCardNum(NULL);
     }
     emit loginStatus(status);
-    qDebug() << "Logged in by logindll";
 
     reply->deleteLater();
     loginManager->deleteLater();
@@ -164,7 +175,7 @@ void LoginDLL::loginSlot(QNetworkReply *reply)
 //GET CUSTOMER
 void LoginDLL::getCustomerInfo()
 {
-    QString site_url="http://localhost:3000/customer";
+    QString site_url = socket + "/customer";
     site_url.append("/" + userId);
     QNetworkRequest request((site_url));
     //WEBTOKEN ALKU
@@ -194,7 +205,7 @@ void LoginDLL::getCustomerSlot(QNetworkReply *reply)
 //GET WITHRAWAL
 void LoginDLL::getWithdrawalsInfo()
 {
-    QString site_url="http://localhost:3000/withdrawal";
+    QString site_url = socket + "/withdrawal";
     site_url.append("/" + accountId);
     qDebug() << "userId in getWithdrawalsInfo() was " << accountId;
     qDebug() << "Trying to access url " << site_url;
@@ -227,7 +238,7 @@ void LoginDLL::getWithdrawalsSlot(QNetworkReply *reply)
 void LoginDLL::getTilitjaKortitInfo()
 {
     qDebug() << "Current userId is: " << userId << "(On row 216, logindll.cpp)";
-    QString site_url="http://localhost:3000/tilitjakortit";
+    QString site_url = socket + "/tilitjakortit";
     site_url.append("/" + userId);
 
     QNetworkRequest request((site_url));
@@ -262,7 +273,7 @@ void LoginDLL::getTilitjaKortitSlot(QNetworkReply *reply)
 void LoginDLL::nostotapahtuma(QString tilin_numero,QString nostot)
 {
 
-    QString site_url="http://localhost:3000/nostotapahtuma";
+    QString site_url="http://3000akcloud.dy.fi:9000/nostotapahtuma";
     site_url.append("/" + userId);
     site_url.append("/" + tilin_numero);
     site_url.append("/" + nostot);

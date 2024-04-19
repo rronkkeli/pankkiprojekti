@@ -36,21 +36,21 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 DISTFILES += \
-    style.qss
+    darkeum.qss
 
-win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../loginDLL/build/Desktop_Qt_6_6_3_MinGW_64_bit-Debug/release/ -lloginDLL
+win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../loginDLL/build/Desktop_Qt_6_6_3_MinGW_64_bit-Release/release/ -lloginDLL
 else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../loginDLL/build/Desktop_Qt_6_6_3_MinGW_64_bit-Debug/debug/ -lloginDLL
 
 INCLUDEPATH += $$PWD/../loginDLL
 DEPENDPATH += $$PWD/../loginDLL
 
-win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../pinuiDLL/build/Desktop_Qt_6_6_3_MinGW_64_bit-Debug/release/ -lpinuiDLL
+win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../pinuiDLL/build/Desktop_Qt_6_6_3_MinGW_64_bit-Release/release/ -lpinuiDLL
 else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../pinuiDLL/build/Desktop_Qt_6_6_3_MinGW_64_bit-Debug/debug/ -lpinuiDLL
 
 INCLUDEPATH += $$PWD/../pinuiDLL
 DEPENDPATH += $$PWD/../pinuiDLL
 
-win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../rfid/build/Desktop_Qt_6_6_3_MinGW_64_bit-Debug/release/ -lrfid
+win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../rfid/build/Desktop_Qt_6_6_3_MinGW_64_bit-Release/release/ -lrfid
 else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../rfid/build/Desktop_Qt_6_6_3_MinGW_64_bit-Debug/debug/ -lrfid
 
 INCLUDEPATH += $$PWD/../rfid

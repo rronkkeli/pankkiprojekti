@@ -57,6 +57,7 @@ private:
     QNetworkReply *reply;
     QByteArray response_data;
 
+    QString socket;
     QString cardNum;
     QByteArray webToken;
     QString userId;

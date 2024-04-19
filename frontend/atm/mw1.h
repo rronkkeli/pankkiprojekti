@@ -40,6 +40,7 @@ private:
     LoginDLL::LoginStatus loginStatus;
     QJsonObject account;
     bool initialization = true;
+    int tries = 0;
 
     enum SelectWidget {
         WidgetWelcome,

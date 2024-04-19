@@ -9,10 +9,18 @@ mw1::mw1(QWidget *parent)
     , ui(new Ui::mw1)
 {
     ui->setupUi(this);
-    setWidget(SelectWidget::WidgetWelcome);
-    initialization = false;
 
     cardReader = new RFID(this);
+    qDebug() << "Trying to create new LoginDLL..";
+    login = new LoginDLL(this);
+
+    connect(
+        login,
+        SIGNAL(loginStatus(LoginDLL::LoginStatus)),
+        this,
+        SLOT(setLoginStatus(LoginDLL::LoginStatus)),
+        Qt::UniqueConnection
+    );
 
     connect(
         cardReader,
@@ -21,6 +29,8 @@ mw1::mw1(QWidget *parent)
         SLOT(fetch_card_data())
     );
 
+    setWidget(SelectWidget::WidgetWelcome);
+    initialization = false;
 }
 
 mw1::~mw1()
@@ -56,8 +66,14 @@ void mw1::setLoginStatus(LoginDLL::LoginStatus s)
 
         case LoginDLL::LoginStatus::InvalidCredentials:
             qDebug() << "Invalid credentials";
-            setWidget(SelectWidget::WidgetPinUI);
-            break;
+            tries++;
+
+            if (tries < 3) {
+                setWidget(SelectWidget::WidgetPinUI);
+            } else {
+                setWidget(SelectWidget::WidgetWelcome);
+            }
+                break;
 
         case LoginDLL::LoginStatus::ConnectionError:
             qDebug() << "Connection error while trying to log in";
@@ -95,19 +111,13 @@ void mw1::setWidget(SelectWidget type)
         if (!initialization) {
             qDebug() << "Deleting widget..";
             delete widget;
-            delete login;
+            // delete login;
         }
 
-        qDebug() << "Trying to create new LoginDLL..";
-        login = new LoginDLL(this);
-
-        connect(
-            login,
-            SIGNAL(loginStatus(LoginDLL::LoginStatus)),
-            this,
-            SLOT(setLoginStatus(LoginDLL::LoginStatus)),
-            Qt::UniqueConnection
-        );
+        login->logout();
+        pin = "";
+        cardNumber = "";
+        tries = 0;
 
         widget = new Welcome(this);
         widget->show();

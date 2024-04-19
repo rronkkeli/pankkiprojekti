@@ -7,16 +7,14 @@
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
-
-    QString path = QDir::currentPath();
-    path.push_back("/debug/style.qss");
-
+    QString path = "darkeum.qss";
     qDebug() << "Current path of style is: " << path;
 
     QFile stylesheet(path);
     if (stylesheet.open(QFile::ReadOnly)) {
         qDebug() << "Stylesheet opened";
     }
+
     QString styledata = QLatin1String(stylesheet.readAll());
 
     a.setStyleSheet(styledata);

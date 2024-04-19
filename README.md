@@ -1,46 +1,5 @@
-# SPL_Group7
+# ATM project
 
-RahanAhneRacing ryhmän oma github repositorio
+## Slick Darkeum style
 
-
-Tavoitteena luoda toimiva pankkiautomaatti ohjelma
-
-## CRUD-testit
-
-### withdrawal
-
-Testit läpäisty
-
-### account
-
-Testit läpäisty
-
-### card
-
-Testit läpäisty
-
-### customer
-
-Testit läpäisty
-
-### credentials
-
-Testit läpäisty
-
-
-
-⠀⠀⠀⠀- ⣠⠤⠖⠚⠛⠉⠛⠒⠒⠦⢤
-⠀⠀⠀⠀⣠⠞⠁⠀⠀⠠⠒⠂⠀⠀⠀⠀⠀⠉⠳⡄
-⠀⠀⠀⢸⠇⠀⠀⠀⢀⡄⠤⢤⣤⣤⡀⢀⣀⣀⣀⣹⡄
-⠀⠀⠀⠘⢧⠀⠀⠀⠀⣙⣒⠚⠛⠋⠁⡈⠓⠴⢿⡿⠁
-⠀⠀⠀⠀⠀⠙⠒⠤⢀⠛⠻⠿⠿⣖⣒⣁⠤⠒⠋
-⠀⠀⠀⠀⠀⢀⣀⣀⠼⠀⠈⣻⠋⠉⠁
-⠀⠀⠀⡴⠚⠉⠀⠀⠀⠀⠀⠈⠀⠐⢦
-⠀⠀⣸⠃⠀⡴⠋⠉⠀⢄⣀⠤⢴⠄⠀⡇
-⠀⢀⡏⠀⠀⠹⠶⢀⡔⠉⠀⠀⣼⠀⠀⡇
-⠀⣼⠁⠀⠙⠦⣄⡀⣀⡤⠶⣉⣁⣀⠘
-⢀⡟⠀⠀⠀⠀⠀⠁⠀⠀⠀⠀⣽
-⢸⠇⠀⠀⠀⢀⡤⠦⢤⡄⠀⠀⡟
-⢸⠀⠀⠀⠀⡾⠀⠀⠀⡿⠀⠀⣇⣀⣀
-⢸⠀⠀⠈⠉⠓⢦⡀⢰⣇⡀⠀⠉⠀⠀⣉⠇
-⠈⠓⠒⠒⠀⠐⠚⠃⠀⠈⠉⠉⠉⠉⠉⠁
+This project uses Darkeum style from [qss-stock.devsecstudio.com](https://qss-stock.devsecstudio.com/templates.php).
