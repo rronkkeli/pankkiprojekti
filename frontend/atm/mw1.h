@@ -32,6 +32,7 @@ private slots:
     void openWithdraw();
     void getAccountNumber(QString);
     void openInfo();
+    void refreshWithdrawals();
 
 private:
     Ui::mw1 *ui;
@@ -43,6 +44,7 @@ private:
     LoginDLL::LoginStatus loginStatus;
     QJsonObject account;
     bool initialization = true;
+    bool infoRefreshReady = true;
     int tries = 0;
     QString accountID;
 

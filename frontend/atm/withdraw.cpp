@@ -20,7 +20,6 @@ Withdraw::~Withdraw()
 void Withdraw::sendWithdrawal()
 {
     login->nostotapahtuma(account, withdrawal);
-
 }
 
 void Withdraw::add(QString x)

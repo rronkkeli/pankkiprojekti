@@ -12,7 +12,8 @@ AccountInfo::AccountInfo(QWidget *parent, LoginDLL *l, QString card, QJsonObject
         login,
         SIGNAL(withdrawalsInfo(QJsonArray)),
         this,
-        SLOT(getWithdrawalsInfo(QJsonArray))
+        SLOT(getWithdrawalsInfo(QJsonArray)),
+        Qt::SingleShotConnection
     );
 
     ui->cardNumber->setText(card);
@@ -28,12 +29,9 @@ AccountInfo::AccountInfo(QWidget *parent, LoginDLL *l, QString card, QJsonObject
     }
 
     login->setAccountId(this->account);
-    login->getWithdrawalsInfo();
 
     ui->accountBalance->setText(balance);
     ui->accountNumber->setText(this->account);
-
-    emit accountNumberSignal(this->account);
 
     qDebug() << "AccountInfo widget created";
 }
@@ -45,6 +43,8 @@ AccountInfo::~AccountInfo()
 }
 
 void AccountInfo::getWithdrawalsInfo(QJsonArray wi) {
+    qDebug() << "Parsing withdrawals in widget. Got data: " << QJsonDocument(wi);
+
     this->withdrawalsInfo = wi;
     qsizetype len = withdrawalsInfo.size();
     QString data = "Tunniste\tSumma\tNostoajankohta\r\n";
@@ -60,36 +60,7 @@ void AccountInfo::getWithdrawalsInfo(QJsonArray wi) {
     }
 
     ui->withdrawals->setText(data);
-}
-
-void AccountInfo::getAccountInfo(QJsonArray accountData)
-{
-    QJsonObject data = accountData.at(0).toObject();
-    qsizetype len = accountData.size();
-
-    QString id, balance, type;
-    QString credit;
-
-    id = QString::number(data["idaccount"].toInt());
-    balance = data["balance"].toString();
-    credit = data["credit"].toString();
-
-    ui->accountBalance->setText(balance);
-    ui->accountNumber->setText(id);
-
-    qDebug() << "Credit: " << credit;
-
-    if (credit == "") {
-        type = QString("Debit");
-    } else {
-        if (credit != "0.00" || credit != "0") {
-            type = QString("Credit (" + credit + ")");
-        } else {
-            type = QString("Debit");
-        }
-    }
-
-    ui->accountType->setText(type);
+    qDebug() << "Withdrawal window was updated";
 }
 
 QString AccountInfo::editTimestamp(QString timestamp)

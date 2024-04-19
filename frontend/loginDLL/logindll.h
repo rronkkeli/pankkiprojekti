@@ -80,6 +80,7 @@ signals:
     void accountInfo(QJsonArray);
     void nostotapahtumaInfo(QString);
     void cardInfo(QJsonArray);
+    void withdrawalDone();
 };
 
 #endif // LOGINDLL_H

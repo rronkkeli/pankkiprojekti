@@ -7,7 +7,7 @@ LoginDLL::LoginDLL(QObject * parent):QObject(parent) {
 
     if (!socketfile.open(QFile::ReadOnly)) {
         qDebug() << "Opening socket file failed";
-        socket = "http://akcloud.dy.fi:9000";
+        socket = "http://localhost:3000";
     } else {
         socket = QLatin1String(socketfile.readAll());
     }
@@ -229,9 +229,9 @@ void LoginDLL::getWithdrawalsSlot(QNetworkReply *reply)
     QJsonDocument json_doc = QJsonDocument::fromJson(response_data);
     QJsonArray accountinfo = json_doc.array();
 
-    emit withdrawalsInfo(accountinfo);
     reply->deleteLater();
     getManager->deleteLater();
+    emit withdrawalsInfo(accountinfo);
 }
 
 //GET TILIT JA KORTIT
@@ -298,7 +298,7 @@ void LoginDLL::getNostotapahtumaSlot(QNetworkReply *reply)
 {
 
     QByteArray responseData = reply->readAll();
-    qDebug() << "DATA : " << responseData;
+    qDebug() << "DATA withdraw: " << responseData;
 
     if (reply->error() == QNetworkReply::NoError) {
         QJsonParseError jsonError;
@@ -311,11 +311,14 @@ void LoginDLL::getNostotapahtumaSlot(QNetworkReply *reply)
                 if (!firstArray.isEmpty() && firstArray.size() == 1 && firstArray.at(0).isObject()) {
                     QJsonObject firstObject = firstArray.at(0).toObject();
                     emit nostotapahtumaInfo(firstObject.keys()[0]);
+                    reply->deleteLater();
+                    getManager->deleteLater();
                     return;
                 }
             }
         }
     }
+    emit withdrawalDone();
     reply->deleteLater();
     getManager->deleteLater();
 }

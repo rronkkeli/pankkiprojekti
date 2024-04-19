@@ -29,6 +29,14 @@ mw1::mw1(QWidget *parent)
         SLOT(fetch_card_data())
     );
 
+    connect(
+        login,
+        SIGNAL(withdrawalDone()),
+        this,
+        SLOT(refreshWithdrawals()),
+        Qt::QueuedConnection
+    );
+
     setWidget(SelectWidget::WidgetWelcome);
     initialization = false;
 }
@@ -91,6 +99,7 @@ void mw1::logout()
     pin = "";
     cardNumber = "";
     login->logout();
+    infoRefreshReady = true;
     qDebug() << "Logged out";
     // disconnect(widget, SIGNAL(logout()), this, SLOT(logout()));
     setWidget(SelectWidget::WidgetWelcome);
@@ -108,7 +117,14 @@ void mw1::getAccountNumber(QString s)
 
 void mw1::openInfo()
 {
+    qDebug() << "openInfo() was called";
     setWidget(SelectWidget::WidgetInfo);
+}
+
+void mw1::refreshWithdrawals()
+{
+    login->getWithdrawalsInfo();
+    qDebug() << "Refreshed withdrawals";
 }
 
 void mw1::setAccount(QJsonObject a)
@@ -149,7 +165,7 @@ void mw1::setWidget(SelectWidget type)
             SIGNAL(logout()),
             this,
             SLOT(logout()),
-            Qt::UniqueConnection
+            Qt::SingleShotConnection
         );
 
         connect(
@@ -157,8 +173,13 @@ void mw1::setWidget(SelectWidget type)
             SIGNAL(withdrawSignal()),
             this,
             SLOT(openWithdraw()),
-            Qt::UniqueConnection
+            Qt::SingleShotConnection
         );
+
+        if (infoRefreshReady) {
+            infoRefreshReady = false;
+            login->getWithdrawalsInfo();
+        }
 
         widget->show();
         break;
@@ -173,7 +194,7 @@ void mw1::setWidget(SelectWidget type)
             SIGNAL(selectedAccount(QJsonObject)),
             this,
             SLOT(setAccount(QJsonObject)),
-            Qt::UniqueConnection
+            Qt::SingleShotConnection
         );
 
         widget->show();
@@ -204,7 +225,7 @@ void mw1::setWidget(SelectWidget type)
             SIGNAL(returnToAccountInfo()),
             this,
             SLOT(openInfo()),
-            Qt::UniqueConnection
+            Qt::SingleShotConnection
         );
 
         widget->show();
