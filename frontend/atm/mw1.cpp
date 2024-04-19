@@ -96,9 +96,25 @@ void mw1::logout()
     setWidget(SelectWidget::WidgetWelcome);
 }
 
+void mw1::openWithdraw()
+{
+    setWidget(SelectWidget::WidgetWithdraw);
+}
+
+void mw1::getAccountNumber(QString s)
+{
+    accountID = s;
+}
+
+void mw1::openInfo()
+{
+    setWidget(SelectWidget::WidgetInfo);
+}
+
 void mw1::setAccount(QJsonObject a)
 {
     account = a;
+    accountID = QString::number(account["idaccount"].toInt());
     setWidget(SelectWidget::WidgetInfo);
 }
 
@@ -136,6 +152,14 @@ void mw1::setWidget(SelectWidget type)
             Qt::UniqueConnection
         );
 
+        connect(
+            widget,
+            SIGNAL(withdrawSignal()),
+            this,
+            SLOT(openWithdraw()),
+            Qt::UniqueConnection
+        );
+
         widget->show();
         break;
 
@@ -165,6 +189,21 @@ void mw1::setWidget(SelectWidget type)
             SIGNAL(sendPinNumber(QString)),
             this,
             SLOT(set_pin(QString)),
+            Qt::UniqueConnection
+        );
+
+        widget->show();
+        break;
+
+    case WidgetWithdraw:
+        delete widget;
+        widget = new Withdraw(this, accountID, login);
+
+        connect(
+            widget,
+            SIGNAL(returnToAccountInfo()),
+            this,
+            SLOT(openInfo()),
             Qt::UniqueConnection
         );
 

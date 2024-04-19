@@ -7,6 +7,7 @@
 #include <QJsonArray>
 #include <QJsonValue>
 #include "logindll.h"
+#include "withdraw.h"
 
 #include <QDateTime>
 
@@ -37,9 +38,12 @@ public slots:
     void getAccountInfo(QJsonArray);
 private slots:
     void on_logout_clicked();
+    void on_withdraw_clicked();
 
 signals:
     void logout();
+    void withdrawSignal();
+    void accountNumberSignal(QString);
 };
 
 #endif // ACCOUNTINFO_H

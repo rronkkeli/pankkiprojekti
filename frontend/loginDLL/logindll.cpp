@@ -7,7 +7,7 @@ LoginDLL::LoginDLL(QObject * parent):QObject(parent) {
 
     if (!socketfile.open(QFile::ReadOnly)) {
         qDebug() << "Opening socket file failed";
-        socket = "http://localhost:3000";
+        socket = "http://akcloud.dy.fi:9000";
     } else {
         socket = QLatin1String(socketfile.readAll());
     }
@@ -100,7 +100,7 @@ void LoginDLL::setUserId(const QString &newUserId)
 void LoginDLL::setAccountId(const QString &newAccountId)
 {
     accountId = newAccountId;
-    qDebug()<<"Account id: " + accountId;
+    qDebug()<<"Account id: " + accountId + "set By DLL";
 }
 
 void LoginDLL::cardInfoSlot(QNetworkReply *reply)
@@ -159,7 +159,7 @@ void LoginDLL::loginSlot(QNetworkReply *reply)
         qDebug() << "Apparently login succeeded";
         status = LoginStatus::Ok;
         setWebToken(response_data);
-        // getCardInformation();
+        getCardInformation();
         qDebug() << "Logged in by logindll";
     } else {
         //Wrong card num or pin
@@ -273,12 +273,12 @@ void LoginDLL::getTilitjaKortitSlot(QNetworkReply *reply)
 void LoginDLL::nostotapahtuma(QString tilin_numero,QString nostot)
 {
 
-    QString site_url="http://3000akcloud.dy.fi:9000/nostotapahtuma";
+    QString site_url= socket + "/nostotapahtuma";
     site_url.append("/" + userId);
     site_url.append("/" + tilin_numero);
     site_url.append("/" + nostot);
 
-
+    qDebug() << site_url;
 
     QNetworkRequest request((site_url));
     //WEBTOKEN ALKU

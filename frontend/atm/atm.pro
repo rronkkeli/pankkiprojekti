@@ -14,21 +14,24 @@ SOURCES += \
     dialog.cpp \
     main.cpp \
     mw1.cpp \
-    welcome.cpp
+    welcome.cpp \
+    withdraw.cpp
 
 HEADERS += \
     accountinfo.h \
     cardselect.h \
     dialog.h \
     mw1.h \
-    welcome.h
+    welcome.h \
+    withdraw.h
 
 FORMS += \
     accountinfo.ui \
     cardselect.ui \
     dialog.ui \
     mw1.ui \
-    welcome.ui
+    welcome.ui \
+    withdraw.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
@@ -38,20 +41,21 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 DISTFILES += \
     darkeum.qss
 
-win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../loginDLL/build/Desktop_Qt_6_6_3_MinGW_64_bit-Release/release/ -lloginDLL
-else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../loginDLL/build/Desktop_Qt_6_6_3_MinGW_64_bit-Debug/debug/ -lloginDLL
+
+win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../loginDLL/build/release/ -lloginDLL
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../loginDLL/build/debug/ -lloginDLL
 
 INCLUDEPATH += $$PWD/../loginDLL
 DEPENDPATH += $$PWD/../loginDLL
 
-win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../pinuiDLL/build/Desktop_Qt_6_6_3_MinGW_64_bit-Release/release/ -lpinuiDLL
-else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../pinuiDLL/build/Desktop_Qt_6_6_3_MinGW_64_bit-Debug/debug/ -lpinuiDLL
+win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../pinuiDLL/build/release/ -lpinuiDLL
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../pinuiDLL/build/debug/ -lpinuiDLL
 
 INCLUDEPATH += $$PWD/../pinuiDLL
 DEPENDPATH += $$PWD/../pinuiDLL
 
-win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../rfid/build/Desktop_Qt_6_6_3_MinGW_64_bit-Release/release/ -lrfid
-else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../rfid/build/Desktop_Qt_6_6_3_MinGW_64_bit-Debug/debug/ -lrfid
+win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../rfid/build/release/ -lrfid
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../rfid/build/debug/ -lrfid
 
 INCLUDEPATH += $$PWD/../rfid
 DEPENDPATH += $$PWD/../rfid

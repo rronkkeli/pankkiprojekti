@@ -18,7 +18,7 @@ AccountInfo::AccountInfo(QWidget *parent, LoginDLL *l, QString card, QJsonObject
     ui->cardNumber->setText(card);
 
     QString credit = account["credit"].toString();
-    QString accountNumber = QString::number(account["idaccount"].toInt());
+    this->account = QString::number(account["idaccount"].toInt());
     QString balance = account["balance"].toString();
 
     if (credit == "" || credit == "0" || credit == "0.00" || credit.isNull()) {
@@ -27,11 +27,13 @@ AccountInfo::AccountInfo(QWidget *parent, LoginDLL *l, QString card, QJsonObject
         ui->accountType->setText("Credit (" + credit + ")");
     }
 
-    login->setAccountId(accountNumber);
+    login->setAccountId(this->account);
     login->getWithdrawalsInfo();
 
     ui->accountBalance->setText(balance);
-    ui->accountNumber->setText(accountNumber);
+    ui->accountNumber->setText(this->account);
+
+    emit accountNumberSignal(this->account);
 
     qDebug() << "AccountInfo widget created";
 }
@@ -100,5 +102,11 @@ QString AccountInfo::editTimestamp(QString timestamp)
 void AccountInfo::on_logout_clicked()
 {
     emit logout();
+}
+
+
+void AccountInfo::on_withdraw_clicked()
+{
+    emit withdrawSignal();
 }
 

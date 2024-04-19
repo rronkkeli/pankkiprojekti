@@ -29,6 +29,9 @@ private slots:
     void setLoginStatus(LoginDLL::LoginStatus);
     void setAccount(QJsonObject);
     void logout();
+    void openWithdraw();
+    void getAccountNumber(QString);
+    void openInfo();
 
 private:
     Ui::mw1 *ui;
@@ -41,12 +44,14 @@ private:
     QJsonObject account;
     bool initialization = true;
     int tries = 0;
+    QString accountID;
 
     enum SelectWidget {
         WidgetWelcome,
         WidgetInfo,
         WidgetCardSelect,
         WidgetPinUI,
+        WidgetWithdraw,
     };
 
     void setWidget(SelectWidget);
