@@ -15,9 +15,6 @@ public:
     explicit Welcome(QWidget *parent = nullptr);
     ~Welcome();
 
-private slots:
-    void on_pushButton_clicked();
-
 private:
     Ui::Welcome *ui;
 

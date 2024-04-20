@@ -2,7 +2,7 @@
 #include "ui_pinui.h"
 
 PinUI::PinUI(QWidget *parent) :
-    QDialog(parent),
+    QWidget(parent),
     ui(new Ui::PinUI)
 {
     ui->setupUi(this);

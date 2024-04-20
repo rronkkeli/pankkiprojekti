@@ -6,15 +6,11 @@ Welcome::Welcome(QWidget *parent)
     , ui(new Ui::Welcome)
 {
     ui->setupUi(this);
+    qDebug() << "Welcome widget created";
 }
 
 Welcome::~Welcome()
 {
     delete ui;
+    qDebug() << "Welcome widget deleted";
 }
-
-void Welcome::on_pushButton_clicked()
-{
-    emit clicked();
-}
-

@@ -2,7 +2,14 @@
 #define ACCOUNTINFO_H
 
 #include <QWidget>
-#include "customertests.h"
+#include <QJsonDocument>
+#include <QJsonObject>
+#include <QJsonArray>
+#include <QJsonValue>
+#include "logindll.h"
+#include "withdraw.h"
+
+#include <QDateTime>
 
 namespace Ui {
 class AccountInfo;
@@ -13,19 +20,30 @@ class AccountInfo : public QWidget
     Q_OBJECT
 
 public:
-    explicit AccountInfo(QWidget *parent = nullptr);
+    explicit AccountInfo(QWidget *parent = nullptr, LoginDLL *login = nullptr, QString card = "-", QJsonObject account = QJsonObject());
     ~AccountInfo();
+    QString editTimestamp(QString);
 
 private:
     Ui::AccountInfo *ui;
-    CustomerTests *libCustomer;
     QString account;
     QString type;
     QString balance;
-    QStringList withdrawals;
+    LoginDLL *login;
+    QJsonArray withdrawalsInfo;
+
 
 public slots:
-    void getAccountInfo(QString, QString);
+    void getWithdrawalsInfo(QJsonArray);
+
+private slots:
+    void on_logout_clicked();
+    void on_withdraw_clicked();
+
+signals:
+    void logout();
+    void withdrawSignal();
+    void accountNumberSignal(QString);
 };
 
 #endif // ACCOUNTINFO_H

@@ -1,59 +1,83 @@
 #include "accountinfo.h"
 #include "ui_accountinfo.h"
 
-AccountInfo::AccountInfo(QWidget *parent)
+AccountInfo::AccountInfo(QWidget *parent, LoginDLL *l, QString card, QJsonObject account)
     : QWidget(parent)
     , ui(new Ui::AccountInfo)
 {
     ui->setupUi(this);
-    libCustomer = new CustomerTests(this);
+    this->login = l;
 
     connect(
-        libCustomer,
-        SIGNAL(tilitjakortitInfo(QString,QString)),
+        login,
+        SIGNAL(withdrawalsInfo(QJsonArray)),
         this,
-        SLOT(getAccountInfo(QString,QString))
+        SLOT(getWithdrawalsInfo(QJsonArray)),
+        Qt::SingleShotConnection
     );
 
-    libCustomer->setAsiakas("1");
-    libCustomer->getTilitjaKortitInfo();
+    ui->cardNumber->setText(card);
+
+    QString credit = account["credit"].toString();
+    this->account = QString::number(account["idaccount"].toInt());
+    QString balance = account["balance"].toString();
+
+    if (credit == "" || credit == "0" || credit == "0.00" || credit.isNull()) {
+        ui->accountType->setText("Debit");
+    } else {
+        ui->accountType->setText("Credit (" + credit + ")");
+    }
+
+    login->setAccountId(this->account);
+
+    ui->accountBalance->setText(balance);
+    ui->accountNumber->setText(this->account);
+
+    qDebug() << "AccountInfo widget created";
 }
 
 AccountInfo::~AccountInfo()
 {
     delete ui;
-    delete libCustomer;
+    qDebug() << "AccountInfo widget deleted";
 }
 
-void AccountInfo::getAccountInfo(QString accounts, QString cards)
-{
-    QStringList accountsPieces = accounts.split(" \n", Qt::SkipEmptyParts);
-    qsizetype length = accountsPieces.length();
-    qDebug() << accountsPieces;
+void AccountInfo::getWithdrawalsInfo(QJsonArray wi) {
+    qDebug() << "Parsing withdrawals in widget. Got data: " << QJsonDocument(wi);
 
-    if (length > 1) {
+    this->withdrawalsInfo = wi;
+    qsizetype len = withdrawalsInfo.size();
+    QString data = "Tunniste\tSumma\tNostoajankohta\r\n";
 
-        QStringList fields = accountsPieces[1].split(" | ", Qt::SkipEmptyParts);
-        ui->accountNumber->setText(fields[0]);
+    for (qsizetype i = 0; i < len; i++) {
+        QJsonObject row = withdrawalsInfo.at(i).toObject();
 
-        account = fields[0];
-        qint64 credit;
-
-        if (fields.length() < 3) {
-            credit = 0;
-        } else {
-            qint64 credit = fields[2].toInt();
-        }
-
-        if (credit > 0) {
-            fields[2].append(" (luotto)");
-            ui->accountBalance->setText(fields[2]);
-        } else {
-            fields[1].removeLast();
-            ui->accountBalance->setText(fields[1]);
-        }
-
+        QString id = QString::number(row["idwithdrawal"].toInt());
+        QString amount = row["amount"].toString();
+        QString time = row["timestamp"].toString();
+        time = editTimestamp(time);
+        data.append(id + "\t" + amount + "\t" + time + "\r\n");
     }
 
-    qDebug() << libCustomer->getAsiakas();
+    ui->withdrawals->setText(data);
+    qDebug() << "Withdrawal window was updated";
 }
+
+QString AccountInfo::editTimestamp(QString timestamp)
+{
+    QDateTime time = QDateTime::fromString(timestamp, Qt::ISODateWithMs);
+    QString editedTime = time.toString("hh.mm dd.MM.yyyy");
+    return editedTime;
+}
+
+void AccountInfo::on_logout_clicked()
+{
+    emit logout();
+}
+
+
+void AccountInfo::on_withdraw_clicked()
+{
+    emit withdrawSignal();
+}
+

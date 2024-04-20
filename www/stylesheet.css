@@ -1,0 +1,18 @@
+.animation {
+	animation-name: alerts;
+	animation-duration: 5s;
+}
+
+@keyframes alerts {
+	0% {opacity: 1;}
+	80% {opacity: 1;}
+	100% {opacity: 0;}
+}
+
+.hidden {
+	opacity: 0;
+}
+
+.inline {
+	display: inline;
+}
