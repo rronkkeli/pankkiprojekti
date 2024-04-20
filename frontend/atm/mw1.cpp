@@ -1,6 +1,5 @@
 #include "mw1.h"
 #include "ui_mw1.h"
-#include "dialog.h"
 #include <QMessageBox>
 #include <QString>
 
