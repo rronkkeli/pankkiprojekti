@@ -8,7 +8,8 @@ define("HOST", "127.0.0.1");
 define("USERNAME", "bankadmin");
 define("PASSWORD", "bankadminpassword");
 define("DATABASENAME", "bank");
-define("DSN", "mysql:host=" . HOST . ";dbname=" . DATABASENAME . ";charset=UTF8");
+define("PORT", "4000");
+define("DSN", "mysql:host=" . HOST . ";dbname=" . DATABASENAME . ";charset=UTF8;port=" . PORT);
 
 //Yhteys tietokantaan
 try {
