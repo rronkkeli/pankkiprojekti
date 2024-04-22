@@ -79,7 +79,7 @@ try {
 	<div class="row">
 		<div class="col-md-3 mx-auto"></div>
 
-		<div class="col-md-6 mx-auto">
+		<div style="background-color:rgba(0, 0, 0, 0.65); padding: 30px;" class="col-md-6 mx-auto">
 			<div class="form-group">
 			
 			</div>

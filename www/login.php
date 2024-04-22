@@ -33,13 +33,15 @@
 		
 		//Tietojen vahvistus
 		if(empty($error)){
-			$sql = "SELECT credentials.idcredentials, credentials.password, credentials.idcustomer, customer.fname, customer.lname FROM credentials JOIN customer ON credentials.idcustomer = customer.idcustomer WHERE credentials.idcustomer = :idCustomer LIMIT 1";
+			$sql = "SELECT credentials.idcredentials, credentials.password, credentials.idcustomer, customer.fname, customer.lname 
+			FROM credentials JOIN customer ON credentials.idcustomer = customer.idcustomer 
+			WHERE credentials.idcredentials = :idcredentials LIMIT 1";
 			
 			if($statement = $connect->prepare($sql)){
 				
 				$paramId = trim($_POST["userId"]);
 				
-				$statement->bindparam(":idCustomer", $paramId);
+				$statement->bindparam(":idcredentials", $paramId);
 				
 				if($statement->execute()) {
 					
@@ -106,7 +108,7 @@
 	<div class="row">
 		<div class="col-md-3 mx-auto"></div>
 
-		<div class="col-md-6 mx-auto">
+		<div style="background-color:rgba(0, 0, 0, 0.65); padding: 30px;" class="col-md-6 mx-auto">
 			<?php
 			if(!empty($error)) {
 				echo '<div id="error" class="alert alert-danger alert-dismissible"> ';

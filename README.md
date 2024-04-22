@@ -6,7 +6,17 @@ This project uses Darkeum style from <https://qss-stock.devsecstudio.com/templat
 
 ## Web page
 
-The web page uses bootstrapping in stylining. The web page runs in <https://akcloud.dy.fi/pankki>.
+The web page uses bootstrapping in styling and scripting from these sources:
+
+>- <https://www.bootstrapcdn.com>
+>
+>- <https://www.jsdelivr.com>
+>
+>- <https://fontawesome.com>
+
+The web page runs in <https://akcloud.dy.fi/pankki>.
+
+The favicon in the website is from <https://freesvg.org/woman-holding-money-vector-graphics>.
 
 ## RELEASE 1.0.0
 

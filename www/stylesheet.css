@@ -16,3 +16,7 @@
 .inline {
 	display: inline;
 }
+
+body {
+	background-image: url("https://images.nationalgeographic.org/image/upload/v1638892272/EducationHub/photos/hoh-river-valley.jpg");
+}

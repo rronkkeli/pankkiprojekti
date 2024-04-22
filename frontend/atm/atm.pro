@@ -11,7 +11,6 @@ CONFIG += c++17
 SOURCES += \
     accountinfo.cpp \
     cardselect.cpp \
-    dialog.cpp \
     main.cpp \
     mw1.cpp \
     welcome.cpp \
@@ -20,7 +19,6 @@ SOURCES += \
 HEADERS += \
     accountinfo.h \
     cardselect.h \
-    dialog.h \
     mw1.h \
     welcome.h \
     withdraw.h
@@ -28,7 +26,6 @@ HEADERS += \
 FORMS += \
     accountinfo.ui \
     cardselect.ui \
-    dialog.ui \
     mw1.ui \
     welcome.ui \
     withdraw.ui

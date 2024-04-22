@@ -52,7 +52,7 @@
 	<div class="row">
 		<div class="col-md-2 mx-auto"></div>
 
-		<div class="col-md-8 mx-auto">
+		<div style="background-color:rgba(0, 0, 0, 0.65); padding: 30px;" class="col-md-8 mx-auto">
             <?php if(!empty($_SESSION["success"])) {
                     echo '<div id="success" class="alert alert-success alert-dismissible"> ' . $_SESSION["success"] . '<button type="button" class="close" data-dismiss="alert">&times;</button></div>';
                     $_SESSION["success"] = "";

@@ -115,7 +115,7 @@ try {
 	<div class="row">
 		<div class="col-md-3 mx-auto"></div>
 
-		<div class="col-md-6 mx-auto">
+		<div style="background-color:rgba(0, 0, 0, 0.65); padding: 30px;" class="col-md-6 mx-auto">
 			<?php
 			if(!empty($_SESSION["error"])) {
 				echo '<div id="error2" class="alert alert-danger alert-dismissible"> ' . $_SESSION["error"] . '<button type="button" class="close" data-dismiss="alert">&times;</button></div>';
