@@ -1,4 +1,4 @@
-#include "mw1.h"
+#include "mainwindow.h"
 
 #include <QApplication>
 #include <QFile>
@@ -18,7 +18,7 @@ int main(int argc, char *argv[])
     QString styledata = QLatin1String(stylesheet.readAll());
 
     a.setStyleSheet(styledata);
-    mw1 w;
+    MainWindow w;
     w.show();
     return a.exec();
 }
