@@ -28,15 +28,14 @@ bool RFID::setReader() {
                  << "\nDescription: " << availablePorts[i].description() << "\n";
 
         if (availablePorts[i].serialNumber() == QString("OL56DED005B8E88")) {
-            qDebug() << "Aye, this much was true";
             this->cardReader->setPort(
                 availablePorts[i]
             );
 
-            qDebug() << "Port " << this->cardReader->portName() << " has been set";
+            qDebug() << "Card reader found. Port " << this->cardReader->portName() << " has been set";
 
             if (this->cardReader->open(QIODeviceBase::ReadOnly)) {
-                qDebug() << "Opening reader was successfull";
+                qDebug() << "Opening reader was successful";
             } else if (this->cardReader->isOpen()) {
                 return true;
             } else {
@@ -49,17 +48,13 @@ bool RFID::setReader() {
     }
 
     qDebug() << "No card reader available";
-
     return false;
 }
 
-QString RFID::getCardData() {
-    return this->cardData;
-}
-
 void RFID::readCard() {
-    this->cardData = QString::fromUtf8(this->cardReader->readAll()).sliced(3, 10);
-    qDebug() << "A card was read by library";
-    emit this->cardDataReady();
+    QString cardData = QString::fromUtf8(this->cardReader->readAll()).sliced(3, 10);
+    qDebug() << "A card was read by library. Emitting card data..";
+    emit this->cardData(cardData);
+    qDebug() << "Card data emitted";
 }
 

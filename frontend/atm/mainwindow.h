@@ -36,6 +36,17 @@ private:
     // Libraries
     RFID *rfid;
     LoginDLL *login;
+
+    // Functions
+
+    // Variables
+    QString pin, card;
+
+private slots:
+    void start();
+    void handleData(QString);
+    void checkLoginStatus(LoginDLL::LoginStatus);
+
 };
 
 #endif // MAINWINDOW_H
