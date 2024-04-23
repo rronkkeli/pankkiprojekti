@@ -14,7 +14,23 @@ AccountInfo::AccountInfo(QWidget *parent, LoginDLL *l, QString card, QJsonObject
         this,
         SLOT(getWithdrawalsInfo(QJsonArray)),
         Qt::SingleShotConnection
-    );
+        );
+
+    connect(
+        login,
+        SIGNAL(accountDone(QJsonArray)),
+        this,
+        SLOT(getAccountRefresh(QJsonArray)),
+        Qt::SingleShotConnection
+        );
+
+    connect(
+        login,
+        SIGNAL(nostotapahtumaInfo(QString)),
+        this,
+        SLOT(getNostoInfo(QString)),
+        Qt::SingleShotConnection
+        );
 
     ui->cardNumber->setText(card);
 
@@ -42,7 +58,8 @@ AccountInfo::~AccountInfo()
     qDebug() << "AccountInfo widget deleted";
 }
 
-void AccountInfo::getWithdrawalsInfo(QJsonArray wi) {
+void AccountInfo::getWithdrawalsInfo(QJsonArray wi)
+{
     qDebug() << "Parsing withdrawals in widget. Got data: " << QJsonDocument(wi);
 
     this->withdrawalsInfo = wi;
@@ -62,7 +79,22 @@ void AccountInfo::getWithdrawalsInfo(QJsonArray wi) {
     ui->withdrawals->setText(data);
     qDebug() << "Withdrawal window was updated";
 }
+void AccountInfo::getNostoInfo(QString virhe)
+{
+    ui->withdrawals->setText(virhe);
 
+}
+
+void AccountInfo::getAccountRefresh(QJsonArray ar)
+{
+    QString accountit;
+    foreach (const QJsonValue &value, ar) {
+        QJsonObject json_obj = value.toObject();
+        accountit+=json_obj["balance"].toString();
+    ui->accountBalance->setText(accountit);
+    }
+
+}
 QString AccountInfo::editTimestamp(QString timestamp)
 {
     QDateTime time = QDateTime::fromString(timestamp, Qt::ISODateWithMs);
@@ -80,4 +112,3 @@ void AccountInfo::on_withdraw_clicked()
 {
     emit withdrawSignal();
 }
-

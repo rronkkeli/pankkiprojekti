@@ -39,7 +39,7 @@ void Withdraw::on_withdrawalButton10_clicked()
 
 void Withdraw::on_withdrawalButton20_clicked()
 {
-   add("20");
+    add("20");
 }
 
 
@@ -86,4 +86,3 @@ void Withdraw::on_pushButtonClear_clicked()
     withdrawal = "0";
     ui->amountLineEdit->setText(withdrawal);
 }
-

@@ -33,6 +33,7 @@ private slots:
     void getAccountNumber(QString);
     void openInfo();
     void refreshWithdrawals();
+    void refreshAccountInfo();
 
 private:
     Ui::mw1 *ui;
