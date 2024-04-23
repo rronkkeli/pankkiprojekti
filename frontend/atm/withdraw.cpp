@@ -1,25 +1,17 @@
 #include "withdraw.h"
 #include "ui_withdraw.h"
 
-Withdraw::Withdraw(QWidget *parent, QString accountNumber, LoginDLL * l) :
+Withdraw::Withdraw(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::Withdraw)
 {
     ui->setupUi(this);
-    account = accountNumber;
-    qDebug() << "Account number in withdrawal constructor: " + account;
     qDebug() << "Withdraw widget created";
-    login = l;
 }
 
 Withdraw::~Withdraw()
 {
     delete ui;
-}
-
-void Withdraw::sendWithdrawal()
-{
-    login->nostotapahtuma(account, withdrawal);
 }
 
 void Withdraw::add(QString x)
@@ -69,15 +61,17 @@ void Withdraw::on_withdrawalButton500_clicked()
 
 void Withdraw::on_pushButton_clicked()
 {
-    sendWithdrawal();
-    emit returnToAccountInfo();
+    emit sendWithdrawal(withdrawal);
+    withdrawal = "0";
+    ui->amountLineEdit->setText(withdrawal);
 }
 
 
 void Withdraw::on_pushButtonGoBack_clicked()
 {
     withdrawal = "0";
-    emit returnToAccountInfo();
+    ui->amountLineEdit->setText(withdrawal);
+    emit sendWithdrawal(withdrawal);
 }
 
 

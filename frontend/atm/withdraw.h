@@ -13,20 +13,16 @@ class Withdraw : public QWidget
     Q_OBJECT
 
 public:
-    explicit Withdraw(QWidget *parent = nullptr, QString accountNumber = NULL, LoginDLL * login = nullptr);
+    explicit Withdraw(QWidget *parent = nullptr);
     ~Withdraw();
 
 private:
     Ui::Withdraw *ui;
-    void sendWithdrawal();
-    QString account;
-    LoginDLL * login;
     QString withdrawal = "0";
     void add(QString);
 
 signals:
-    void returnToAccountInfo();
-
+    void sendWithdrawal(QString);
 
 private slots:
     void on_withdrawalButton10_clicked();

@@ -15,6 +15,7 @@ public:
     explicit RFID(QObject*);
     ~RFID();
     bool setReader();
+    void closeReader();
 
 private slots:
     void readCard();

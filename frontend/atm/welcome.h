@@ -17,6 +17,7 @@ public:
     void setStart();
     void setReadCard();
     void setCardReaderError();
+    void setLoggingIn();
 
 private:
     Ui::Welcome *ui;

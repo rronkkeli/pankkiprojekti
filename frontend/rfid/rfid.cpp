@@ -4,8 +4,6 @@
 RFID::RFID(QObject *parent) : QObject(parent) {
     qDebug() << "Card reader class created";
     this->cardReader = new QSerialPort;
-    this->setReader();
-
     connect(this->cardReader, SIGNAL(readyRead()), this, SLOT(readCard()));
 }
 
@@ -49,6 +47,11 @@ bool RFID::setReader() {
 
     qDebug() << "No card reader available";
     return false;
+}
+
+void RFID::closeReader()
+{
+    this->cardReader->close();
 }
 
 void RFID::readCard() {

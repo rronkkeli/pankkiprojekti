@@ -6,8 +6,8 @@ LoginDLL::LoginDLL(QObject * parent):QObject(parent) {
     QFile socketfile(path);
 
     if (!socketfile.open(QFile::ReadOnly)) {
-        qDebug() << "Opening socket file failed";
-        socket = "http://localhost:3000";
+        qDebug() << "Opening socket file failed. Using default.";
+        socket = "http://akcloud.dy.fi:3000";
     } else {
         socket = QLatin1String(socketfile.readAll());
     }

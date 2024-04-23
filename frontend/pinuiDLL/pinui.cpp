@@ -14,6 +14,16 @@ PinUI::~PinUI()
     qDebug() << "DLL Destroyed";
 }
 
+void PinUI::setAlert(bool b)
+{
+    if (b) {
+        ui->alert->setText("Virheellinen pinkoodi");
+        return;
+    }
+
+    ui->alert->setText("");
+}
+
 void PinUI::on_btnPin0_clicked()
 {
     pinNumberClickHandler();

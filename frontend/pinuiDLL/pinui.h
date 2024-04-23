@@ -16,6 +16,7 @@ class PINUIDLL_EXPORT PinUI : public QWidget
 public:
     explicit PinUI(QWidget *parent = nullptr);
     ~PinUI();
+    void setAlert(bool);
 
 signals:
     void sendPinNumber(QString);

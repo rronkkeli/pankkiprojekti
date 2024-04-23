@@ -50,6 +50,62 @@ MainWindow::MainWindow(QWidget *parent)
         this,
         SLOT(checkLoginStatus(LoginDLL::LoginStatus))
     );
+
+    connect(
+        login,
+        SIGNAL(cardInfo(QJsonArray)),
+        this,
+        SLOT(handleCard(QJsonArray))
+    );
+
+    connect(
+        login,
+        SIGNAL(withdrawalsInfo(QJsonArray)),
+        accountinfo,
+        SLOT(getWithdrawalsInfo(QJsonArray))
+    );
+
+    connect(
+        login,
+        SIGNAL(nostotapahtumaInfo(QString)),
+        accountinfo,
+        SLOT(withdrawError(QString))
+    );
+
+    connect(
+        login,
+        SIGNAL(withdrawalDone()),
+        this,
+        SLOT(refetchWithdrawals())
+    );
+
+    connect(
+        cardselect,
+        SIGNAL(selectedAccount(CardSelect::AccountType)),
+        this,
+        SLOT(handleAccountSelect(CardSelect::AccountType))
+    );
+
+    connect(
+        accountinfo,
+        SIGNAL(withdrawSignal()),
+        this,
+        SLOT(openWithdrawWidget())
+    );
+
+    connect(
+        accountinfo,
+        SIGNAL(logout()),
+        this,
+        SLOT(logout())
+    );
+
+    connect(
+        withdraw,
+        SIGNAL(sendWithdrawal(QString)),
+        this,
+        SLOT(handleWithdrawal(QString))
+    );
 }
 
 MainWindow::~MainWindow()
@@ -65,11 +121,74 @@ MainWindow::~MainWindow()
     delete login;
 }
 
+void MainWindow::handleCard(QJsonArray accounts)
+{
+    qDebug() << "Processing card information";
+    QJsonObject account;
+
+    qsizetype len = accounts.size();
+    if (len == 1) {
+        qDebug() << "Single account detected..";
+        account = (accounts.at(0).toObject());
+
+        QString creditamt = account["credit"].toString();
+        QString type;
+
+        accountid = QString::number(account["idaccount"].toInt());
+
+        if (creditamt == "" || creditamt == "0.00" || creditamt == "0") {
+            type = "Debit";
+        } else {
+            type = "Credit (" + account["credit"].toString() + ")";
+        }
+
+        accountinfo->setInfo(
+            account,
+            cardNum,
+            type
+        );
+
+        ui->viewer->setCurrentWidget(accountinfo);
+        login->getWithdrawalsInfo();
+        return;
+
+    } else {
+        qDebug() << "Double card detected. Splitting..";
+
+        for (qsizetype i = 0; i < len; i++) {
+            account = accounts.at(i).toObject();
+            QString creditamt = account["credit"].toString();
+
+            if (creditamt == "" || creditamt == "0.00" || creditamt == "0") {
+                debit = account;
+                qDebug() << "Debit set to: " << debit;
+
+            } else {
+                credit = account;
+                qDebug() << "Credit set to: " << credit;
+
+            }
+        }
+
+        ui->viewer->setCurrentWidget(cardselect);
+
+    }
+}
+
+void MainWindow::logout()
+{
+    login->logout();
+    cardselect->zeroize();
+    accountinfo->zeroize();
+    debit = credit = QJsonObject();
+    pin = cardNum = "";
+    welcome->setStart();
+    ui->viewer->setCurrentWidget(welcome);
+}
+
 void MainWindow::start()
 {
-    if (rfid->setReader()) {
-        ui->viewer->setCurrentWidget(pinui);
-    } else {
+    if (!rfid->setReader()) {
         welcome->setCardReaderError();
     }
 }
@@ -78,15 +197,25 @@ void MainWindow::checkLoginStatus(LoginDLL::LoginStatus s)
 {
     switch (s) {
         case LoginDLL::LoginStatus::Ok:
-            // Check for double card
+            login->getAccountInformation();
             break;
 
         case LoginDLL::LoginStatus::InvalidCredentials:
-            // Show error message and try again or logout
+            if (tries < 3) {
+                tries++;
+                pinui->setAlert(true);
+                ui->viewer->setCurrentWidget(pinui);
+
+            } else {
+                logout();
+                pinui->setAlert(false);
+                ui->viewer->setCurrentWidget(welcome);
+
+            }
             break;
 
         case LoginDLL::LoginStatus::ConnectionError:
-            // Show connection error message
+            // TODO: Show connection error message
             break;
 
         default:
@@ -94,13 +223,63 @@ void MainWindow::checkLoginStatus(LoginDLL::LoginStatus s)
     }
 }
 
+void MainWindow::handleAccountSelect(CardSelect::AccountType t)
+{
+    switch (t) {
+    case CardSelect::AccountType::Debit:
+        accountinfo->setInfo(debit, cardNum, "Debit");
+        accountid = QString::number(debit["idaccount"].toInt());
+        break;
+
+    case CardSelect::AccountType::Credit:
+        accountinfo->setInfo(credit, cardNum, "Credit (" + credit["credit"].toString() + ")");
+        accountid = QString::number(credit["idaccount"].toInt());
+        break;
+
+    default:
+        qDebug() << "Unexpected value as AccountType";
+        break;
+    }
+
+    accountinfo->refreshUI();
+    ui->viewer->setCurrentWidget(accountinfo);
+    login->getWithdrawalsInfo();
+}
+
+void MainWindow::handleWithdrawal(QString withdrawal)
+{
+    if (withdrawal != "0") {
+        qDebug() << "Withdrawal from account " + accountid + " with sum of " + withdrawal;
+        login->nostotapahtuma(accountid, withdrawal);
+    }
+
+    ui->viewer->setCurrentWidget(accountinfo);
+}
+
+void MainWindow::openWithdrawWidget()
+{
+    ui->viewer->setCurrentWidget(withdraw);
+}
+
+void MainWindow::refetchWithdrawals()
+{
+    qDebug() << "Refetching withdrawals..";
+    login->getWithdrawalsInfo();
+}
+
 void MainWindow::handleData(QString d)
 {
     if (sender() == rfid) {
-        card = d;
+        cardNum = d;
+        pinui->setAlert(false);
+        tries = 0;
         ui->viewer->setCurrentWidget(pinui);
+        rfid->closeReader();
+
     } else if (sender() == pinui) {
         pin = d;
-        login->login(card, pin);
+        welcome->setLoggingIn();
+        ui->viewer->setCurrentWidget(welcome);
+        login->login(cardNum, pin);
     }
 }

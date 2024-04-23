@@ -6,6 +6,7 @@ Welcome::Welcome(QWidget *parent)
     , ui(new Ui::Welcome)
 {
     ui->setupUi(this);
+    setStart();
     qDebug() << "Welcome widget created";
 }
 
@@ -28,6 +29,11 @@ void Welcome::setReadCard()
 void Welcome::setCardReaderError()
 {
     ui->message->setCurrentIndex(2);
+}
+
+void Welcome::setLoggingIn()
+{
+    ui->message->setCurrentIndex(3);
 }
 
 void Welcome::on_pbstart_clicked()

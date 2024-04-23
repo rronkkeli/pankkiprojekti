@@ -6,7 +6,6 @@
 #include <QJsonObject>
 #include <QJsonArray>
 #include <QJsonValue>
-#include "logindll.h"
 #include "withdraw.h"
 
 #include <QDateTime>
@@ -20,21 +19,21 @@ class AccountInfo : public QWidget
     Q_OBJECT
 
 public:
-    explicit AccountInfo(QWidget *parent = nullptr, LoginDLL *login = nullptr, QString card = "-", QJsonObject account = QJsonObject());
+    explicit AccountInfo(QWidget *parent = nullptr);
     ~AccountInfo();
     QString editTimestamp(QString);
+    void setInfo(QJsonObject, QString, QString);
+    void zeroize();
+    void refreshUI();
 
 private:
     Ui::AccountInfo *ui;
-    QString account;
-    QString type;
-    QString balance;
-    LoginDLL *login;
+    QString card, account, type, balance, credit, customer, withdrawals;
     QJsonArray withdrawalsInfo;
-
 
 public slots:
     void getWithdrawalsInfo(QJsonArray);
+    void withdrawError(QString);
 
 private slots:
     void on_logout_clicked();

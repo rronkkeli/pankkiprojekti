@@ -40,13 +40,20 @@ private:
     // Functions
 
     // Variables
-    QString pin, card;
+    QString pin, cardNum, accountid;
+    QJsonObject debit, credit;
+    int tries = 0;
 
 private slots:
     void start();
+    void logout();
     void handleData(QString);
+    void handleCard(QJsonArray);
     void checkLoginStatus(LoginDLL::LoginStatus);
-
+    void handleAccountSelect(CardSelect::AccountType);
+    void handleWithdrawal(QString);
+    void openWithdrawWidget();
+    void refetchWithdrawals();
 };
 
 #endif // MAINWINDOW_H
