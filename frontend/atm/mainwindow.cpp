@@ -94,7 +94,7 @@ void MainWindow::checkLoginStatus(LoginDLL::LoginStatus s)
     }
 }
 
-void MainWindow::handleCardData(QString d)
+void MainWindow::handleData(QString d)
 {
     if (sender() == rfid) {
         card = d;

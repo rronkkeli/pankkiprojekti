@@ -22,7 +22,7 @@ void Welcome::setStart()
 
 void Welcome::setReadCard()
 {
-    ui->message->setCurrendIndex(1);
+    ui->message->setCurrentIndex(1);
 }
 
 void Welcome::setCardReaderError()
