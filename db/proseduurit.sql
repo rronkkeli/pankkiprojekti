@@ -59,4 +59,51 @@ BEGIN
     WHERE asiakas = idcustomer;
 
 END//
+
+DROP procedure IF EXISTS new_card;
+CREATE PROCEDURE new_card(IN use_customer INT,IN combine_account INT, IN combine_account2 INT, IN newcardcode VARCHAR(255),IN new_pin VARCHAR(225))
+
+BEGIN
+
+    DECLARE account_type1 VARCHAR(50);
+    DECLARE account_type2 VARCHAR(50);
+    SELECT credit INTO account_type1 FROM account WHERE idaccount = combine_account;
+    SELECT credit INTO account_type2 FROM account WHERE idaccount = combine_account2;
+
+IF combine_account2 IS NULL THEN
+  IF EXISTS(SELECT 1 FROM account WHERE idaccount = combine_account) THEN
+      IF NOT EXISTS(SELECT 1 FROM card WHERE idcard = newcardcode) THEN
+          INSERT INTO card(idcard, pin, idcustomer) VALUES(newcardcode,new_pin, use_customer);
+          INSERT INTO card_has_account(idcard,idaccount) VALUES (newcardcode, combine_account);
+          SELECT 'SUCCHEESE';
+       ELSE
+          SELECT 'Card already exists';
+          END IF;
+  ELSE
+      SELECT 'Account does not exist';
+  END IF;
+ELSE 
+  IF EXISTS(SELECT 1 FROM account WHERE idaccount = combine_account) THEN
+      IF EXISTS(SELECT 1 FROM account WHERE idaccount = combine_account2) THEN
+          IF account_type1 IS NULL XOR account_type2 IS NULL THEN
+                 IF NOT EXISTS(SELECT 1 FROM card WHERE idcard = newcardcode) THEN
+                     INSERT INTO card(idcard, pin, idcustomer) VALUES(newcardcode,new_pin, use_customer);
+                      INSERT INTO card_has_account(idcard,idaccount) VALUES (newcardcode, combine_account);
+                      INSERT INTO card_has_account(idcard,idaccount) VALUES (newcardcode, combine_account2);
+                      SELECT 'SUCCEES';
+               ELSE
+                   SELECT 'Card already exists';
+               END IF;
+           ELSE
+               SELECT 'Accounts are the same type';
+           END IF;
+       ELSE
+           SELECT 'Credit accout does not exists';
+       END IF;
+   ELSE
+       SELECT 'Debit account does not exists ' ;
+   END IF;
+END IF;
+END//
+    
 DELIMITER ;
