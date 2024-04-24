@@ -44,9 +44,20 @@ void AccountInfo::withdrawError(QString s)
     ui->withdrawals->setText(s);
 }
 
+void AccountInfo::handleCustomerInfo(QJsonArray array)
+{
+    QJsonObject c = array.at(0).toObject();
+    QString fn = c["fname"].toString();
+    QString ln = c["lname"].toString();
+
+    customer = fn + " " + ln;
+    refreshUI();
+}
+
 QString AccountInfo::editTimestamp(QString timestamp)
 {
     QDateTime time = QDateTime::fromString(timestamp, Qt::ISODateWithMs);
+    time = time.addSecs(3600);
     QString editedTime = time.toString("hh.mm dd.MM.yyyy");
     return editedTime;
 }
@@ -71,7 +82,7 @@ void AccountInfo::refreshUI()
     ui->accountNumber->setText(account);
     ui->accountBalance->setText(balance);
     ui->accountType->setText(type);
-    //ui->accountOwner->setText(customer);
+    ui->accountOwner->setText(customer);
     ui->withdrawals->setText(withdrawals);
     ui->cardNumber->setText(card);
 }

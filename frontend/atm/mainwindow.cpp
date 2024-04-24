@@ -62,21 +62,32 @@ MainWindow::MainWindow(QWidget *parent)
         login,
         SIGNAL(withdrawalsInfo(QJsonArray)),
         accountinfo,
-        SLOT(getWithdrawalsInfo(QJsonArray))
+        SLOT(getWithdrawalsInfo(QJsonArray))/*,
+        Qt::QueuedConnection*/
     );
 
     connect(
         login,
         SIGNAL(nostotapahtumaInfo(QString)),
         accountinfo,
-        SLOT(withdrawError(QString))
+        SLOT(withdrawError(QString)),
+        Qt::QueuedConnection
+    );
+
+    connect(
+        login,
+        SIGNAL(customerInfo(QJsonArray)),
+        accountinfo,
+        SLOT(handleCustomerInfo(QJsonArray)),
+        Qt::QueuedConnection
     );
 
     connect(
         login,
         SIGNAL(withdrawalDone()),
         this,
-        SLOT(refetchWithdrawals())
+        SLOT(refetchWithdrawals()),
+        Qt::QueuedConnection
     );
 
     connect(
@@ -135,6 +146,8 @@ void MainWindow::handleCard(QJsonArray accounts)
         QString type;
 
         accountid = QString::number(account["idaccount"].toInt());
+        login->setAccountId(accountid);
+        login->getCustomerInfo();
 
         if (creditamt == "" || creditamt == "0.00" || creditamt == "0") {
             type = "Debit";
@@ -241,9 +254,11 @@ void MainWindow::handleAccountSelect(CardSelect::AccountType t)
         break;
     }
 
-    accountinfo->refreshUI();
-    ui->viewer->setCurrentWidget(accountinfo);
+    login->setAccountId(accountid);
+    login->getCustomerInfo();
     login->getWithdrawalsInfo();
+    ui->viewer->setCurrentWidget(accountinfo);
+    accountinfo->refreshUI();
 }
 
 void MainWindow::handleWithdrawal(QString withdrawal)

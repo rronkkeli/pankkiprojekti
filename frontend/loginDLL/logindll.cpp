@@ -7,7 +7,7 @@ LoginDLL::LoginDLL(QObject * parent):QObject(parent) {
 
     if (!socketfile.open(QFile::ReadOnly)) {
         qDebug() << "Opening socket file failed. Using default.";
-        socket = "http://akcloud.dy.fi:3000";
+        socket = "http://akcloud.dy.fi:9000";
     } else {
         socket = QLatin1String(socketfile.readAll());
     }
@@ -37,7 +37,7 @@ void LoginDLL::login(QString cardId, QString cardPin)
     //Signals etc.
     loginManager = new QNetworkAccessManager(this);
     connect(loginManager, SIGNAL(finished(QNetworkReply*)),
-            this, SLOT(loginSlot(QNetworkReply*)));
+            this, SLOT(loginSlot(QNetworkReply*)), Qt::SingleShotConnection);
     reply = loginManager->post(request,QJsonDocument(jsonObj).toJson());
 }
 
@@ -51,7 +51,7 @@ void LoginDLL::getCardInformation()
     //WEBTOKEN LOPPU
 
     cardInfoManager = new QNetworkAccessManager(this);
-    connect(cardInfoManager, SIGNAL(finished(QNetworkReply*)), this, SLOT(cardInfoSlot(QNetworkReply*)));
+    connect(cardInfoManager, SIGNAL(finished(QNetworkReply*)), this, SLOT(cardInfoSlot(QNetworkReply*)), Qt::SingleShotConnection);
     reply = cardInfoManager->get(request);
 }
 
@@ -66,7 +66,7 @@ void LoginDLL::getAccountInformation()
     //WEBTOKEN LOPPU
     accountInfoManager = new QNetworkAccessManager(this);
 
-    connect(accountInfoManager, SIGNAL(finished (QNetworkReply*)), this, SLOT(accountInfoSlot(QNetworkReply*)));
+    connect(accountInfoManager, SIGNAL(finished (QNetworkReply*)), this, SLOT(accountInfoSlot(QNetworkReply*)), Qt::SingleShotConnection);
     reply = accountInfoManager->get(request);
 }
 
@@ -176,6 +176,7 @@ void LoginDLL::loginSlot(QNetworkReply *reply)
 void LoginDLL::getCustomerInfo()
 {
     QString site_url = socket + "/customer";
+    qDebug() << "Customer id in getcustomer: " + userId;
     site_url.append("/" + userId);
     QNetworkRequest request((site_url));
     //WEBTOKEN ALKU
@@ -185,7 +186,8 @@ void LoginDLL::getCustomerInfo()
     request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
 
     getManager = new QNetworkAccessManager(this);
-    connect(getManager, SIGNAL(finished(QNetworkReply*)),this, SLOT(getCustomerSlot(QNetworkReply*)));
+    Qt::ConnectionType ct = Qt::ConnectionType(Qt::SingleShotConnection | Qt::QueuedConnection);
+    connect(getManager, SIGNAL(finished(QNetworkReply*)),this, SLOT(getCustomerSlot(QNetworkReply*)), ct);
     reply = getManager->get(request);
 }
 
@@ -207,7 +209,7 @@ void LoginDLL::getWithdrawalsInfo()
 {
     QString site_url = socket + "/withdrawal";
     site_url.append("/" + accountId);
-    qDebug() << "userId in getWithdrawalsInfo() was " << accountId;
+    qDebug() << "accountId in getWithdrawalsInfo() was " << accountId;
     qDebug() << "Trying to access url " << site_url;
     QNetworkRequest request((site_url));
     //WEBTOKEN ALKU
@@ -217,7 +219,8 @@ void LoginDLL::getWithdrawalsInfo()
     request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
 
     getManager = new QNetworkAccessManager(this);
-    connect(getManager, SIGNAL(finished(QNetworkReply*)),this, SLOT(getWithdrawalsSlot(QNetworkReply*)));
+    Qt::ConnectionType ct = Qt::ConnectionType(Qt::SingleShotConnection | Qt::QueuedConnection);
+    connect(getManager, SIGNAL(finished(QNetworkReply*)),this, SLOT(getWithdrawalsSlot(QNetworkReply*)), ct);
     reply = getManager->get(request);
 }
 
