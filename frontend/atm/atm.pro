@@ -38,19 +38,21 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 DISTFILES += \
     darkeum.qss
 
-win32: LIBS += -L$$PWD/../loginDLL/build/debug/ -lloginDLL
+
+win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../loginDLL/build/release/ -lloginDLL
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../loginDLL/build/debug/ -lloginDLL
 
 INCLUDEPATH += $$PWD/../loginDLL
 DEPENDPATH += $$PWD/../loginDLL
 
-
-win32: LIBS += -L$$PWD/../pinuiDLL/build/debug/ -lpinuiDLL
+win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../pinuiDLL/build/release/ -lpinuiDLL
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../pinuiDLL/build/debug/ -lpinuiDLL
 
 INCLUDEPATH += $$PWD/../pinuiDLL
 DEPENDPATH += $$PWD/../pinuiDLL
 
-
-win32: LIBS += -L$$PWD/../rfid/build/debug/ -lrfid
+win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../rfid/build/release/ -lrfid
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../rfid/build/debug/ -lrfid
 
 INCLUDEPATH += $$PWD/../rfid
 DEPENDPATH += $$PWD/../rfid
