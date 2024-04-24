@@ -37,9 +37,9 @@ public:
 
     void getWithdrawalsInfo();
 
-    void getTilitjaKortitInfo();
-
     void nostotapahtuma(QString tilin_numero,QString nostot);
+
+    void getAccountRefresh();
 
     // Enums make it easy to handle different outcomes
     enum LoginStatus {
@@ -69,18 +69,20 @@ private slots:
     void accountInfoSlot(QNetworkReply *reply);
     void getCustomerSlot(QNetworkReply *reply);
     void getWithdrawalsSlot(QNetworkReply *reply);
-    void getTilitjaKortitSlot(QNetworkReply *reply);
+
     void getNostotapahtumaSlot(QNetworkReply *reply);
+    void getAccountRefreshSlot(QNetworkReply *reply);
 
 signals:
     void loginStatus(LoginStatus);
     void customerInfo(QJsonArray);
     void withdrawalsInfo(QJsonArray);
-    void tilitjakortitInfo(QJsonArray);
     void accountInfo(QJsonArray);
     void nostotapahtumaInfo(QString);
     void cardInfo(QJsonArray);
     void withdrawalDone();
+    void refreshDone();
+    void accountDone(QJsonArray);
 };
 
 #endif // LOGINDLL_H

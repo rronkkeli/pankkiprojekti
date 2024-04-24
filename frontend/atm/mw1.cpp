@@ -19,14 +19,14 @@ mw1::mw1(QWidget *parent)
         this,
         SLOT(setLoginStatus(LoginDLL::LoginStatus)),
         Qt::UniqueConnection
-    );
+        );
 
     connect(
         cardReader,
         SIGNAL(cardDataReady()),
         this,
         SLOT(fetch_card_data())
-    );
+        );
 
     connect(
         login,
@@ -34,7 +34,16 @@ mw1::mw1(QWidget *parent)
         this,
         SLOT(refreshWithdrawals()),
         Qt::QueuedConnection
-    );
+        );
+
+    connect(
+        login,
+        SIGNAL(refreshDone()),
+        this,
+        SLOT(refreshAccountInfo()),
+        Qt::QueuedConnection
+        );
+
 
     setWidget(SelectWidget::WidgetWelcome);
     initialization = false;
@@ -67,28 +76,28 @@ void mw1::setLoginStatus(LoginDLL::LoginStatus s)
     qDebug() << "Login status was set to: " << s;
 
     switch (loginStatus) {
-        case LoginDLL::LoginStatus::Ok:
-            setWidget(SelectWidget::WidgetCardSelect);
-            break;
+    case LoginDLL::LoginStatus::Ok:
+        setWidget(SelectWidget::WidgetCardSelect);
+        break;
 
-        case LoginDLL::LoginStatus::InvalidCredentials:
-            qDebug() << "Invalid credentials";
-            tries++;
+    case LoginDLL::LoginStatus::InvalidCredentials:
+        qDebug() << "Invalid credentials";
+        tries++;
 
-            if (tries < 3) {
-                setWidget(SelectWidget::WidgetPinUI);
-            } else {
-                setWidget(SelectWidget::WidgetWelcome);
-            }
-                break;
-
-        case LoginDLL::LoginStatus::ConnectionError:
-            qDebug() << "Connection error while trying to log in";
+        if (tries < 3) {
+            setWidget(SelectWidget::WidgetPinUI);
+        } else {
             setWidget(SelectWidget::WidgetWelcome);
-            break;
+        }
+        break;
 
-        default:
-            break;
+    case LoginDLL::LoginStatus::ConnectionError:
+        qDebug() << "Connection error while trying to log in";
+        setWidget(SelectWidget::WidgetWelcome);
+        break;
+
+    default:
+        break;
     }
 
 }
@@ -124,6 +133,15 @@ void mw1::refreshWithdrawals()
 {
     login->getWithdrawalsInfo();
     qDebug() << "Refreshed withdrawals";
+
+}
+
+void mw1::refreshAccountInfo()
+{
+    login->getAccountRefresh();
+    qDebug()<<"Refreshed account";
+
+
 }
 
 void mw1::setAccount(QJsonObject a)
@@ -165,7 +183,7 @@ void mw1::setWidget(SelectWidget type)
             this,
             SLOT(logout()),
             Qt::SingleShotConnection
-        );
+            );
 
         connect(
             widget,
@@ -173,7 +191,7 @@ void mw1::setWidget(SelectWidget type)
             this,
             SLOT(openWithdraw()),
             Qt::SingleShotConnection
-        );
+            );
 
         if (infoRefreshReady) {
             infoRefreshReady = false;
@@ -194,7 +212,7 @@ void mw1::setWidget(SelectWidget type)
             this,
             SLOT(setAccount(QJsonObject)),
             Qt::SingleShotConnection
-        );
+            );
 
         widget->show();
         break;
@@ -210,7 +228,7 @@ void mw1::setWidget(SelectWidget type)
             this,
             SLOT(set_pin(QString)),
             Qt::UniqueConnection
-        );
+            );
 
         widget->show();
         break;
@@ -225,7 +243,7 @@ void mw1::setWidget(SelectWidget type)
             this,
             SLOT(openInfo()),
             Qt::SingleShotConnection
-        );
+            );
 
         widget->show();
         break;

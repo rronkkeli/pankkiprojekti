@@ -39,7 +39,7 @@ void Withdraw::on_withdrawalButton10_clicked()
 
 void Withdraw::on_withdrawalButton20_clicked()
 {
-   add("20");
+    add("20");
 }
 
 
@@ -69,8 +69,20 @@ void Withdraw::on_withdrawalButton500_clicked()
 
 void Withdraw::on_pushButton_clicked()
 {
-    sendWithdrawal();
-    emit returnToAccountInfo();
+
+    if (withdrawal.isEmpty() || withdrawal != "0"){
+        sendWithdrawal();
+
+        withdrawal = "0";
+
+        emit returnToAccountInfo();
+
+    }
+
+    else{
+        ui->amountLineEdit->setText("Syöttämäsi arvo ei voi olla 0!");
+    }
+
 }
 
 
@@ -86,4 +98,3 @@ void Withdraw::on_pushButtonClear_clicked()
     withdrawal = "0";
     ui->amountLineEdit->setText(withdrawal);
 }
-

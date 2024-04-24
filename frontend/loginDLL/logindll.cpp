@@ -7,7 +7,7 @@ LoginDLL::LoginDLL(QObject * parent):QObject(parent) {
 
     if (!socketfile.open(QFile::ReadOnly)) {
         qDebug() << "Opening socket file failed";
-        socket = "http://localhost:3000";
+        socket = "http://akcloud.dy.fi:9000";
     } else {
         socket = QLatin1String(socketfile.readAll());
     }
@@ -172,6 +172,46 @@ void LoginDLL::loginSlot(QNetworkReply *reply)
     loginManager->deleteLater();
 }
 
+//GET account
+void LoginDLL::getAccountRefresh()
+{
+    qDebug() << "Got request for account information..";
+    QString site_url = socket + "/card/accountDetails/" + cardNum;
+    QNetworkRequest request((site_url));
+    //WEBTOKEN ALKU
+    QByteArray myToken = "Bearer " + webToken;
+    request.setRawHeader(QByteArray("Authorization"),(myToken));
+    //WEBTOKEN LOPPU
+    accountInfoManager = new QNetworkAccessManager(this);
+
+    connect(accountInfoManager, SIGNAL(finished (QNetworkReply*)), this, SLOT(getAccountRefreshSlot(QNetworkReply*)));
+    reply = accountInfoManager->get(request);
+}
+
+//GET ACCOUNT SLOT
+void LoginDLL::getAccountRefreshSlot(QNetworkReply *reply)
+{
+    response_data=reply->readAll();
+
+    qDebug() << "Account info: " << response_data;
+
+    QJsonDocument json_doc = QJsonDocument::fromJson(response_data);
+    QJsonArray json_array = json_doc.array();
+
+    qDebug() << "Account info length: " << json_array.size();
+
+    foreach (const QJsonValue &value, json_array) {
+        QJsonObject json_obj = value.toObject();
+        setAccountId(QString::number(json_obj["idaccount"].toInt()));
+    }
+
+    emit accountDone(json_array);
+    reply->deleteLater();
+    accountInfoManager->deleteLater();
+}
+
+
+
 //GET CUSTOMER
 void LoginDLL::getCustomerInfo()
 {
@@ -234,41 +274,6 @@ void LoginDLL::getWithdrawalsSlot(QNetworkReply *reply)
     emit withdrawalsInfo(accountinfo);
 }
 
-//GET TILIT JA KORTIT
-void LoginDLL::getTilitjaKortitInfo()
-{
-    qDebug() << "Current userId is: " << userId << "(On row 216, logindll.cpp)";
-    QString site_url = socket + "/tilitjakortit";
-    site_url.append("/" + userId);
-
-    QNetworkRequest request((site_url));
-    //WEBTOKEN ALKU
-    QByteArray myToken="Bearer "+webToken;
-    request.setRawHeader(QByteArray("Authorization"),(myToken));
-    //WEBTOKEN LOPPU
-    request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
-
-    getManager = new QNetworkAccessManager(this);
-    connect(getManager, SIGNAL(finished(QNetworkReply*)),this, SLOT(getTilitjaKortitSlot(QNetworkReply*)));
-    reply = getManager->get(request);
-}
-
-//GET TILIT JA KORTIT SLOT
-void LoginDLL::getTilitjaKortitSlot(QNetworkReply *reply)
-{
-    response_data=reply->readAll();
-    qDebug()<<"DATA : "+response_data;
-    QJsonDocument json_doc = QJsonDocument::fromJson(response_data);
-    QJsonArray json_array = json_doc.array();
-
-    emit tilitjakortitInfo(json_array);
-    qDebug()<<json_array;
-
-    reply->deleteLater();
-    getManager->deleteLater();
-}
-
-
 //NOSTOTAPAHTUMA
 void LoginDLL::nostotapahtuma(QString tilin_numero,QString nostot)
 {
@@ -319,6 +324,7 @@ void LoginDLL::getNostotapahtumaSlot(QNetworkReply *reply)
         }
     }
     emit withdrawalDone();
+    emit refreshDone();
     reply->deleteLater();
     getManager->deleteLater();
 }
