@@ -54,6 +54,13 @@ void AccountInfo::handleCustomerInfo(QJsonArray array)
     refreshUI();
 }
 
+void AccountInfo::updateBalance(QString b)
+{
+    balance = b;
+    ui->accountBalance->setText(balance);
+    qDebug() << "Account balance updated.\n\r";
+}
+
 QString AccountInfo::editTimestamp(QString timestamp)
 {
     QDateTime time = QDateTime::fromString(timestamp, Qt::ISODateWithMs);

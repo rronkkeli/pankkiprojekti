@@ -105,21 +105,17 @@ void LoginDLL::setAccountId(const QString &newAccountId)
 
 void LoginDLL::cardInfoSlot(QNetworkReply *reply)
 {
-    response_data=reply->readAll();
-    qDebug() << "Card info: " << QString(response_data);
+    QByteArray responseData = reply->readAll();
+    qDebug() << "Card info: " + responseData;
 
-    QJsonDocument json_doc = QJsonDocument::fromJson(response_data);
-    QJsonArray json_array = json_doc.array();
-    QString card;
-    foreach (const QJsonValue &value, json_array) {
-        QJsonObject json_obj = value.toObject();
-        card+=json_obj["idcard"].toString()+","+QString::number(json_obj["idcustomer"].toInt());
-        setUserId(QString::number(json_obj["idcustomer"].toInt()));
-        qDebug() << "UserId was set to " << userId << " by cardInfo";
-    }
+    QJsonObject card = QJsonDocument::fromJson(responseData).array().at(0).toObject();
+
+    setCardNum(card["idcard"].toString());
+    setUserId(QString::number(card["idcustomer"].toInt()));
 
     reply->deleteLater();
     cardInfoManager->deleteLater();
+    getAccountInformation();
 }
 
 void LoginDLL::accountInfoSlot(QNetworkReply *reply)
@@ -138,7 +134,7 @@ void LoginDLL::accountInfoSlot(QNetworkReply *reply)
         setAccountId(QString::number(json_obj["idaccount"].toInt()));
     }
 
-    emit cardInfo(json_array);
+    emit accountsInfo(json_array);
     reply->deleteLater();
     accountInfoManager->deleteLater();
 }
@@ -159,7 +155,7 @@ void LoginDLL::loginSlot(QNetworkReply *reply)
         qDebug() << "Apparently login succeeded";
         status = LoginStatus::Ok;
         setWebToken(response_data);
-        getCardInformation();
+        // getCardInformation();
         qDebug() << "Logged in by logindll";
     } else {
         //Wrong card num or pin
@@ -202,6 +198,9 @@ void LoginDLL::getCustomerSlot(QNetworkReply *reply)
     emit customerInfo(customer);
     reply->deleteLater();
     getManager->deleteLater();
+
+    // Has to be done here because QNetworkReplies are stored in one and same variable and they glitch
+    getWithdrawalsInfo();
 }
 
 //GET WITHRAWAL
@@ -228,7 +227,7 @@ void LoginDLL::getWithdrawalsInfo()
 void LoginDLL::getWithdrawalsSlot(QNetworkReply *reply)
 {
     response_data=reply->readAll();
-    qDebug()<<"DATA : "+response_data;
+    // qDebug()<<"Withdrawalsinfo data: "+response_data;
     QJsonDocument json_doc = QJsonDocument::fromJson(response_data);
     QJsonArray accountinfo = json_doc.array();
 
@@ -291,8 +290,36 @@ void LoginDLL::nostotapahtuma(QString tilin_numero,QString nostot)
     request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
 
     getManager = new QNetworkAccessManager(this);
-    connect(getManager, SIGNAL(finished(QNetworkReply*)),this, SLOT(getNostotapahtumaSlot(QNetworkReply*)));
+    connect(getManager, SIGNAL(finished(QNetworkReply*)),this, SLOT(getNostotapahtumaSlot(QNetworkReply*)), Qt::SingleShotConnection);
     reply = getManager->get(request);
+}
+
+void LoginDLL::getBalance(QString aid)
+{
+    // aid as in account id
+    QString site_url = socket + "/account/" + aid;
+    QNetworkRequest request((site_url));
+
+    //WEBTOKEN ALKU
+    QByteArray myToken="Bearer "+webToken;
+    request.setRawHeader(QByteArray("Authorization"),(myToken));
+    //WEBTOKEN LOPPU
+    request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
+
+    getManager = new QNetworkAccessManager(this);
+
+    // Qt::ConnectionType ct = Qt::ConnectionType();
+
+    connect(
+        getManager,
+        SIGNAL(finished(QNetworkReply*)),
+        this,
+        SLOT(getBalanceSlot(QNetworkReply*))/*,
+        Qt::SingleShotConnection*/
+    );
+
+    reply = getManager->get(request);
+    qDebug() << "\n\rRequest for account data was sent\n\r";
 }
 
 
@@ -301,7 +328,7 @@ void LoginDLL::getNostotapahtumaSlot(QNetworkReply *reply)
 {
 
     QByteArray responseData = reply->readAll();
-    qDebug() << "DATA withdraw: " << responseData;
+    // qDebug() << "DATA withdraw: " << responseData;
 
     if (reply->error() == QNetworkReply::NoError) {
         QJsonParseError jsonError;
@@ -321,7 +348,28 @@ void LoginDLL::getNostotapahtumaSlot(QNetworkReply *reply)
             }
         }
     }
-    emit withdrawalDone();
     reply->deleteLater();
     getManager->deleteLater();
+    emit withdrawalDone();
+}
+
+void LoginDLL::getBalanceSlot(QNetworkReply *reply)
+{
+    qDebug() << "In getBalanceSlot";
+    QByteArray responseData = reply->readAll();
+    qDebug() << "\n\rIn function getBalanceSlot, got data: " << responseData << "\n\r\tParsing..\n\r";
+
+    QJsonObject json = QJsonDocument::fromJson(responseData).array().at(0).toObject();
+    QString balance = json["balance"].toString();
+
+
+    qDebug() << "Emitted balance of " << balance << "\n\r";
+
+    reply->deleteLater();
+    getManager->deleteLater();
+
+    emit sendBalance(
+        balance
+    );
+    getWithdrawalsInfo();
 }

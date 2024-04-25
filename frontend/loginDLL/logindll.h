@@ -41,6 +41,8 @@ public:
 
     void nostotapahtuma(QString tilin_numero,QString nostot);
 
+    void getBalance(QString);
+
     // Enums make it easy to handle different outcomes
     enum LoginStatus {
         InvalidCredentials,
@@ -71,16 +73,18 @@ private slots:
     void getWithdrawalsSlot(QNetworkReply *reply);
     void getTilitjaKortitSlot(QNetworkReply *reply);
     void getNostotapahtumaSlot(QNetworkReply *reply);
+    void getBalanceSlot(QNetworkReply *reply);
 
 signals:
     void loginStatus(LoginStatus);
     void customerInfo(QJsonArray);
     void withdrawalsInfo(QJsonArray);
     void tilitjakortitInfo(QJsonArray);
-    void accountInfo(QJsonArray);
+    void accountsInfo(QJsonArray);
     void nostotapahtumaInfo(QString);
     void cardInfo(QJsonArray);
     void withdrawalDone();
+    void sendBalance(QString);
 };
 
 #endif // LOGINDLL_H

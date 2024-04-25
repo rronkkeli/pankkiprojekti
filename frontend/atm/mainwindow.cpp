@@ -1,5 +1,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include <chrono>
+#include <thread>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -53,17 +55,17 @@ MainWindow::MainWindow(QWidget *parent)
 
     connect(
         login,
-        SIGNAL(cardInfo(QJsonArray)),
+        SIGNAL(accountsInfo(QJsonArray)),
         this,
-        SLOT(handleCard(QJsonArray))
+        SLOT(handleAccounts(QJsonArray))
     );
 
     connect(
         login,
         SIGNAL(withdrawalsInfo(QJsonArray)),
         accountinfo,
-        SLOT(getWithdrawalsInfo(QJsonArray))/*,
-        Qt::QueuedConnection*/
+        SLOT(getWithdrawalsInfo(QJsonArray)),
+        Qt::QueuedConnection
     );
 
     connect(
@@ -86,8 +88,14 @@ MainWindow::MainWindow(QWidget *parent)
         login,
         SIGNAL(withdrawalDone()),
         this,
-        SLOT(refetchWithdrawals()),
-        Qt::QueuedConnection
+        SLOT(refetchWithdrawals())
+    );
+
+    connect(
+        login,
+        SIGNAL(sendBalance(QString)),
+        accountinfo,
+        SLOT(updateBalance(QString))
     );
 
     connect(
@@ -132,7 +140,7 @@ MainWindow::~MainWindow()
     delete login;
 }
 
-void MainWindow::handleCard(QJsonArray accounts)
+void MainWindow::handleAccounts(QJsonArray accounts)
 {
     qDebug() << "Processing card information";
     QJsonObject account;
@@ -210,7 +218,7 @@ void MainWindow::checkLoginStatus(LoginDLL::LoginStatus s)
 {
     switch (s) {
         case LoginDLL::LoginStatus::Ok:
-            login->getAccountInformation();
+            login->getCardInformation();
             break;
 
         case LoginDLL::LoginStatus::InvalidCredentials:
@@ -256,9 +264,7 @@ void MainWindow::handleAccountSelect(CardSelect::AccountType t)
 
     login->setAccountId(accountid);
     login->getCustomerInfo();
-    login->getWithdrawalsInfo();
     ui->viewer->setCurrentWidget(accountinfo);
-    accountinfo->refreshUI();
 }
 
 void MainWindow::handleWithdrawal(QString withdrawal)
@@ -278,8 +284,8 @@ void MainWindow::openWithdrawWidget()
 
 void MainWindow::refetchWithdrawals()
 {
-    qDebug() << "Refetching withdrawals..";
-    login->getWithdrawalsInfo();
+    qDebug() << "Refetching balance and withdrawals for account number " + accountid + "..";
+    login->getBalance(accountid);
 }
 
 void MainWindow::handleData(QString d)

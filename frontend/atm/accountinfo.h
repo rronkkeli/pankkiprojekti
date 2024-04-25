@@ -35,6 +35,7 @@ public slots:
     void getWithdrawalsInfo(QJsonArray);
     void withdrawError(QString);
     void handleCustomerInfo(QJsonArray);
+    void updateBalance(QString);
 
 private slots:
     void on_logout_clicked();

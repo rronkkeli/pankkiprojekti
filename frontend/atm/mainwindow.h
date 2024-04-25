@@ -48,7 +48,7 @@ private slots:
     void start();
     void logout();
     void handleData(QString);
-    void handleCard(QJsonArray);
+    void handleAccounts(QJsonArray);
     void checkLoginStatus(LoginDLL::LoginStatus);
     void handleAccountSelect(CardSelect::AccountType);
     void handleWithdrawal(QString);
