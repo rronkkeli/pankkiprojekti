@@ -155,7 +155,6 @@ void LoginDLL::loginSlot(QNetworkReply *reply)
         qDebug() << "Apparently login succeeded";
         status = LoginStatus::Ok;
         setWebToken(response_data);
-        // getCardInformation();
         qDebug() << "Logged in by logindll";
     } else {
         //Wrong card num or pin
@@ -167,46 +166,6 @@ void LoginDLL::loginSlot(QNetworkReply *reply)
     reply->deleteLater();
     loginManager->deleteLater();
 }
-
-//GET account
-void LoginDLL::getAccountRefresh()
-{
-    qDebug() << "Got request for account information..";
-    QString site_url = socket + "/card/accountDetails/" + cardNum;
-    QNetworkRequest request((site_url));
-    //WEBTOKEN ALKU
-    QByteArray myToken = "Bearer " + webToken;
-    request.setRawHeader(QByteArray("Authorization"),(myToken));
-    //WEBTOKEN LOPPU
-    accountInfoManager = new QNetworkAccessManager(this);
-
-    connect(accountInfoManager, SIGNAL(finished (QNetworkReply*)), this, SLOT(getAccountRefreshSlot(QNetworkReply*)));
-    reply = accountInfoManager->get(request);
-}
-
-//GET ACCOUNT SLOT
-void LoginDLL::getAccountRefreshSlot(QNetworkReply *reply)
-{
-    response_data=reply->readAll();
-
-    qDebug() << "Account info: " << response_data;
-
-    QJsonDocument json_doc = QJsonDocument::fromJson(response_data);
-    QJsonArray json_array = json_doc.array();
-
-    qDebug() << "Account info length: " << json_array.size();
-
-    foreach (const QJsonValue &value, json_array) {
-        QJsonObject json_obj = value.toObject();
-        setAccountId(QString::number(json_obj["idaccount"].toInt()));
-    }
-
-    emit accountDone(json_array);
-    reply->deleteLater();
-    accountInfoManager->deleteLater();
-}
-
-
 
 //GET CUSTOMER
 void LoginDLL::getCustomerInfo()
@@ -353,11 +312,6 @@ void LoginDLL::getNostotapahtumaSlot(QNetworkReply *reply)
             }
         }
     }
-<<<<<<< HEAD
-=======
-    emit withdrawalDone();
-    emit refreshDone();
->>>>>>> origin/MrReaa-patch-1
     reply->deleteLater();
     getManager->deleteLater();
     emit withdrawalDone();
