@@ -119,8 +119,6 @@
 		setTimeout(addAnimation(error), 1);
 	} else {}
 
-    
-	
 	//Animaatiofunktio ja piilottaminen
 	function addAnimation(object) {
 		object.classList.add("animation")
