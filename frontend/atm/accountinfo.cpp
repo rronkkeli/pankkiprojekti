@@ -51,6 +51,7 @@ void AccountInfo::handleCustomerInfo(QJsonArray array)
     QString ln = c["lname"].toString();
 
     customer = fn + " " + ln;
+    ui->tervetuloteksti->setText("TERVETULOA "+customer+"\n\r 🐱‍👤🤳");
     refreshUI();
 }
 
