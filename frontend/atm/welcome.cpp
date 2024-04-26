@@ -6,6 +6,7 @@ Welcome::Welcome(QWidget *parent)
     , ui(new Ui::Welcome)
 {
     ui->setupUi(this);
+    setStart();
     qDebug() << "Welcome widget created";
 }
 
@@ -13,4 +14,40 @@ Welcome::~Welcome()
 {
     delete ui;
     qDebug() << "Welcome widget deleted";
+}
+
+void Welcome::setStart()
+{
+    ui->message->setCurrentIndex(0);
+}
+
+void Welcome::setReadCard()
+{
+    ui->message->setCurrentIndex(1);
+}
+
+void Welcome::setCardReaderError()
+{
+    ui->message->setCurrentIndex(2);
+}
+
+void Welcome::setLoggingIn()
+{
+    ui->message->setCurrentIndex(3);
+}
+
+void Welcome::setLoggedOut()
+{
+    ui->message->setCurrentIndex(4);
+}
+
+void Welcome::on_pbstart_clicked()
+{
+    setReadCard();
+    emit start();
+}
+
+void Welcome::on_pbok_clicked()
+{
+    setStart();
 }

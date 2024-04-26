@@ -14,6 +14,16 @@ PinUI::~PinUI()
     qDebug() << "DLL Destroyed";
 }
 
+void PinUI::setAlert(bool b)
+{
+    if (b) {
+        ui->alert->setText("Virheellinen pinkoodi");
+        return;
+    }
+
+    ui->alert->setText("");
+}
+
 void PinUI::on_btnPin0_clicked()
 {
     pinNumberClickHandler();
@@ -111,5 +121,10 @@ void PinUI::on_btnPinBackspace_clicked()
     qDebug() << "Text in line edit: " << text << Qt::endl;
 
     ui->pinLineEdit->setText(text);
+}
+
+void PinUI::on_btnPinCancel_clicked()
+{
+    emit pinCancel();
 }
 

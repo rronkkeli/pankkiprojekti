@@ -13,22 +13,27 @@ class CardSelect : public QWidget
     Q_OBJECT
 
 public:
-    explicit CardSelect(QWidget *parent = nullptr, LoginDLL *login = nullptr);
+    explicit CardSelect(QWidget *parent = nullptr);
     ~CardSelect();
+
+    enum AccountType {
+        Debit,
+        Credit,
+        Unset
+    };
+
+    // Unsets type
+    void zeroize();
 
 private:
     Ui::CardSelect *ui;
-    LoginDLL *login;
-    QJsonObject debit;
-    QJsonObject credit;
+    AccountType type;
 
 private slots:
-    void accountSelect(QJsonArray);
-    void on_cardDebit_clicked();
-    void on_cardCredit_clicked();
+    void accountSelect();
 
 signals:
-    void selectedAccount(QJsonObject);
+    void selectedAccount(AccountType);
 };
 
 #endif // CARDSELECT_H

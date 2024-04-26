@@ -1025,8 +1025,8 @@ QDial::disabled
 /*-----QScrollBar-----*/
 QScrollBar:horizontal
 {
-    border: 1px solid #222222;
-    background-color: #3d3d3d;
+    border: 1px solid #121212;
+    background-color: #121212;
     height: 13px;
     margin: 0px 16px 0 16px;
 
@@ -1035,7 +1035,7 @@ QScrollBar:horizontal
 
 QScrollBar::handle:horizontal
 {
-    background: #607cff;
+    background: #121212;
     min-height: 20px;
 
 }
@@ -1043,8 +1043,8 @@ QScrollBar::handle:horizontal
 
 QScrollBar::add-line:horizontal
 {
-    border: 1px solid #1b1b19;
-    background-color: #607cff;
+    border: 1px solid #121212;
+    background-color: #121212;
     width: 14px;
     subcontrol-position: right;
     subcontrol-origin: margin;
@@ -1054,8 +1054,8 @@ QScrollBar::add-line:horizontal
 
 QScrollBar::sub-line:horizontal
 {
-    border: 1px solid #1b1b19;
-    background-color: #607cff;
+    border: 1px solid #121212;
+    background-color: #121212;
     width: 14px;
     subcontrol-position: left;
     subcontrol-origin: margin;
@@ -1090,17 +1090,17 @@ QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal
 
 QScrollBar:vertical
 {
-    background-color: #3d3d3d;
+    background-color: #121212;
     width: 13px;
     margin: 16px 0 16px 0;
-    border: 1px solid #222222;
+    border: 1px solid #121212;
 
 }
 
 
 QScrollBar::handle:vertical
 {
-    background-color: #607cff;
+    background-color: #121212;
     min-height: 20px;
 
 }
@@ -1108,8 +1108,8 @@ QScrollBar::handle:vertical
 
 QScrollBar::add-line:vertical
 {
-    border: 1px solid #1b1b19;
-    background-color: #607cff;
+    border: 1px solid #121212;
+    background-color: #121212;
     height: 14px;
     subcontrol-position: bottom;
     subcontrol-origin: margin;
@@ -1119,8 +1119,8 @@ QScrollBar::add-line:vertical
 
 QScrollBar::sub-line:vertical
 {
-    border: 1px solid #1b1b19;
-    background-color: #607cff;
+    border: 1px solid #121212;
+    background-color: #121212;
     height: 14px;
     subcontrol-position: top;
     subcontrol-origin: margin;

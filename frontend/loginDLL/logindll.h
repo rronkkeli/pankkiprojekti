@@ -39,7 +39,7 @@ public:
 
     void nostotapahtuma(QString tilin_numero,QString nostot);
 
-    void getAccountRefresh();
+    void getBalance(QString);
 
     // Enums make it easy to handle different outcomes
     enum LoginStatus {
@@ -71,18 +71,31 @@ private slots:
     void getWithdrawalsSlot(QNetworkReply *reply);
 
     void getNostotapahtumaSlot(QNetworkReply *reply);
+<<<<<<< HEAD
+    void getBalanceSlot(QNetworkReply *reply);
+=======
     void getAccountRefreshSlot(QNetworkReply *reply);
+>>>>>>> origin/MrReaa-patch-1
 
 signals:
     void loginStatus(LoginStatus);
     void customerInfo(QJsonArray);
     void withdrawalsInfo(QJsonArray);
+<<<<<<< HEAD
+    void tilitjakortitInfo(QJsonArray);
+    void accountsInfo(QJsonArray);
+    void nostotapahtumaInfo(QString);
+    void cardInfo(QJsonArray);
+    void withdrawalDone();
+    void sendBalance(QString);
+=======
     void accountInfo(QJsonArray);
     void nostotapahtumaInfo(QString);
     void cardInfo(QJsonArray);
     void withdrawalDone();
     void refreshDone();
     void accountDone(QJsonArray);
+>>>>>>> origin/MrReaa-patch-1
 };
 
 #endif // LOGINDLL_H

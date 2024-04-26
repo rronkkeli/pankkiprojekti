@@ -1,4 +1,4 @@
-#include "mw1.h"
+#include "mainwindow.h"
 
 #include <QApplication>
 #include <QFile>
@@ -7,10 +7,15 @@
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
-    QString path = "darkeum.qss";
-    qDebug() << "Current path of style is: " << path;
 
-    QFile stylesheet(path);
+    QString path1 = QDir::currentPath();
+    QDir directory(path1);
+    directory.cdUp();
+
+    QString path2 = directory.filePath("darkeum.qss");
+    qDebug() << "Current path of style is: " << path2;
+
+    QFile stylesheet(path2);
     if (stylesheet.open(QFile::ReadOnly)) {
         qDebug() << "Stylesheet opened";
     }
@@ -18,7 +23,7 @@ int main(int argc, char *argv[])
     QString styledata = QLatin1String(stylesheet.readAll());
 
     a.setStyleSheet(styledata);
-    mw1 w;
+    MainWindow w;
     w.show();
     return a.exec();
 }

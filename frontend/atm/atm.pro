@@ -12,21 +12,21 @@ SOURCES += \
     accountinfo.cpp \
     cardselect.cpp \
     main.cpp \
-    mw1.cpp \
+    mainwindow.cpp \
     welcome.cpp \
     withdraw.cpp
 
 HEADERS += \
     accountinfo.h \
     cardselect.h \
-    mw1.h \
+    mainwindow.h \
     welcome.h \
     withdraw.h
 
 FORMS += \
     accountinfo.ui \
     cardselect.ui \
-    mw1.ui \
+    mainwindow.ui \
     welcome.ui \
     withdraw.ui
 

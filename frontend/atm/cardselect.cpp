@@ -1,21 +1,28 @@
 #include "cardselect.h"
 #include "ui_cardselect.h"
 
-CardSelect::CardSelect(QWidget *parent, LoginDLL *l)
+CardSelect::CardSelect(QWidget *parent)
     : QWidget(parent)
     , ui(new Ui::CardSelect)
 {
     ui->setupUi(this);
-    login = l;
 
     connect(
-        login,
-        SIGNAL(cardInfo(QJsonArray)),
+        ui->cardDebit,
+        SIGNAL(clicked()),
         this,
-        SLOT(accountSelect(QJsonArray))
+        SLOT(accountSelect())
     );
 
-    login->getAccountInformation();
+    connect(
+        ui->cardCredit,
+        SIGNAL(clicked()),
+        this,
+        SLOT(accountSelect())
+    );
+
+    zeroize();
+
     qDebug() << "CardSelect widget created";
 }
 
@@ -25,40 +32,23 @@ CardSelect::~CardSelect()
     qDebug() << "CardSelect widget deleted";
 }
 
-void CardSelect::accountSelect(QJsonArray accounts)
+void CardSelect::zeroize()
 {
-    qsizetype len = accounts.size();
-    if (len == 1) {
-        emit selectedAccount(accounts.at(0).toObject());
-        return;
+    type = Unset;
+}
+
+void CardSelect::accountSelect()
+{
+    QPushButton *button = qobject_cast<QPushButton*>(sender());
+    QString choice = button->objectName();
+
+    if (choice == "cardDebit") {
+        type = Debit;
+    } else if (choice == "cardCredit") {
+        type = Credit;
     } else {
-        qDebug() << "Double card detected. Splitting..";
-
-        for (qsizetype i = 0; i < len; i++) {
-            QJsonObject account = accounts.at(i).toObject();
-            QString credit = account["credit"].toString();
-
-            if (credit == "" || credit == "0.00" || credit == "0") {
-                debit = account;
-                qDebug() << "Debit set to: " << debit;
-            } else {
-                this->credit = account;
-                qDebug() << "Credit set to: " << this->credit;
-            }
-        }
-
+        zeroize();
     }
-}
 
-void CardSelect::on_cardDebit_clicked()
-{
-    qDebug() << "Debit card was selected";
-    emit selectedAccount(debit);
-}
-
-
-void CardSelect::on_cardCredit_clicked()
-{
-    qDebug() << "Credit card was selected";
-    emit selectedAccount(credit);
+    emit selectedAccount(type);
 }

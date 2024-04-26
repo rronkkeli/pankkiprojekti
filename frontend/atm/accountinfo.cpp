@@ -1,53 +1,11 @@
 #include "accountinfo.h"
 #include "ui_accountinfo.h"
 
-AccountInfo::AccountInfo(QWidget *parent, LoginDLL *l, QString card, QJsonObject account)
+AccountInfo::AccountInfo(QWidget *parent)
     : QWidget(parent)
     , ui(new Ui::AccountInfo)
 {
     ui->setupUi(this);
-    this->login = l;
-
-    connect(
-        login,
-        SIGNAL(withdrawalsInfo(QJsonArray)),
-        this,
-        SLOT(getWithdrawalsInfo(QJsonArray)),
-        Qt::SingleShotConnection
-        );
-
-    connect(
-        login,
-        SIGNAL(accountDone(QJsonArray)),
-        this,
-        SLOT(getAccountRefresh(QJsonArray)),
-        Qt::SingleShotConnection
-        );
-
-    connect(
-        login,
-        SIGNAL(nostotapahtumaInfo(QString)),
-        this,
-        SLOT(getNostoInfo(QString)),
-        Qt::SingleShotConnection
-        );
-
-    ui->cardNumber->setText(card);
-
-    QString credit = account["credit"].toString();
-    this->account = QString::number(account["idaccount"].toInt());
-    QString balance = account["balance"].toString();
-
-    if (credit == "" || credit == "0" || credit == "0.00" || credit.isNull()) {
-        ui->accountType->setText("Debit");
-    } else {
-        ui->accountType->setText("Credit (" + credit + ")");
-    }
-
-    login->setAccountId(this->account);
-
-    ui->accountBalance->setText(balance);
-    ui->accountNumber->setText(this->account);
 
     qDebug() << "AccountInfo widget created";
 }
@@ -76,8 +34,33 @@ void AccountInfo::getWithdrawalsInfo(QJsonArray wi)
         data.append(id + "\t" + amount + "\t" + time + "\r\n");
     }
 
+    withdrawals = data;
     ui->withdrawals->setText(data);
     qDebug() << "Withdrawal window was updated";
+    refreshUI();
+}
+
+void AccountInfo::withdrawError(QString s)
+{
+    ui->withdrawals->setText(s);
+}
+
+void AccountInfo::handleCustomerInfo(QJsonArray array)
+{
+    QJsonObject c = array.at(0).toObject();
+    QString fn = c["fname"].toString();
+    QString ln = c["lname"].toString();
+
+    customer = fn + " " + ln;
+    ui->tervetuloteksti->setText("TERVETULOA "+customer+"\n\r 🐱‍👤🤳");
+    refreshUI();
+}
+
+void AccountInfo::updateBalance(QString b)
+{
+    balance = b;
+    ui->accountBalance->setText(balance);
+    qDebug() << "Account balance updated.\n\r";
 }
 void AccountInfo::getNostoInfo(QString virhe)
 {
@@ -98,8 +81,34 @@ void AccountInfo::getAccountRefresh(QJsonArray ar)
 QString AccountInfo::editTimestamp(QString timestamp)
 {
     QDateTime time = QDateTime::fromString(timestamp, Qt::ISODateWithMs);
+    time = time.addSecs(3600);
     QString editedTime = time.toString("hh.mm dd.MM.yyyy");
     return editedTime;
+}
+
+void AccountInfo::setInfo(QJsonObject a, QString c, QString t)
+{
+    account = QString::number(a["idaccount"].toInt());
+    balance = a["balance"].toString();
+    credit = a["credit"].toString();
+    type = t;
+    card = c;
+}
+
+void AccountInfo::zeroize()
+{
+    type = account = balance = credit = card = customer = withdrawals = "";
+    refreshUI();
+}
+
+void AccountInfo::refreshUI()
+{
+    ui->accountNumber->setText(account);
+    ui->accountBalance->setText(balance);
+    ui->accountType->setText(type);
+    ui->accountOwner->setText(customer);
+    ui->withdrawals->setText(withdrawals);
+    ui->cardNumber->setText(card);
 }
 
 void AccountInfo::on_logout_clicked()
