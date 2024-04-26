@@ -197,7 +197,6 @@ void MainWindow::handleAccounts(QJsonArray accounts)
         );
 
         ui->viewer->setCurrentWidget(accountinfo);
-        login->getWithdrawalsInfo();
         return;
 
     } else {

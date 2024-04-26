@@ -7,15 +7,10 @@
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
+    QString path = "darkeum.qss";
+    qDebug() << "Current path of style is: " << path;
 
-    QString path1 = QDir::currentPath();
-    QDir directory(path1);
-    directory.cdUp();
-
-    QString path2 = directory.filePath("darkeum.qss");
-    qDebug() << "Current path of style is: " << path2;
-
-    QFile stylesheet(path2);
+    QFile stylesheet(path);
     if (stylesheet.open(QFile::ReadOnly)) {
         qDebug() << "Stylesheet opened";
     }
