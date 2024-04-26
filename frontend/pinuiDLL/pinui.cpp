@@ -123,3 +123,8 @@ void PinUI::on_btnPinBackspace_clicked()
     ui->pinLineEdit->setText(text);
 }
 
+void PinUI::on_btnPinCancel_clicked()
+{
+    emit pinCancel();
+}
+
