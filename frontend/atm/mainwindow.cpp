@@ -50,6 +50,13 @@ MainWindow::MainWindow(QWidget *parent)
     );
 
     connect(
+        pinui,
+        SIGNAL(pinCancel()),
+        this,
+        SLOT(logout())
+    );
+
+    connect(
         login,
         SIGNAL(loginStatus(LoginDLL::LoginStatus)),
         this,
