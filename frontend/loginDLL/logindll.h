@@ -37,8 +37,6 @@ public:
 
     void getWithdrawalsInfo();
 
-    void getTilitjaKortitInfo();
-
     void nostotapahtuma(QString tilin_numero,QString nostot);
 
     void getBalance(QString);
@@ -71,20 +69,33 @@ private slots:
     void accountInfoSlot(QNetworkReply *reply);
     void getCustomerSlot(QNetworkReply *reply);
     void getWithdrawalsSlot(QNetworkReply *reply);
-    void getTilitjaKortitSlot(QNetworkReply *reply);
+
     void getNostotapahtumaSlot(QNetworkReply *reply);
+<<<<<<< HEAD
     void getBalanceSlot(QNetworkReply *reply);
+=======
+    void getAccountRefreshSlot(QNetworkReply *reply);
+>>>>>>> origin/MrReaa-patch-1
 
 signals:
     void loginStatus(LoginStatus);
     void customerInfo(QJsonArray);
     void withdrawalsInfo(QJsonArray);
+<<<<<<< HEAD
     void tilitjakortitInfo(QJsonArray);
     void accountsInfo(QJsonArray);
     void nostotapahtumaInfo(QString);
     void cardInfo(QJsonArray);
     void withdrawalDone();
     void sendBalance(QString);
+=======
+    void accountInfo(QJsonArray);
+    void nostotapahtumaInfo(QString);
+    void cardInfo(QJsonArray);
+    void withdrawalDone();
+    void refreshDone();
+    void accountDone(QJsonArray);
+>>>>>>> origin/MrReaa-patch-1
 };
 
 #endif // LOGINDLL_H

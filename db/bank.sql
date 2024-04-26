@@ -144,31 +144,83 @@ SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
 -- -----------------------------------------------------
 -- Test value insertions on all tables
 -- -----------------------------------------------------
-INSERT INTO bank.customer VALUES (1, 'Aku', 'Ankka', '+302385022982', '1934-03-13', 'Paratiisitie 13, Ankkalinna');
-INSERT INTO bank.customer VALUES (2, 'Iines', 'Ankka', '+1234567890', '1920-10-20', 'Helytie 6, Ankkalinna');
+Truncate TABLE credentials;
+Truncate TABLE withdrawal;
+Truncate TABLE customer_has_account;
+Truncate TABLE card_has_account;
+Delete from card;
+Delete from customer;
+Delete from account;
+
+
+INSERT INTO customer (idcustomer, fname, lname, phone_number, birthdate, address)
+VALUES(204, 'Paavo', 'Pesusieni','+4897897897','1899-02-03', 'Ananastalo'),
+(502, 'Muumi', 'Peikko','045789425470','2000-04-09', 'Muumitalo Muumilaakso'),
+(666,'Osku', 'Potsku','045 340 8826', '2018-04-10', 'Talatie 10 OULU'),
+(1, 'Aku', 'Ankka', '+302385022982', '1934-03-13', 'Paratiisitie 13, Ankkalinna') ,
+(2, 'Iines', 'Ankka', '+1234567890','1920-10-20','Helytie 6, Ankkalinna'),
+(3, 'Hannu', 'Hanhi', '+55555555555', '1944-11-10', 'Rahakatu 15, Ankkalinna');
+
+INSERT INTO card (idcard, pin, idcustomer) 
+VALUES('06000622F0', '$2a$12$eoRO4an4QdEsUhbhwct52uNwqPFKFsLCim2GWpmaly3z77.H8xKAi', 1),
+('06000DE540', '$2a$12$QnIME1de3u7kdAcMW1VVW.fiUAErV/WPSkTBGyEtEM1kzAV/yIKYG', 2);
+
 -- Pin 1234;
-INSERT INTO bank.card VALUES ('06000622F0', '$2a$12$eoRO4an4QdEsUhbhwct52uNwqPFKFsLCim2GWpmaly3z77.H8xKAi', 1);
 -- Pin 4321;
-INSERT INTO bank.card VALUES ('06000DE540', '$2a$12$QnIME1de3u7kdAcMW1VVW.fiUAErV/WPSkTBGyEtEM1kzAV/yIKYG', 2);
-INSERT INTO bank.account VALUES (1, 20.00, NULL);
-INSERT INTO bank.account VALUES (2, 1923.71, 2000.00);
-INSERT INTO bank.account VALUES (3, 480.00, 500.00);
-INSERT INTO bank.card_has_account VALUES ('06000622F0', 1);
-INSERT INTO bank.card_has_account VALUES ('06000DE540', 2);
-INSERT INTO bank.card_has_account VALUES ('06000622F0', 3);
-INSERT INTO bank.customer_has_account VALUES (1, 1);
-INSERT INTO bank.customer_has_account VALUES (2, 2);
-INSERT INTO bank.customer_has_account VALUES (1, 3);
-INSERT INTO bank.withdrawal VALUES (1, 2, 50.00, '2022-11-06 10:31:11');
-INSERT INTO bank.withdrawal VALUES (2, 1, 10.00, '2022-11-08 08:02:57');
-INSERT INTO bank.withdrawal VALUES (3, 1, 5.00, '2022-11-14 07:55:21');
-INSERT INTO bank.withdrawal VALUES (4, 2, 100.00, '2022-11-15 13:12:07');
-INSERT INTO bank.withdrawal VALUES (5, 2, 80.00, '2022-11-17 19:22:03');
-INSERT INTO bank.withdrawal VALUES (6, 3, 20.00, '2022-11-25 15:35:44');
+
+INSERT INTO account(idaccount,balance,credit) 
+VALUES(1,200.00, NULL),
+(2, 1923.71, 2000.00),
+(3, 480, 500.00),
+(235, 558.45, 4000.00),
+(56, 8054.78,NULL),
+(485, 45789, 450),
+(5, 4447.98,786.50),
+(10, 10, NULL),
+(12, 4555, NULL);
+
+INSERT INTO card_has_account(idcard,idaccount)
+VALUES ('06000622F0', 1),
+('06000DE540', 2),
+('06000622F0', 3);
+
+INSERT INTO customer_has_account(idcustomer, idaccount) 
+VALUES (1,1),
+(2,2),
+(1,3),
+(204, 235),
+(204, 56),
+(204, 485),
+(502, 12),
+(666, 235),
+(666, 1),
+(3, 10),
+(3,2),
+(3, 5);
+
+INSERT INTO withdrawal(idwithdrawal, withdrawal.idaccount, amount, timestamp)
+VALUES (1, 2, 50.00, '2023-11-06 10:31:11'),
+(2, 1, 10.00, '2023-11-08 08:02:57'),
+(3, 1, 5.00, '2023-11-14 07:55:21'),
+(4, 2, 100.00, '2023-11-15 13:12:07'),
+(5, 2, 80.00, '2023-11-17 19:22:03'),
+(6, 3, 20.00, '2023-11-25 15:35:44'),
+(7, 253, 200.00, '2023-12-25 16:35:44'),
+(8, 253, 30.00, '2023-12-26 11:45:02'),
+(9, 253, 250.00, '2023-12-26 01:55:09'),
+(10, 485, 1220.00, '2023-02-03 14:25:03'),
+(11, 5, 20.00, '2023-08-25 15:35:44'),
+(12, 5, 55.00, '2023-09-02 12:12:12'),
+(13, 10, 10.00, '2023-11-25 15:36:44'),
+(14, 10, 2000.00, '2023-11-28 09:45:25'),
+(15, 12, 200.00, '2023-11-15 10:14:10'),
+(16, 12, 6942.69, '2022-11-25 15:35:44');
+
 -- Password 313131;
-INSERT INTO bank.credentials VALUES (13031934, '$2a$12$HcRqgJFcRl4rZ.GrUb19CuEqxab/8Rha0zXUGhc/dpWobErOy1oXW', 1);
 -- Password 999999;
-INSERT INTO bank.credentials VALUES (20101920, '$2a$12$kaLD1nSl98hd5NP2jZm5FOLhbgIlrN7VW87mxM1T9TNVS9zeZQiT.', 2);
+INSERT INTO credentials (idcredentials, password, idcustomer)
+VALUES (13031934, '$2a$12$HcRqgJFcRl4rZ.GrUb19CuEqxab/8Rha0zXUGhc/dpWobErOy1oXW', 1),
+(20101920, '$2a$12$kaLD1nSl98hd5NP2jZm5FOLhbgIlrN7VW87mxM1T9TNVS9zeZQiT.', 2);
 
 -- -----------------------------------------------------
 -- Create test user for test database
