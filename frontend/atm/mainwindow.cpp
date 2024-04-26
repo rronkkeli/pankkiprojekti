@@ -17,6 +17,9 @@ MainWindow::MainWindow(QWidget *parent)
     login = new LoginDLL(this);
     rfid = new RFID(this);
 
+    logoutTimer = new QTimer;
+    startWidgetTimer = new QTimer;
+
     ui->viewer->addWidget(welcome);
     ui->viewer->addWidget(pinui);
     ui->viewer->addWidget(cardselect);
@@ -125,6 +128,22 @@ MainWindow::MainWindow(QWidget *parent)
         this,
         SLOT(handleWithdrawal(QString))
     );
+
+    connect(
+        logoutTimer,
+        SIGNAL(timeout()),
+        this,
+        SLOT(logout()),
+        Qt::UniqueConnection
+    );
+
+    connect(
+        startWidgetTimer,
+        SIGNAL(timeout()),
+        this,
+        SLOT(returnToStart()),
+        Qt::UniqueConnection
+    );
 }
 
 MainWindow::~MainWindow()
@@ -135,6 +154,7 @@ MainWindow::~MainWindow()
     delete cardselect;
     delete accountinfo;
     delete withdraw;
+    delete logoutTimer;
 
     delete rfid;
     delete login;
@@ -203,8 +223,16 @@ void MainWindow::logout()
     accountinfo->zeroize();
     debit = credit = QJsonObject();
     pin = cardNum = "";
-    welcome->setStart();
+    welcome->setLoggedOut();
+    startWidgetTimer->setSingleShot(true);
+    startWidgetTimer->start(2000);
     ui->viewer->setCurrentWidget(welcome);
+}
+
+void MainWindow::returnToStart()
+{
+    welcome->setStart();
+    // ui->viewer->setCurrentWidget(welcome);
 }
 
 void MainWindow::start()
@@ -218,6 +246,8 @@ void MainWindow::checkLoginStatus(LoginDLL::LoginStatus s)
 {
     switch (s) {
         case LoginDLL::LoginStatus::Ok:
+            logoutTimer->setSingleShot(true);
+            logoutTimer->start(5 * 60 * 1000);
             login->getCardInformation();
             break;
 
@@ -291,11 +321,11 @@ void MainWindow::refetchWithdrawals()
 void MainWindow::handleData(QString d)
 {
     if (sender() == rfid) {
+        rfid->closeReader();
         cardNum = d;
         pinui->setAlert(false);
         tries = 0;
         ui->viewer->setCurrentWidget(pinui);
-        rfid->closeReader();
 
     } else if (sender() == pinui) {
         pin = d;

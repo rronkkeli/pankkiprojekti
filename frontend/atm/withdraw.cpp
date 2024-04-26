@@ -61,9 +61,14 @@ void Withdraw::on_withdrawalButton500_clicked()
 
 void Withdraw::on_pushButton_clicked()
 {
-    emit sendWithdrawal(withdrawal);
-    withdrawal = "0";
-    ui->amountLineEdit->setText(withdrawal);
+    if (withdrawal != "0") {
+        emit sendWithdrawal(withdrawal);
+        withdrawal = "0";
+        ui->amountLineEdit->setText(withdrawal);
+
+    } else {
+        ui->amountLineEdit->setText("Syötä arvo!!");
+    }
 }
 
 

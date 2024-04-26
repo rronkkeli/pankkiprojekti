@@ -23,7 +23,7 @@
     </rect>
    </property>
    <property name="currentIndex">
-    <number>0</number>
+    <number>4</number>
    </property>
    <widget class="QWidget" name="start">
     <widget class="QLabel" name="label_2">
@@ -135,6 +135,24 @@
      </property>
      <property name="text">
       <string>Kirjataan sinua sisään... Odotathan</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+   </widget>
+   <widget class="QWidget" name="loggedout">
+    <widget class="QLabel" name="label_5">
+     <property name="geometry">
+      <rect>
+       <x>290</x>
+       <y>290</y>
+       <width>221</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Sinut on kirjattu ulos</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignCenter</set>

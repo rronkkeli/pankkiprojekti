@@ -36,6 +36,11 @@ void Welcome::setLoggingIn()
     ui->message->setCurrentIndex(3);
 }
 
+void Welcome::setLoggedOut()
+{
+    ui->message->setCurrentIndex(4);
+}
+
 void Welcome::on_pbstart_clicked()
 {
     setReadCard();

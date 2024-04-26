@@ -42,11 +42,13 @@ private:
     // Variables
     QString pin, cardNum, accountid;
     QJsonObject debit, credit;
+    QTimer *logoutTimer, *startWidgetTimer;
     int tries = 0;
 
 private slots:
     void start();
     void logout();
+    void returnToStart();
     void handleData(QString);
     void handleAccounts(QJsonArray);
     void checkLoginStatus(LoginDLL::LoginStatus);
