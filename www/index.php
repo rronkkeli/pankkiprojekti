@@ -80,6 +80,26 @@ try {
 		<div class="col-md-3 mx-auto"></div>
 
 		<div style="background-color:rgba(0, 0, 0, 0.65); padding: 30px;" class="col-md-6 mx-auto">
+				<?php if(!empty($_SESSION["success"])) {
+                    echo '<div id="success" class="alert alert-success alert-dismissible"> ' . $_SESSION["success"] . '<button type="button" class="close" data-dismiss="alert">&times;</button></div>';
+                    $_SESSION["success"] = "";
+                }
+                
+                if(!empty($_SESSION["error"])) {
+                    echo '<div id="error" class="alert alert-danger alert-dismissible"> ' . $_SESSION["error"] . '<button type="button" class="close" data-dismiss="alert">&times;</button></div>';
+                    $_SESSION["error"] = "";
+                }
+                
+                if(!empty($_SESSION["updatesuccess"])) {
+                    echo '<div id="update" class="alert alert-success alert-dismissible"> ' . $_SESSION["updatesuccess"] . '<button type="button" class="close" data-dismiss="alert">&times;</button></div>';
+                    $_SESSION["updatesuccess"] = "";
+                }
+                
+                if(!empty($_SESSION["deleteSuccess"])) {
+                    echo '<div id="deleted" class="alert alert-success alert-dismissible"> ' . $_SESSION["deleteSuccess"] . '<button type="button" class="close" data-dismiss="alert">&times;</button></div>';
+                    $_SESSION["deleteSuccess"] = "";
+                }
+			?>
 			<div class="form-group">
 			
 			</div>
@@ -96,13 +116,19 @@ try {
 				</thead>
 				<tbody>
 				<?php 
-					if ($result === null) {
-						echo "You have no accounts.";
+					if (count($result) === 0) {
+						echo "<tr><td colspan='3'>You have no accounts.</td></tr>";
 					} else {
 						foreach ($result as $value) {
 							echo '<tr onclick="window.location=\'accountDetails.php?id=' . htmlspecialchars($value['idaccount']) . '\'"><td>' . htmlspecialchars($value['idaccount']) . '</td>
 							<td>' . htmlspecialchars($value['balance']) . "</td>
-							<td>" . htmlspecialchars($value['credit']) . "</td>
+							<td>";
+							if($value['credit'] === NULL) {
+								echo "No credit";
+							} else {
+								echo htmlspecialchars($value['credit']);
+							}
+							echo "</td>
 							</tr>";
 						}
 					}
@@ -115,22 +141,26 @@ try {
 					<tr class="font-weight-bold">
 						<td>Account ID</td>
 						<td>Card ID</td>
+						<td>Remove card</td>
 					</tr>
 				</thead>
 				<tbody>
 				<?php 
-					if ($result === null) {
-						echo "You have no cards.";
+					if (count($result2) === 0) {
+						echo "<tr><td colspan='2'>You have no cards.</td></tr>";
 					} else {
 						foreach ($result2 as $value) {
 							echo '<tr><td>' . htmlspecialchars($value['idaccount']) . '</td>
-							<td>' . htmlspecialchars($value['idcard']) . "</td>
-							</tr>";
+							<td>' . htmlspecialchars($value['idcard']) . '</td>
+							<td><a href=deleteCard.php?delID=' . htmlspecialchars($value['idcard']) . ' role="button" class="btn btn-danger"  onClick="return confirm(\'Are you sure you want to delete this card?\')">Delete</a></td>
+							</tr>';
 						}
 					}
 				?>
 				</tbody>
 			</table><br><br>
+			<button onclick="location.href='createAccount.php';" style="margin-right: 20px" class="btn btn-info">New account</button>
+			<button onclick="location.href='createCard.php';" class="btn btn-info">New card</button>
 		</div>
 
 		<div class="col-md-3 mx-auto"></div>
@@ -141,7 +171,7 @@ try {
 	<script>	
 	$(document).ready(function () {
 		new DataTable('#table');
-		$('#table').DataTable();
+		new DataTable('#cardTable');
 	});
 	
 	</script>

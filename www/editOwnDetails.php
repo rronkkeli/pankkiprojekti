@@ -10,6 +10,7 @@
 
 	//Muuttujat
 	$errors = [];
+    $fname = $lname = $phone = $address = "";
 
 	if($_SERVER["REQUEST_METHOD"] == "POST") {
 	  
@@ -41,10 +42,6 @@
         if (strlen($lname) > 255) {
             array_push($errors, "Last name has to be under 255 letters long.");
         }
-        
-        if (!empty($errors)) {
-            $_SESSION["error"] = "An error has occured. Please check the input and try again.";
-        }
 
         if (empty($address)) {
             array_push($errors, "Address can't be empty.");
@@ -69,6 +66,10 @@
         if (strlen($phone) > 255) {
             array_push($errors, "Phone number has to be under 255 numbers long.");
         }
+
+        if (!empty($errors)) {
+            $_SESSION["error"] = "An error has occured. Please check the input and try again.";
+        }
         
         if (empty($errors)) {
             try {
@@ -87,28 +88,28 @@
                 echo "Error" . $error->getMessage();
             }
         }
-	}
-
-    try {
-        $sql = "SELECT credentials.idcredentials, credentials.password, credentials.idcustomer, customer.fname, customer.lname, customer.phone_number, customer.birthdate, customer.address 
-        FROM credentials 
-        JOIN customer ON credentials.idcustomer = customer.idcustomer 
-        WHERE credentials.idcustomer = :idCustomer LIMIT 1";
-    
-        //Muuttujia
-        $statement = $connect->prepare($sql);
-    
-        $paramCustomerId = $_SESSION["userID"];
-        $statement->bindparam(":idCustomer", $paramCustomerId);
-    
-        $statement->execute();
-        $result = $statement->fetch();
-        $fname = $result["fname"];
-        $lname = $result["lname"];
-        $phone = $result["phone_number"];
-        $address = $result["address"];
-    } catch (Exception $error) {
-        echo "Error" . $error->getMessage();
+	} else {
+        try {
+            $sql = "SELECT credentials.idcredentials, credentials.password, credentials.idcustomer, customer.fname, customer.lname, customer.phone_number, customer.birthdate, customer.address 
+            FROM credentials 
+            JOIN customer ON credentials.idcustomer = customer.idcustomer 
+            WHERE credentials.idcustomer = :idCustomer LIMIT 1";
+        
+            //Muuttujia
+            $statement = $connect->prepare($sql);
+        
+            $paramCustomerId = $_SESSION["userID"];
+            $statement->bindparam(":idCustomer", $paramCustomerId);
+        
+            $statement->execute();
+            $result = $statement->fetch();
+            $fname = $result["fname"];
+            $lname = $result["lname"];
+            $phone = $result["phone_number"];
+            $address = $result["address"];
+        } catch (Exception $error) {
+            echo "Error" . $error->getMessage();
+        }
     }
 ?>
 <!DOCTYPE html>
@@ -146,6 +147,7 @@
 				}
 				echo '<button type="button" class="close" data-dismiss="alert">&times;</button></div>';
 				$errors = [];
+                $_SESSION["error"] = [];
 			}
 			?>
 		  <h1>Log in</h1><br>

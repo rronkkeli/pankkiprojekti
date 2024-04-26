@@ -134,13 +134,19 @@ try {
                     </thead>
                     <tbody>
                     <?php 
-                        if ($result === null) {
+                        if ($result === NULL) {
                             echo "You have no accounts.";
                         } else {
                             foreach ($result as $value) {
                                 echo '<tr><td>' . htmlspecialchars($value['idaccount']) . '</td>
                                 <td>' . htmlspecialchars($value['balance']) . "</td>
-                                <td>" . htmlspecialchars($value['credit']) . "</td>
+                                <td>";
+                                if($value['credit'] === NULL) {
+                                    echo "No credit";
+                                } else {
+                                    echo htmlspecialchars($value['credit']);
+                                }
+                                echo "</td>
                                 </tr>";
                             }
                         }
@@ -158,8 +164,8 @@ try {
                     </thead>
                     <tbody>
                     <?php 
-                        if ($result === null) {
-                            echo "You have no cards.";
+                        if (count($result3) === 0) {
+                            echo "<tr><td colspan='2'>You have no cards on this account.</td></tr>";
                         } else {
                             foreach ($result3 as $value) {
                                 echo '<tr><td>' . htmlspecialchars($value['idaccount']) . '</td>
@@ -181,8 +187,8 @@ try {
                     </thead>
                     <tbody>
                     <?php 
-                        if ($result === null) {
-                            echo "You have no withdrawals.";
+                        if (count($result2) === 0) {
+                            echo "<tr><td colspan='2'>You have no withdrawals on this account.</td></tr>";
                         } else {
                             foreach ($result2 as $value) {
                                 echo '<tr>
@@ -194,6 +200,7 @@ try {
                     ?>
                     </tbody>
                 </table><br><br>
+                <a href="<?php echo "deleteAccount.php?delID=" . $result[0]["idaccount"]; ?>" role="button" class="btn btn-danger"  onClick="return confirm('Are you sure you want to delete this account and the cards associated with it?')">Delete</a>
 		    </div>
 			
 		  </div>
