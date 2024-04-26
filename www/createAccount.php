@@ -11,16 +11,20 @@
 	//Muuttujat
 	$errors = [];
     $type = $balance = $credit = "";
+	$balance = 0;
+	$credit = NULL;
 
 	if($_SERVER["REQUEST_METHOD"] == "POST") {
 	  
         $type = $_POST["type"];
         if($type === "credit") {
-            $credit= $_POST["credit"];
-            $balance = $_POST["balance"];
+			$credit = 0;
+        //     $credit= $_POST["credit"];
+        //     $balance = $_POST["balance"];
         } else {
-            $balance = $_POST["balance"];
-            $credit = NULL;
+			$credit = NULL;
+        //     $balance = $_POST["balance"];
+        //     $credit = NULL;
         }
         
         
@@ -28,21 +32,21 @@
             array_push($errors, "Account type can't be empty.");
         }
         
-        if (empty($balance)) {
-            array_push($errors, "Balance can't be empty.");
-        }
+        // if (empty($balance)) {
+        //     array_push($errors, "Balance can't be empty.");
+        // }
 
-        if (strlen($balance) > 8) {
-            array_push($errors, "Balance has to be under 8 numbers long.");
-        }
+        // if (strlen($balance) > 8) {
+        //     array_push($errors, "Balance has to be under 8 numbers long.");
+        // }
 
-        if ($type === "credit" && empty($credit)) {
-            array_push($errors, "Credit can't be empty.");
-        }
+        // if ($type === "credit" && empty($credit)) {
+        //     array_push($errors, "Credit can't be empty.");
+        // }
 
-        if ($type === "credit" && strlen($credit) > 8) {
-            array_push($errors, "Credit has to be under 8 numbers long.");
-        }
+        // if ($type === "credit" && strlen($credit) > 8) {
+        //     array_push($errors, "Credit has to be under 8 numbers long.");
+        // }
 
         if (!empty($errors)) {
             $_SESSION["error"] = "An error has occured. Please check the input and try again.";
@@ -114,14 +118,14 @@
                     <option value="credit">Credit</option>
                 </select>
 				<br>
-				<label for="balance">Balance: </label>
+				<!-- <label for="balance">Balance: </label>
 				<input type="number" class="form-control" id="balance" name="balance" required>
 				<br>
                 <div id="creditDiv" class="hidden">
                     <label for="credit">Credit: </label>
 				    <input type="number" class="form-control" id="credit" name="credit">
                 </div>
-                <br>
+                <br> -->
                 <input class="btn btn-outline-danger" type="button" name="cancel" value="Cancel" onclick="window.location='index.php'">
 				<input class="btn btn-success" type="submit" name="submit" value="Submit">
 			</form>
@@ -157,13 +161,13 @@
     var selectElem = document.getElementById("type");
     selectElem.addEventListener("change", valueChanged);
 
-    function valueChanged() {
+    /*function valueChanged() {
         if (selectElem.value === "credit") {
             document.getElementById("creditDiv").classList.remove("hidden");
         } else {
             document.getElementById("creditDiv").classList.add("hidden");
         }
-    }
+    }*/
 	
 	</script>
 </body>
