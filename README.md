@@ -25,3 +25,8 @@ ATM 1.0.0 has been released. You can find it from <https://akcloud.dy.fi/latauks
 ### Server address
 
 The server address for REST API can be manipulated with socket file in the executable directory. The address should be without any new lines and spaces in order to work.
+
+
+## Token creation
+
+Create new token with command line command by running `$ node gentoken.js > .env`
