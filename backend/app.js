@@ -38,14 +38,8 @@ app.use('/account', accountRouter);
 var cardRouter = require('./routes/card');
 app.use('/card', cardRouter);
 
-const tilitjakortitRouter = require('./routes/tilitjakortit');
-app.use('/tilitjakortit', tilitjakortitRouter);
-
 const nostotapahtumaRouter = require('./routes/nostotapahtuma');
 app.use('/nostotapahtuma', nostotapahtumaRouter);
-
-const tilitiedotRouter = require('./routes/tilitiedot');
-app.use('/tilitiedot', tilitiedotRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
