@@ -76,10 +76,8 @@ signals:
     void loginStatus(LoginStatus);
     void customerInfo(QJsonArray);
     void withdrawalsInfo(QJsonArray);
-    void tilitjakortitInfo(QJsonArray);
     void accountsInfo(QJsonArray);
     void nostotapahtumaInfo(QString);
-    void cardInfo(QJsonArray);
     void withdrawalDone();
     void sendBalance(QString);
 };
