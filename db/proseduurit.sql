@@ -16,7 +16,7 @@ BEGIN
         INSERT INTO withdrawal(idaccount, amount, timestamp) VALUES (tilin_numero, nosto, NOW());
 
         ELSEIF  tarkistettava_balance-nosto < 0 THEN
-            SELECT 'You do not have enought money for that sum';
+            SELECT 'You do not have enough money for that sum';
         ELSE
             SELECT 'You have no balance, U broke :)';
         END IF;
