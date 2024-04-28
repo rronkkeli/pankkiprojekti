@@ -169,6 +169,7 @@ MainWindow::MainWindow(QWidget *parent)
 
 MainWindow::~MainWindow()
 {
+    music->stop();
     delete ui;
     delete welcome;
     delete pinui;
