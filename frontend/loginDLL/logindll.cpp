@@ -70,6 +70,16 @@ void LoginDLL::getAccountInformation()
     reply = accountInfoManager->get(request);
 }
 
+void LoginDLL::lockCard()
+{
+    QString site_url = socket + "/login/setLocked/" + cardNum;
+    QNetworkRequest request((site_url));
+
+    lockedManager = new QNetworkAccessManager(this);
+    connect(lockedManager, SIGNAL(finished(QNetworkReply*)), this, SLOT(lockCardSlot(QNetworkReply*)), Qt::SingleShotConnection);
+    reply = lockedManager->get(request);
+}
+
 void LoginDLL::logout()
 {
 
@@ -336,4 +346,12 @@ void LoginDLL::getBalanceSlot(QNetworkReply *reply)
         balance
     );
     getWithdrawalsInfo();
+}
+
+void LoginDLL::lockCardSlot(QNetworkReply *reply)
+{
+    response_data=reply->readAll();
+    qDebug()<<response_data;
+    reply->deleteLater();
+    lockedManager->deleteLater();
 }
