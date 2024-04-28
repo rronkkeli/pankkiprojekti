@@ -20,8 +20,6 @@ int main(int argc, char *argv[])
     a.setStyleSheet(styledata);
     MainWindow w;
     w.show();
-
-    //delete music;
     return a.exec();
 }
 
