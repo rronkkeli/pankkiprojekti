@@ -10,6 +10,10 @@
 #include "withdraw.h"
 #include "rfid.h"
 #include "logindll.h"
+#include <QMediaPlayer>
+#include <QAudioOutput>
+#include <QUrl>
+
 
 namespace Ui {
 class MainWindow;
@@ -25,6 +29,11 @@ public:
 
 private:
     Ui::MainWindow *ui;
+
+    //music
+    QMediaPlayer * music;
+    QAudioOutput * audioOutput;
+
 
     // Widgets
     Welcome *welcome;
