@@ -1,5 +1,6 @@
 #include "accountinfo.h"
 #include "ui_accountinfo.h"
+#include <QMessageBox>
 
 AccountInfo::AccountInfo(QWidget *parent)
     : QWidget(parent)
@@ -50,9 +51,9 @@ void AccountInfo::getWithdrawalsInfo(QJsonArray wi)
     refreshUI();
 }
 
-void AccountInfo::withdrawError(QString s)
+void AccountInfo::withdrawError(QString s) //WithdrawError
 {
-    ui->withdrawals->setText(s);
+    QMessageBox::critical(this, "Withdrawal Error",s); //WithdrawError is now a popup! Yay!
 }
 
 void AccountInfo::handleCustomerInfo(QJsonArray array)
@@ -118,3 +119,5 @@ void AccountInfo::on_withdraw_clicked()
     timeout->stop();
     emit withdrawSignal();
 }
+
+
