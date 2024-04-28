@@ -62,22 +62,7 @@ void AccountInfo::updateBalance(QString b)
     ui->accountBalance->setText(balance);
     qDebug() << "Account balance updated.\n\r";
 }
-void AccountInfo::getNostoInfo(QString virhe)
-{
-    ui->withdrawals->setText(virhe);
 
-}
-
-void AccountInfo::getAccountRefresh(QJsonArray ar)
-{
-    QString accountit;
-    foreach (const QJsonValue &value, ar) {
-        QJsonObject json_obj = value.toObject();
-        accountit+=json_obj["balance"].toString();
-    ui->accountBalance->setText(accountit);
-    }
-
-}
 QString AccountInfo::editTimestamp(QString timestamp)
 {
     QDateTime time = QDateTime::fromString(timestamp, Qt::ISODateWithMs);
