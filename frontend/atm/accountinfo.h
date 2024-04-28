@@ -6,6 +6,7 @@
 #include <QJsonObject>
 #include <QJsonArray>
 #include <QJsonValue>
+#include <QTimer>
 #include "withdraw.h"
 
 #include <QDateTime>
@@ -25,6 +26,8 @@ public:
     void setInfo(QJsonObject, QString, QString);
     void zeroize();
     void refreshUI();
+    QTimer *timeout;
+
 
 private:
     Ui::AccountInfo *ui;

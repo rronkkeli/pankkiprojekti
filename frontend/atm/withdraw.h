@@ -2,6 +2,7 @@
 #define WITHDRAW_H
 
 #include <QWidget>
+#include <QTimer>
 #include "logindll.h"
 
 namespace Ui {
@@ -15,6 +16,7 @@ class Withdraw : public QWidget
 public:
     explicit Withdraw(QWidget *parent = nullptr);
     ~Withdraw();
+    QTimer *timeout;
 
 private:
     Ui::Withdraw *ui;

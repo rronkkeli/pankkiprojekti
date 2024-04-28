@@ -6,6 +6,16 @@ AccountInfo::AccountInfo(QWidget *parent)
     , ui(new Ui::AccountInfo)
 {
     ui->setupUi(this);
+    timeout = new QTimer;
+    timeout->setSingleShot(true);
+
+    connect(
+        timeout,
+        SIGNAL(timeout()),
+        this,
+        SLOT(on_logout_clicked()),
+        Qt::UniqueConnection
+    );
 
     qDebug() << "AccountInfo widget created";
 }
@@ -98,11 +108,13 @@ void AccountInfo::refreshUI()
 
 void AccountInfo::on_logout_clicked()
 {
+    timeout->stop();
     emit logout();
 }
 
 
 void AccountInfo::on_withdraw_clicked()
 {
+    timeout->stop();
     emit withdrawSignal();
 }

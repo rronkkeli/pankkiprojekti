@@ -6,11 +6,23 @@ PinUI::PinUI(QWidget *parent) :
     ui(new Ui::PinUI)
 {
     ui->setupUi(this);
+    timeout = new QTimer;
+
+    timeout->setSingleShot(true);
+
+    connect(
+        timeout,
+        SIGNAL(timeout()),
+        this,
+        SLOT(on_btnPinCancel_clicked()),
+        Qt::UniqueConnection
+    );
 }
 
 PinUI::~PinUI()
 {
     delete ui;
+    delete timeout;
     qDebug() << "DLL Destroyed";
 }
 
@@ -89,6 +101,7 @@ void PinUI::on_btnPinClear_clicked()
 
 void PinUI::on_btnPinEnter_clicked()
 {
+    timeout->stop();
     qDebug() << "Clicked ENTER";
     emit sendPinNumber(pinNumber);
     pinNumber = "";
@@ -98,6 +111,10 @@ void PinUI::on_btnPinEnter_clicked()
 
 void PinUI::pinNumberClickHandler()
 {
+    // timeout->stop();
+    timeout->start(10000);
+    qDebug() << timeout->remainingTime();
+
     QPushButton * button = qobject_cast <QPushButton*> (sender());
     QString buttonName = button->objectName();
     qDebug() << "Clicked: " << buttonName;
