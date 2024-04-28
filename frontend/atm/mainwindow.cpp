@@ -3,6 +3,7 @@
 #include <chrono>
 #include <thread>
 
+
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
@@ -27,6 +28,17 @@ MainWindow::MainWindow(QWidget *parent)
     ui->viewer->addWidget(withdraw);
 
     ui->viewer->setCurrentWidget(welcome);
+
+    // play background music
+    qDebug()<<"Mediaplayer created!!";
+    audioOutput = new QAudioOutput;
+    music = new QMediaPlayer;
+    music->setLoops(-1);
+    music->setAudioOutput(audioOutput);
+    music->setSource(QUrl("qrc:/sounds/ElevatorMusic.mp3"));
+    qDebug()<<music->errorString();
+    audioOutput->setVolume(50);
+    music->play();
 
     connect(
         welcome,
@@ -162,6 +174,9 @@ MainWindow::~MainWindow()
     delete accountinfo;
     delete withdraw;
     delete logoutTimer;
+
+    delete music;
+    delete audioOutput;
 
     delete rfid;
     delete login;
