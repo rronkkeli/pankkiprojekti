@@ -16,7 +16,7 @@ BEGIN
         INSERT INTO withdrawal(idaccount, amount, timestamp) VALUES (tilin_numero, nosto, NOW());
 
         ELSEIF  tarkistettava_balance-nosto < 0 THEN
-            SELECT 'You do not have enought money for that sum';
+            SELECT 'You do not have enough money for that sum';
         ELSE
             SELECT 'You have no balance, U broke :)';
         END IF;
@@ -40,6 +40,7 @@ IF combine_account2 IS NULL THEN
       IF NOT EXISTS(SELECT 1 FROM card WHERE idcard = newcardcode) THEN
           INSERT INTO card(idcard, pin, idcustomer) VALUES(newcardcode,new_pin, use_customer);
           INSERT INTO card_has_account(idcard,idaccount) VALUES (newcardcode, combine_account);
+          INSERT INTO card_locked(idcard,locked) VALUES (newcardcode,false);
           SELECT 'SUCCHEESE';
        ELSE
           SELECT 'Card already exists';
@@ -55,6 +56,7 @@ ELSE
                      INSERT INTO card(idcard, pin, idcustomer) VALUES(newcardcode,new_pin, use_customer);
                       INSERT INTO card_has_account(idcard,idaccount) VALUES (newcardcode, combine_account);
                       INSERT INTO card_has_account(idcard,idaccount) VALUES (newcardcode, combine_account2);
+                      INSERT INTO card_locked(idcard,locked) VALUES (newcardcode,false);
                       SELECT 'SUCCHEESE';
                ELSE
                    SELECT 'Card already exists';
