@@ -7,7 +7,7 @@
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
-    QString path = "darkeum.qss";
+    QString path = "darkeum.qss"; //Asetetaan oikea tyylitiedosto
     qDebug() << "Current path of style is: " << path;
 
     QFile stylesheet(path);

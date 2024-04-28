@@ -3,6 +3,7 @@
 
 #include <QDebug>
 #include <QDialog>
+#include <QTimer>
 #include "pinuiDLL_global.h"
 
 namespace Ui {
@@ -17,6 +18,7 @@ public:
     explicit PinUI(QWidget *parent = nullptr);
     ~PinUI();
     void setAlert(bool);
+    QTimer *timeout;
 
 signals:
     void sendPinNumber(QString);

@@ -21,6 +21,8 @@ MainWindow::MainWindow(QWidget *parent)
     logoutTimer = new QTimer;
     startWidgetTimer = new QTimer;
 
+    logoutTimer->setSingleShot(true);
+
     ui->viewer->addWidget(welcome);
     ui->viewer->addWidget(pinui);
     ui->viewer->addWidget(cardselect);
@@ -167,6 +169,7 @@ MainWindow::MainWindow(QWidget *parent)
 
 MainWindow::~MainWindow()
 {
+    music->stop();
     delete ui;
     delete welcome;
     delete pinui;
@@ -211,10 +214,12 @@ void MainWindow::handleAccounts(QJsonArray accounts)
             type
         );
 
+        logoutTimer->start(3 * 60 * 1000);
         ui->viewer->setCurrentWidget(accountinfo);
         return;
 
     } else {
+        logoutTimer->start(10000);
         qDebug() << "Double card detected. Splitting..";
 
         for (qsizetype i = 0; i < len; i++) {
@@ -240,6 +245,7 @@ void MainWindow::handleAccounts(QJsonArray accounts)
 void MainWindow::logout()
 {
     login->logout();
+    logoutTimer->stop();
     cardselect->zeroize();
     accountinfo->zeroize();
     debit = credit = QJsonObject();
@@ -253,6 +259,7 @@ void MainWindow::logout()
 void MainWindow::returnToStart()
 {
     welcome->setStart();
+    rfid->closeReader();
     // ui->viewer->setCurrentWidget(welcome);
 }
 
@@ -261,14 +268,13 @@ void MainWindow::start()
     if (!rfid->setReader()) {
         welcome->setCardReaderError();
     }
+    startWidgetTimer->start(10000);
 }
 
 void MainWindow::checkLoginStatus(LoginDLL::LoginStatus s)
 {
     switch (s) {
         case LoginDLL::LoginStatus::Ok:
-            logoutTimer->setSingleShot(true);
-            logoutTimer->start(5 * 60 * 1000);
             login->getCardInformation();
             break;
 
@@ -315,6 +321,8 @@ void MainWindow::handleAccountSelect(CardSelect::AccountType t)
 
     login->setAccountId(accountid);
     login->getCustomerInfo();
+    accountinfo->timeout->start(30000);
+    logoutTimer->start(3 * 60 * 1000);
     ui->viewer->setCurrentWidget(accountinfo);
 }
 
@@ -325,12 +333,14 @@ void MainWindow::handleWithdrawal(QString withdrawal)
         login->nostotapahtuma(accountid, withdrawal);
     }
 
+    accountinfo->timeout->start(10000);
     ui->viewer->setCurrentWidget(accountinfo);
 }
 
 void MainWindow::openWithdrawWidget()
 {
     ui->viewer->setCurrentWidget(withdraw);
+    withdraw->timeout->start(10000);
 }
 
 void MainWindow::refetchWithdrawals()
@@ -343,8 +353,10 @@ void MainWindow::handleData(QString d)
 {
     if (sender() == rfid) {
         rfid->closeReader();
+        startWidgetTimer->stop();
         cardNum = d;
         pinui->setAlert(false);
+        pinui->timeout->start(10000);
         tries = 0;
         ui->viewer->setCurrentWidget(pinui);
 
