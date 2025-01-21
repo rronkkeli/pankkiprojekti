@@ -39,7 +39,7 @@ MainWindow::MainWindow(QWidget *parent)
     music->setAudioOutput(audioOutput);
     music->setSource(QUrl("qrc:/sounds/ElevatorMusic.mp3"));
     qDebug()<<music->errorString();
-    audioOutput->setVolume(50);
+    audioOutput->setVolume(0);
     music->play();
 
     connect(
@@ -279,12 +279,13 @@ void MainWindow::checkLoginStatus(LoginDLL::LoginStatus s)
             break;
 
         case LoginDLL::LoginStatus::InvalidCredentials:
-            if (tries < 3) {
+            if (tries < 2) {
                 tries++;
                 pinui->setAlert(true);
                 ui->viewer->setCurrentWidget(pinui);
 
             } else {
+                login->lockCard();
                 logout();
                 pinui->setAlert(false);
                 ui->viewer->setCurrentWidget(welcome);
