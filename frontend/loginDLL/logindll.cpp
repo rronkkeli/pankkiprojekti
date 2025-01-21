@@ -24,6 +24,7 @@ LoginDLL::~LoginDLL()
 void LoginDLL::login(QString cardId, QString cardPin)
 {
     //Bring cardId to a variable
+    qDebug()<<"login firs";
     setCardNum(cardId);
     //Json-object and inserting data to it
     QJsonObject jsonObj;
@@ -73,6 +74,9 @@ void LoginDLL::getAccountInformation()
 
 void LoginDLL::lockCard()
 {
+    qDebug()<<"tää eka";
+
+    qDebug()<<cardNum;
     QString site_url = socket + "/login/setLocked/" + cardNum;
     QNetworkRequest request((site_url));
 
@@ -171,7 +175,7 @@ void LoginDLL::loginSlot(QNetworkReply *reply)
     } else {
         //Wrong card num or pin
         status = LoginStatus::InvalidCredentials;
-        setCardNum(NULL);
+        // setCardNum(NULL);
     }
     emit loginStatus(status);
 
